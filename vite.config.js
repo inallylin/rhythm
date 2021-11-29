@@ -9,7 +9,6 @@ import nodeResolve from 'rollup-plugin-node-resolve'
  * @type {import('vite').UserConfig}
  */
 export default {
-  input: 'main.coffee',
   plugins: [
     vue(),
     sass(),
@@ -20,9 +19,9 @@ export default {
     })
   ],
   server: {
-    host: '0.0.0.0',
+    host: 'localhost',
     hmr: {
-      port: 443,
+      // port: 443,
     }
   }
 }

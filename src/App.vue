@@ -1,10 +1,10 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
-  <syllable v-for="i in 4" />
+  <bar v-for="i in 4" />
 </template>
 
 <script setup>
-import syllable from './components/syllable.vue'
+import bar from './components/bar.vue'
 </script>
 
 <style>
