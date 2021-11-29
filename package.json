@@ -1,0 +1,21 @@
+{
+  "name": "VueJS-with-Vite",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "coffeescript": "^2.6.1",
+    "vue": "^3.1.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.4",
+    "@vue/compiler-sfc": "^3.1.4",
+    "rollup-plugin-coffee-script": "^2.0.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-sass": "^1.2.10",
+    "vite": "^2.3.8"
+  }
+}
