@@ -1,32 +1,34 @@
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import sass from 'rollup-plugin-sass'
-import coffeescript from 'rollup-plugin-coffee-script'
-import commonjs from 'rollup-plugin-commonjs'
-import nodeResolve from 'rollup-plugin-node-resolve'
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import coffee from 'rollup-plugin-coffee-script';
+import viteCompression from 'vite-plugin-compression';
+import path from "path";
 
-/**
- * https://vitejs.dev/config/
- * @type {import('vite').UserConfig}
- */
-
- export default defineConfig(({ mode }) => {
-   const env = loadEnv(mode, __dirname)
-   return {
-    plugins: [
-      vue(),
-      sass(),
-      coffeescript(),
-      nodeResolve({ extensions: ['.js', '.coffee'] }),
-      commonjs({
-        extensions: ['.js', '.coffee']
-      })
-    ],
-    server: {
-      host: 'localhost',
-      hmr: {
-        port: env.VITE_HMR_PORT,
-      }
-    }
-   }
- })
+// https://vitejs.dev/config/
+export default defineConfig({
+  server:  {
+    host:  true,
+    port:  8080,
+  },
+  build:   {
+    assetsDir:   's',
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.coffee']
+  },
+  plugins: [
+    vue(),
+    coffee(),
+    viteCompression({
+      algorithm:  'brotliCompress',
+      ext:        'br'
+    }),
+    viteCompression({
+      algorithm:  'gzip',
+      ext:        'gz'
+    }),
+  ]
+});

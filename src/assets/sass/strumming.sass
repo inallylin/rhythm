@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap')
+
+%padding
+  padding: .6rem 1.2rem
+%color-fix
+  filter: saturate(50%)
+
+html
+  @media screen and (max-width: 568px) and (orientation: landscape)
+    font-size: 12px
+body
+  font-family: 'Ubuntu', sans-serif
+*, *:before, *:after
+  border-color: inherit
+  color: inherit
+[hint]
+  position: relative
+  &:before
+    @extend %color-fix
+    content: attr(hint)
+    position: absolute
+    left: 50%
+    top: 0
+    transform: translateX(-50%)
+    opacity: 0
+    transition: .2s
+  &:hover:before
+    opacity: .5
+#app
+  background: white
+  padding-top: 10vh
+.bar
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  padding: 2rem
+  @media screen and (orientation: landscape)
+    padding-left: 0
+    padding-right: 0
+  @media screen and (max-width: 480px)
+    flex-direction: column
+  .beat
+    cursor: pointer
+    transition: .2s
+    min-width: 8rem
+    text-align: center
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 1rem 0
+    &:active
+      opacity: .75
+.note, .arrow
+  border-left: .25rem solid
+  height: 2rem
+  line-height: 1
+  display: inline-block
+  vertical-align: middle
+  text-align: center
+  margin: 0 1rem
+  font-size: 0
+  position: relative
+  &.active
+    // color: red
+  &:before, &:after
+    content: ''
+    display: block
+    position: absolute
+  &:before
+    width: 1rem
+    height: 1rem
+    box-shadow: inset 0 0 0 5rem
+    border-radius: 50%
+    border-top-right-radius: 0
+    top: 100%
+    right: 0
+  &:after
+    width: 1rem
+    border-top: .25rem solid
+    top: .5rem
+  &:first-child
+    &:after
+      right: .25rem
+  // 1111
+  &:not(:empty) + &:not(:empty)
+    + :not(:empty), + :last-child:empty
+      &:after
+        width: 2rem
+  &:empty
+    &:not(:last-child)
+      display: none
+    + span
+      &:not(:empty)
+        // 8
+        &, &:last-child
+          &:after
+            display: none
+        &:last-child
+          &:after
+            display: none
+        + :not(:empty):not(:last-child)
+          &:after
+            left: auto
+            right: 0
+      &:empty
+        &:last-child:after
+          display: none
+        + span
+          &:not(:empty), &:last-child
+            // 8.
+            &:before
+              box-shadow: inset 0 0 0 3rem, 1rem -.5rem 0 -.3rem
+            &:after
+              display: none
+          &:empty
+            + span
+              // 4
+              &:before
+                box-shadow: inset 0 0 0 3rem
+  &__wrapper
+    display: inline-flex
+    flex-direction: row-reverse
+    justify-content: flex-end
+    margin: 2rem
+    position: relative
+    @media screen and (orientation: landscape)
+      margin: 1rem
+    &:before, &:after
+      content: ''
+      display: block
+      position: absolute
+    &:before
+      left: 1rem
+      right: 1rem
+      border-top: .25rem solid
+    &.quarter:before
+      border-color: transparent
+    &.tie:after
+      width: 1rem
+      height: .5rem
+      border: .25rem solid
+      border-right-color: transparent
+      border-bottom-color: transparent
+      border-left-color: transparent
+      border-radius: 50%
+      left: -.1rem
+      top: -.2rem
+.arrow
+  height: .25rem
+  margin-top: 1.75rem
+  box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
+  &:before
+    box-shadow: none
+    border-left: .25rem solid
+    border-top: .25rem solid
+    border-radius: 0
+    bottom: auto
+    top: -1.5rem
+    height: .5rem
+    width: .5rem
+    right: calc(-.5rem - .125rem)
+    transform: rotate(45deg)
+    transform-origin: top left
+  &:after
+    bottom: -1rem
+    top: auto
+    transform: scaleX(1.25)
+  &:first-child:after
+    right: .125rem
+  &:nth-child(1), &:nth-child(3)
+    &:before
+      transform: translateY(100%) rotate(-135deg)
+      top: auto
+      bottom: -.125rem
+  &:empty
+    + span
+      &:empty
+        + span
+          &:not(:empty), &:last-child
+            box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem, 1rem 0 0 .05rem
+            &:before
+              box-shadow: none
+          &:empty + span
+            box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
+            &:before
+              box-shadow: none
+            
+  &__wrapper
+    margin-top: 2em
+    opacity: .5
+    @media screen and (orientation: portrait)
+      margin-bottom: 5rem
+    &:before
+      top: auto
+      bottom: -.5rem   
+.number
+  @extend %color-fix
+  width: 1em
+  text-align: center
+  font-size: 1.2rem
+  &__wrapper
+    display: flex
+    justify-content: center
+    padding: 1rem 0
+    + .arrow__wrapper
+      margin-top: 0
+
+.btn-refresh
+  @extend %color-fix
+  display: block
+  margin: 1vw auto
+  position: relative
+  cursor: pointer
+  border: 0
+  padding: 0
+  background: none
+  transition: .2s
+  transform: rotate(120deg)
+  color: inherit
+  opacity: .5
+  &:hover
+    opacity: 1
+  &:active
+    animation: rotate .2s linear 1
+  &:before, &:after
+    content: ''
+    display: block
+  &:before
+    width: 1rem
+    height: 1rem
+    border: .25rem solid
+    border-top-color: transparent
+    border-radius: 50%
+  &:after
+    position: absolute
+    width: .5rem
+    height: .5rem
+    border-top: .25rem solid
+    border-left: .25rem solid
+    top: .0rem
+    left: .3rem
+    transform-origin: left top
+    transform: rotate(60deg)
+@keyframes rotate
+  0%
+    transform: rotate(150deg)
+  50%
+    transform: rotate(360deg)
+  100%
+    transform: rotate(480deg)
+
+.preference
+  display: flex
+  align-items: stretch
+  justify-content: center
+  padding: 1rem
+  @media screen and (min-width: 1025px)
+    display: table
+    position: fixed
+    padding: 1rem
+    left: 0
+    top: 0
+  @media screen and (max-width: 480px)
+    flex-direction: column
+  > *
+    font-size: 1rem
+    margin: 0 .5rem
+    @media screen and (max-width: 480px)
+      margin: .5rem
+    label
+      height: 100%
+      box-sizing: border-box
+      display: inline-block
+select
+  @extend %padding
+  @extend %color-fix
+  width: 100%
+  height: 100%
+  color: inherit
+  background: none
+  cursor: pointer
+  border-radius: .25rem
+  border: .125rem solid
+  box-sizing: border-box
+  font-size: inherit
+  @media screen and (min-width: 1025px)
+    margin: .5rem 0 0
+  &, &:focus, &:active, &:focus:active
+    border-color: inherit
+    outline: none
+.color-picker
+  > input
+    opacity: 0
+    pointer-event: none
+    position: absolute
+  > label
+    @extend %padding
+    box-shadow: inset 0 0 0 10rem
+    display: block
+    border-radius: .25rem
+    cursor: pointer
+    &:hover
+      opacity: .8
+.checkbox
+  margin: .5rem
+  @media screen and (max-width: 1024px) and  (min-width: 481px)
+    margin-top: 0
+    margin-bottom: 0
+  > input
+    pointer-events: none
+    position: absolute
+    opacity: 0
+    &:checked + label
+      &:before
+        right: 1.35rem
+      &:after
+        box-shadow: inset 0 0 0 10rem
+      // content: 'ON'
+      // box-shadow: inset 0 0 0 10rem
+  > label
+    @extend %padding
+    @extend %color-fix
+    display: inline-block
+    cursor: pointer
+    border: 2px solid #eee
+    border-radius: .25rem
+    width: 100%
+    position: relative
+    &:before
+      content: ''
+      display: inline-block
+      width: .75rem
+      height: .75rem
+      float: right
+      margin-left: 1rem
+      position: absolute
+      background: white
+      border-radius: 50%
+      right: 2.3rem
+      top: .8rem
+      transition: .2s
+    &:after
+      content: ''
+      display: inline-block
+      float: right
+      width: 2rem
+      height: 1rem
+      border-radius: 3rem
+      margin-top: .075rem
+      margin-left: 1rem
+      background: #f2f2f2
+      box-shadow: inset 0 0 0 10rem #ccc

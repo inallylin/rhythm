@@ -1,21 +1,42 @@
 {
-  "name": "VueJS-with-Vite",
-  "version": "0.0.0",
+  "name": "player",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
+    "serve": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "coffeescript": "^2.6.1",
-    "vue": "^3.1.4"
+    "@fortawesome/fontawesome-free": "^6.0.0-beta3",
+    "@fullcalendar/core": "^5.2.1",
+    "@fullcalendar/daygrid": "^5.2.0",
+    "@fullcalendar/interaction": "^5.2.0",
+    "@fullcalendar/timegrid": "^5.2.0",
+    "@msgpack/msgpack": "^2.4.1",
+    "axios": "0.21.1",
+    "core-js": "^3.6.5",
+    "interactjs": "^1.10.11",
+    "jquery-slim": "^3.0.0",
+    "lodash": "^4.17.15",
+    "qs": "^6.10.2",
+    "underscore": "^1.13.2",
+    "uuid": "^8.3.2",
+    "vue": "^3.2.26",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.4",
-    "@vue/compiler-sfc": "^3.1.4",
+    "@vitejs/plugin-vue": "^1.6.1",
+    "coffeescript": "^2.6.1",
     "rollup-plugin-coffee-script": "^2.0.0",
-    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-sass": "^1.2.10",
-    "vite": "^2.3.8"
-  }
+    "vite": "^2.7.2",
+    "vite-plugin-compression": "^0.3.6"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
