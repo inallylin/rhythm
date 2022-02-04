@@ -15,7 +15,7 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   pages: {
     index: {
-      entry: 'src/main.coffee'
+      entry: 'src/main.js'
     }
   },
   chainWebpack: config => {

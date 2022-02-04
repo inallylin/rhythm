@@ -86,7 +86,7 @@ body
     + :not(:empty), + :last-child:empty
       &:after
         width: 2rem
-  &:empty
+  &:empty:not(.rest)
     &:not(:last-child)
       display: none
     + span
@@ -102,7 +102,7 @@ body
           &:after
             left: auto
             right: 0
-      &:empty
+      &:empty:not(.rest)
         &:last-child:after
           display: none
         + span
@@ -112,7 +112,7 @@ body
               box-shadow: inset 0 0 0 3rem, 1rem -.5rem 0 -.3rem
             &:after
               display: none
-          &:empty
+          &:empty:not(.rest)
             + span
               // 4
               &:before
@@ -145,6 +145,21 @@ body
       border-radius: 50%
       left: -.1rem
       top: -.2rem
+.note
+  &__wrapper
+    &:before
+      // border-color: transparent
+    &.tie:after
+      top: auto
+      left: -1.2rem
+      bottom: -1rem
+      border-bottom-color: inherit
+      border-top-color: transparent
+  &.rest
+    color: red
+    // display: inline-block!important
+  &:after
+    box-shadow: 0 -.5rem
 .arrow
   height: .25rem
   margin-top: 1.75rem
@@ -172,15 +187,15 @@ body
       transform: translateY(100%) rotate(-135deg)
       top: auto
       bottom: -.125rem
-  &:empty
+  &:empty:not(.rest)
     + span
-      &:empty
+      &:empty:not(.rest)
         + span
           &:not(:empty), &:last-child
             box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem, 1rem 0 0 .05rem
             &:before
               box-shadow: none
-          &:empty + span
+          &:empty:not(.rest) + span
             box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
             &:before
               box-shadow: none
