@@ -4,6 +4,9 @@
   padding: .6rem 1.2rem
 %color-fix
   filter: saturate(50%)
+%reverse-roof
+  left: auto
+  right: .25rem
 
 html
   @media screen and (max-width: 568px) and (orientation: landscape)
@@ -82,8 +85,7 @@ body
     &:after
       right: .25rem
   // 1111
-  &:not(:empty) + &:not(:empty)
-    + :not(:empty), + :last-child:empty
+  &:not(:empty) + &:not(:empty) + :not(:empty), + :last-child:empty
       &:after
         width: 2rem
   &:empty:not(.rest)
@@ -94,29 +96,35 @@ body
         // 8
         &, &:last-child
           &:after
-            display: none
-        &:last-child
-          &:after
-            display: none
-        + :not(:empty):not(:last-child)
+            border-color: transparent
+        &:not(:last-child)
           &:after
             left: auto
-            right: 0
+            right: .25rem
       &:empty:not(.rest)
         &:last-child:after
           display: none
         + span
+          &:not(:empty)
+            &:not(:last-child):after
+              @extend %reverse-roof
           &:not(:empty), &:last-child
             // 8.
             &:before
               box-shadow: inset 0 0 0 3rem, 1rem -.5rem 0 -.3rem
             &:after
-              display: none
+              border-color: transparent
+              &:not(:last-child)
+                @extend %reverse-roof
           &:empty:not(.rest)
             + span
               // 4
               &:before
                 box-shadow: inset 0 0 0 3rem
+    &:first-child:not(:empty) + span, &:not(:first-child):not(:last-child)
+      + span:not(:empty):not(:last-child)
+        &:after
+          box-shadow: 0 -.5rem, 1.25rem -.5rem
   &__wrapper
     display: inline-flex
     flex-direction: row-reverse
@@ -148,7 +156,7 @@ body
 .note
   &__wrapper
     &:before
-      // border-color: transparent
+      border-color: transparent
     &.tie:after
       top: auto
       left: -1.2rem
@@ -157,13 +165,46 @@ body
       border-top-color: transparent
   &.rest
     color: red
-    // display: inline-block!important
+    &:before
+      top: 0
+      left: -1.5rem
+    &:after
+      display: none
+    &.afterRest
+      display: none
+    + .note:not(.rest):not(:last-child)
+      &:after
+        left: auto
+        right: .25rem
+  &.afterRest
+    &:not(.rest)[class][class]
+      &:after
+        left: 0
+        right: auto
   &:after
     box-shadow: 0 -.5rem
+  &:empty
+    + .rest
+      // 8
+      color: firebrick
+    &:first-child
+      + .afterRest:not(:empty)[class]:after
+        left: auto
+        right: auto
+        box-shadow: 0 -.5rem
+    + span
+      &:empty
+        + .rest
+          // 8.
+          color: green
 .arrow
   height: .25rem
   margin-top: 1.75rem
   box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
+  &__wrapper
+    &:before
+      left: .5rem
+      right: .75rem
   &:before
     box-shadow: none
     border-left: .25rem solid
@@ -179,7 +220,7 @@ body
   &:after
     bottom: -1rem
     top: auto
-    transform: scaleX(1.25)
+    transform: scaleX(1.75)
   &:first-child:after
     right: .125rem
   &:nth-child(1), &:nth-child(3)
@@ -199,7 +240,15 @@ body
             box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
             &:before
               box-shadow: none
-            
+  &.rest
+    &, &:before
+      border-color: transparent
+      box-shadow: none
+    &:before
+      content: '0'
+      font-size: 2rem
+      top: 0
+      transform: translate(-1rem, -2rem)
   &__wrapper
     margin-top: 2em
     opacity: .5
@@ -213,6 +262,12 @@ body
   width: 1em
   text-align: center
   font-size: 1.2rem
+  &:empty:before
+    content: '-'
+  &:not(:empty) + &.rest
+    &:before
+      content: '0'
+      font-size: inherit
   &__wrapper
     display: flex
     justify-content: center

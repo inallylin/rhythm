@@ -1,7 +1,12 @@
 <template>
   <div class="strumming" :style="style">
     <div class="bar">
-      <note :ref="getNoteInstance" :showCode="showCode" :showArrow="showArrow" :index="i" v-for="i in bar" />
+      <note
+        :ref="getNoteInstance"
+        :showCode="showCode"
+        :showArrow="showArrow"
+        :index="i"
+        v-for="i in 1" />
     </div>
     <button class="btn-refresh" @click="createRamdon"></button>
     <div class="preference">
