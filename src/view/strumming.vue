@@ -3,12 +3,13 @@
     <div class="bar">
       <note
         :ref="getNoteInstance"
+        :useRest="useRest"
         :showCode="showCode"
         :showArrow="showArrow"
         :index="i"
-        v-for="i in 1" />
+        v-for="i in bar" />
+      <button class="btn-add" @click="add"></button>
     </div>
-    <button class="btn-refresh" @click="createRamdon"></button>
     <div class="preference">
       <div class="color-picker">
         <input id="color-picker" type="color" v-model="theme">
@@ -20,6 +21,10 @@
             {{option.label}}
           </option>
         </select>
+      </div>
+      <div class="checkbox">
+        <input id="toggle-code" type="checkbox" v-model="useRest">
+        <label for="toggle-code">Rest</label>
       </div>
       <div class="checkbox">
         <input id="toggle-code" type="checkbox" v-model="showCode">
@@ -43,15 +48,16 @@ export default
     note: note
   setup: ->
     bar = ref 4
-    theme = '#1c5580'
+    theme = ref '#1c5580'
     noteInstance = ref []
     showArrow = ref true
     showCode = ref true
+    useRest = ref false
     player = null
     audio = null
     oscillator = null
     gainNode = null
-    style = computed -> "color: #{theme}"
+    style = computed -> "color: #{theme.value}"
     barOptions = ref [
       {
         value: 2
@@ -69,6 +75,8 @@ export default
     createRamdon = ->
       for n in noteInstance.value
         n.createNote()
+    add = ->
+      bar.value += 1
     getNoteInstance = (instance)->
       noteInstance.value.push instance
     return {
@@ -77,10 +85,12 @@ export default
       theme
       bar
       createRamdon
+      useRest
       showCode
       showArrow
       barOptions
       getNoteInstance
+      add
     }
 </script>
 <style lang="sass">
