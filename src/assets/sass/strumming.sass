@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu&Noto+Music&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Noto+Music&family=Ubuntu&display=swap')
 %padding
   padding: .6rem 1.2rem
 %color-fix
@@ -116,7 +116,6 @@ body
   @media screen and (max-width: 480px)
     flex-direction: column
 .beat
-  cursor: pointer
   transition: .2s
   min-width: 8rem
   text-align: center
@@ -126,7 +125,8 @@ body
   padding: 2rem
   border-radius: 8px
   &:hover
-    box-shadow: 0 0 0 2px #eee
+    @media screen and (min-width: 1025px)
+      box-shadow: 0 0 0 2px #eee
   &:active
     opacity: .75
   .control

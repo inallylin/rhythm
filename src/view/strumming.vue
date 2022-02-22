@@ -9,7 +9,7 @@
         </div>
         <div class="input">
           <label for="measure">Measure</label>
-          <input id="measure" type="Number" min="0" onfocus="this.select()" v-model="bar">
+          <input id="measure" type="Number" min="1" max="100" onfocus="this.select()" v-model="bar">
         </div>
         <div class="checkbox">
           <input id="toggle-rest" type="checkbox" v-model="useRest">
