@@ -1,6 +1,9 @@
 <template>
-  <div class="beat" @click="createNote($event)" hint="Change">
-    {{beats}}
+  <div class="beat">
+    <div class="control">
+      <button @click="createNote($event)">Change</button>
+      <button class="btn-delete" @click="remove()">Remove</button>
+    </div>
     <template v-if="note">
       <div :class="['note__wrapper', {quarter: isQuarter, tie: hasTie}]">
         <span :class="['note', seqClass(j)]" v-for="n, j in beats">
@@ -34,9 +37,15 @@
   </div>
 </template>
 <script lang="coffee">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   export default
     props:
+      note:
+        type: Number
+        default: null
+      restAt:
+        type: Number
+        default: null
       index:
         type: Number
         default: 0
@@ -49,8 +58,11 @@
       useRest:
         type: Boolean
         default: false
-    setup: (props)->
-      note = ref null
+    emits: ['update:note', 'update:restAt', 'remove']
+    setup: (props, {emit})->
+      note = computed
+        get: -> props.note
+        set: (value)-> emit 'update:note', value
       feint = (n, act)->
         return if act == -1
         return '-' if !act
@@ -67,10 +79,21 @@
           bin = bin + rem * i
           i = i * 10
         String(bin).padStart 4, 0
+      restAt = computed
+        get: ->
+          return [] if !props.restAt
+          _restAt = decimalToBinary Number(props.restAt)
+          String(_restAt).split('').map (r)-> Number r
+        set: (value)->
+          emit 'update:restAt', value
+
       beats = computed ->
         _beats = decimalToBinary(note.value)
         _beatsArray = String(_beats).split ''
-        _beatsArray.map (beat) -> rest Number beat
+        _beatsArray.map (beat, i) ->
+          return -1 if !Number(beat) && restAt.value[i] != undefined
+          return rest Number beat if props.restAt != null
+          Number beat
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->
@@ -87,16 +110,24 @@
         next = beats.value[index+3] if !next
         return true if next && next == -1
       rest = (beat)->
+        aa = ramdon(0)
         return beat if !props.useRest || beat || ramdon(0.9)
         -1
       createNote = (e)->
         e.target.blur() if e
-        note.value = 0
-        return if props.useRest && ramdon(0.03)
-        note.value = ramdon 15, 1
-        if props.index == 1 && note.value%2 == 0
-          note.value -= 1
-      createNote()
+        restAt.value = null
+        if props.useRest && ramdon(0.03)
+          _note = 0
+        else
+          _note = ramdon 15, 1
+          if props.index == 0 && _note%2 == 0
+            _note -= 1
+        note.value = _note
+      remove = -> emit 'remove'
+      watch beats, (n)->
+        _restAt = n.map (b)-> if b == -1 then 1 else 0
+        restAt.value = parseInt(_restAt.join(''), 2)
+      createNote() if !note.value
       return {
         note
         createNote
@@ -105,5 +136,6 @@
         hasTie
         isQuarter
         seqClass
+        remove
       }
 </script>
