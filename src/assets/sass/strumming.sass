@@ -16,6 +16,10 @@
   width: 100%
   position: relative
   box-sizing: border-box
+  transition: .2s
+  white-space: nowrap
+  &:hover
+    border-color: #ddd
 %button
   display: inline-block
   vertical-align: middle
@@ -24,26 +28,26 @@
   min-width: 2em
   height: 2em
   background: none
-  border: 2px solid #eee
+  border: 2px solid
   border-radius: 2em
   align-self: center
   cursor: pointer
   transition: .2s
   padding: 0 1em
   background: white
-  @media screen and (min-width: 1025px)
-    opacity: .5
   &:hover
-    opacity: 1
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #ddd
 
 html
-  @media screen and (max-width: 568px) and (orientation: landscape)
+  height: 100%
+  @media screen and (max-width: 768px)
     font-size: 12px
 body, *
   font-family: 'Ubuntu', sans-serif
 body
   margin: 0
   padding: 0
+  height: 100%
 *, *:before, *:after
   border-color: inherit
   color: inherit
@@ -62,47 +66,51 @@ body
     opacity: .5
 #app
   background: white
+  height: 100%
+.preference
+  padding: 1rem
+  > *
+    font-size: 1rem
+    margin: .5rem
+    background: white
+    label
+      height: 100%
+      box-sizing: border-box
+      display: inline-block
+      cursor: pointer
 .navpage
+  display: flex
+  flex-direction: column
+  min-height: 100%
+  box-sizing: border-box
   &__page
     transition: .2s
+    flex: 1 1 1%
   &__nav
-    position: fixed
+    position: sticky
+    flex: 0 0 auto
     z-index: 100
     left: 0
-    top: 0
+    bottom: 0
     padding: 1em
+    display: flex
+    align-items: center
+    justify-content: space-between
     .preference
-      position: absolute
       left: .5em
-      top: 3em
+      top: .5em
       transition: .2s
       padding: 0
-      transform: translateX(-100%)
-    &.open
-      + .navpage__page
-        opacity: .25
-        pointer-events: none
-      .preference
-        transform: translateX(0)
-      .navpage__nav__toggle
-        opacity: 1
-        transform: none
-        &:before
-          pointer-events: all
-    &__toggle
-      @extend %button
-      @media screen and (max-width: 320px)
-        transform-origin: left bottom
-        transform: rotate(90deg) translateX(-2em)
-      &:before
-        content: ''
-        position: fixed
-        left: 0
-        right: 0
-        bottom: 0
-        top: 0
-        z-index: -1
-        pointer-events: none
+      display: flex
+    .control
+      button
+        min-width: 1.5em
+        height: 1.5em
+        padding: 0 .725rem
+        @media screen and (min-width: 769px)
+          min-width: 3em
+          height: 3em
+          padding: 0 1.5rem
 .bar
   display: flex
   flex-wrap: wrap
@@ -122,6 +130,8 @@ body
   align-items: center
   padding: 2rem
   border-radius: 8px
+  @media screen and (max-width: 768px)
+    padding: 0
   &:hover
     @media screen and (min-width: 1025px)
       box-shadow: 0 0 0 2px #eee
@@ -129,6 +139,7 @@ body
     opacity: .75
   .control
     margin: 0
+    opacity: 0
     @media screen and (min-width: 1025px)
       transition: .2s
       opacity: 0
@@ -137,6 +148,9 @@ body
     button
       font-size: 12px
       font-weight: normal
+      opacity: .5
+      &:hover
+        opacity: 1
   &:hover
     .control
       opacity: 1
@@ -471,18 +485,16 @@ body
     top: calc(50% - .125em)
     left: calc(.5em - .125em)
     display: block
-    border-top: .25em solid
+    border-top: .125em solid
     border-radius: 4px
     width: 1em
+    @media screen and (min-width: 769px)
+      left: calc(1em - .125em)
   &:after
     transform-origin: center center
     transform: rotate(90deg)
 .btn-delete
   color: firebrick
-
-
-
-
 @keyframes rotate
   0%
     transform: rotate(150deg)
@@ -491,17 +503,6 @@ body
   100%
     transform: rotate(480deg)
 
-.preference
-  display: table
-  padding: 1rem
-  > *
-    font-size: 1rem
-    margin: .5rem
-    background: white
-    label
-      height: 100%
-      box-sizing: border-box
-      display: inline-block
 select
   @extend %padding
   @extend %color-fix
@@ -526,13 +527,17 @@ select
     pointer-event: none
     position: absolute
   > label
-    @extend %padding
-    box-shadow: inset 0 0 0 10rem
+    width: 1.5em
+    transition: .2s
+    border: 1px solid
+    box-shadow: 0 0 0 0 white, 0 0 0 0 #ccc, inset 0 0 0 10rem
     display: block
     border-radius: .25rem
     cursor: pointer
+    position: relative
+    z-index: 0
     &:hover
-      opacity: .8
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #ddd, inset 0 0 0 10rem
 .checkbox
   margin: .5rem
   white-space: nowrap
@@ -554,7 +559,6 @@ select
       display: inline-block
       width: .75rem
       height: .75rem
-      float: right
       margin-left: 1rem
       position: absolute
       background: white
@@ -565,7 +569,6 @@ select
     &:after
       content: ''
       display: inline-block
-      float: right
       width: 2rem
       height: 1rem
       border-radius: 3rem
@@ -580,7 +583,7 @@ select
   > input
     transition: .2s
     min-width: 0
-    width: 50px
+    max-width: 40px
     text-align: right
     font-size: inherit
     border: 0

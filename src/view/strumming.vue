@@ -1,41 +1,12 @@
 <template>
   <div class="navpage" :style="style">
-    <div :class="['navpage__nav', {open: nav}]">
-      <button class="navpage__nav__toggle" @click="nav = !nav">Settings</button>
-      <div class="preference">
-        <div class="color-picker">
-          <input id="color-picker" type="color" v-model="theme">
-          <label for="color-picker" :style="style"></label>
-        </div>
-        <div class="input">
-          <label for="measure">Measure</label>
-          <input id="measure" type="Number" min="1" max="100" onfocus="this.select()" v-model="bar">
-        </div>
-        <div class="checkbox">
-          <input id="toggle-rest" type="checkbox" v-model="useRest">
-          <label for="toggle-rest">Rest</label>
-        </div>
-        <div class="checkbox">
-          <input id="toggle-code" type="checkbox" v-model="showCode">
-          <label for="toggle-code">Code</label>
-        </div>
-        <div class="checkbox">
-          <input id="toggle-arrow" type="checkbox" v-model="showArrow">
-          <label for="toggle-arrow">Arrow</label>
-        </div>
-      </div>
-    </div>
     <div class="navpage__page">
-      <div class="control">
-        <button @click="createRamdon()">Random</button>
-        <button class="btn-add" @click="add"></button>
-      </div>
       <TransitionGroup tag="div" class="bar" name="list" mode="out-in">
         <note
           :ref="getNoteInstance"
-          :useRest="useRest"
-          :showCode="showCode"
-          :showArrow="showArrow"
+          :useRest="config.rest"
+          :showCode="config.code"
+          :showArrow="config.arrow"
           :index="i"
           :key="i"
           @remove="remove(i)"
@@ -44,27 +15,55 @@
           v-for="note, i in notes" />
       </TransitionGroup>
     </div>
-
+    <div class="navpage__nav">
+      <div class="preference">
+        <div class="color-picker">
+          <input id="color-picker" type="color" v-model="config.theme">
+          <label for="color-picker" :style="style"></label>
+        </div>
+        <div class="input">
+          <label for="measure">Measure</label>
+          <input id="measure" type="Number" min="1" max="100" onfocus="this.select()" v-model="bar">
+        </div>
+        <div class="checkbox">
+          <input id="toggle-code" type="checkbox" v-model="config.code">
+          <label for="toggle-code">Code</label>
+        </div>
+        <div class="checkbox">
+          <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
+          <label for="toggle-arrow">Arrow</label>
+        </div>
+        <div class="checkbox">
+          <input id="toggle-rest" type="checkbox" v-model="config.rest">
+          <label for="toggle-rest">Rest</label>
+        </div>
+      </div>
+      <div class="control">
+        <button @click="createRamdon()">Random</button>
+        <button class="btn-add" @click="add"></button>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="coffee">
 import { useRouter } from 'vue-router'
-import { computed, watch, onMounted, ref } from 'vue'
+import { computed, watch, onMounted, ref, reactive } from 'vue'
 import note from '@/components/note.vue'
+import { storage } from '@/mixins/tools.coffee'
 export default
   components:
     note: note
   setup: ->
     router = useRouter()
-    theme = ref '#1c5580'
+    config = reactive
+      theme: storage 'theme', '#1c5580'
+      arrow: storage 'arrow', true
+      code: storage 'code', true
+      rest: storage 'rest', false
     noteInstance = ref []
-    showArrow = ref true
-    showCode = ref true
-    useRest = ref true
-    nav = ref false
     notes = ref []
     rests = ref []
-    style = computed -> "color: #{theme.value}"
+    style = computed -> "color: #{config.theme}"
     url = computed
       get: ->
         codes = notes.value.map (note, i)->
@@ -116,19 +115,15 @@ export default
     return {
       noteInstance
       style
-      theme
       bar
       createRamdon
-      useRest
-      showCode
-      showArrow
+      config
       getNoteInstance
       add
       notes
       rests
       getUrlCode
       remove
-      nav
     }
 </script>
 <style lang="sass">

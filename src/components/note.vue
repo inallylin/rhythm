@@ -1,7 +1,7 @@
 <template>
   <div class="beat">
     <div class="control">
-      <button @click="createNote($event)">Change</button>
+      <button @click="createNote($event)">Random</button>
       <button class="btn-delete" @click="remove()">Remove</button>
     </div>
     <template v-if="note">
@@ -110,7 +110,6 @@
         next = beats.value[index+3] if !next
         return true if next && next == -1
       rest = (beat)->
-        aa = ramdon(0)
         return beat if !props.useRest || beat || ramdon(0.9)
         -1
       createNote = (e)->
