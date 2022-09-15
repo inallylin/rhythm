@@ -82,7 +82,7 @@ export default
           if _diff > 0 then add() else notes.value.splice -1, 1
     createRamdon = ->
       for n in noteInstance.value
-        n.createNote()
+        n?.createNote()
     add = ->
       notes.value.push 0
     getNoteInstance = (instance)->
@@ -96,6 +96,8 @@ export default
       return if !params.code
       syncConfig params.code
       url.value = params.code
+    watch bar, (n)->
+      noteInstance.value.length = 0
     watch url, (n)->
       router.replace
         name: router.currentRoute.value.name
