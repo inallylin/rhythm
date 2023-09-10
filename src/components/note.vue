@@ -26,6 +26,9 @@
           <template v-if="n != 0">{{n}}</template>
         </span>
       </div>
+      <p>NOTE:{{note}}</p>
+      <p>beats: {{beats.reverse()}}</p>
+      <p>restAt: {{restAt}}</p>
     </template>
     <template v-else>
       <div class="note__wrapper fullrest">
@@ -42,6 +45,7 @@
 </template>
 <script lang="coffee">
   import { ref, computed, watch } from 'vue'
+  import { createBeats, getRests, ramdon } from '@/mixins/beat.coffee'
   export default
     props:
       note:
@@ -71,37 +75,17 @@
         return if act == -1
         return '-' if !act
         n
-      ramdon = (max = 0.5, min)->
-        return Math.random() < max if !min
-        Math.floor(Math.random() * max) + min
-      decimalToBinary = (x)->
-        bin = 0
-        i = 1
-        while (x != 0)
-          rem = x % 2
-          x = parseInt(x / 2)
-          bin = bin + rem * i
-          i = i * 10
-        String(bin).padStart 4, 0
       restAt = computed
         get: ->
           # trigger computed by useRest
           return if (props.useRest && !props.useRest)
           return [] if !props.restAt
-          _restAt = decimalToBinary Number(props.restAt)
-          console.log 'compouted restAt'
-          String(_restAt).split('').map (r)-> Number r
+          getRests(props.restAt)
         set: (value)->
-          console.log 'restAt set'
           emit 'update:restAt', value
 
       beats = computed ->
-        _beats = decimalToBinary(note.value)
-        _beatsArray = String(_beats).split ''
-        _beatsArray.map (beat, i) ->
-          return -1 if !Number(beat) && restAt.value[i] != undefined
-          return rest Number beat if props.restAt != null
-          Number beat
+        createBeats(props.note, props.restAt, props.useRest)
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->
@@ -117,9 +101,6 @@
         next = beats.value[index+2] if !next
         next = beats.value[index+3] if !next
         return true if next && next == -1
-      rest = (beat)->
-        return beat if !props.useRest || beat || ramdon(0.9)
-        -1
       createNote = (e)->
         e.target.blur() if e
         restAt.value = null

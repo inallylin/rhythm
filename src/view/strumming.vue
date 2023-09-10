@@ -1,6 +1,8 @@
 <template>
   <div class="navpage" :style="style">
+    <player :notes="notes" :rests="rests" :use-rest="config.rest" />
     <div class="navpage__page">
+      {{notes}}, {{rests}}
       <TransitionGroup tag="div" class="bar" name="list" mode="out-in">
         <note
           :ref="getNoteInstance"
@@ -51,10 +53,12 @@
 import { useRouter } from 'vue-router'
 import { computed, watch, onMounted, ref, reactive } from 'vue'
 import note from '@/components/note.vue'
+import player from '@/components/player.vue'
 import { storage } from '@/mixins/tools.coffee'
 export default
   components:
     note: note
+    player: player
   setup: ->
     router = useRouter()
     config = reactive
