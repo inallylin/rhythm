@@ -1,0 +1,5 @@
+$space: (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 20px)
+@function space($size: md)
+  @return map-get($space, $size)
+=form-padding($size: md)
+  padding: calc(space($size)/2) space($size)

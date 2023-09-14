@@ -21,13 +21,21 @@ createBeats = (_noteId, _restId, _useRest)->
   _beats = decimalToBinary(_noteId)
   _restArray = if _useRest && _restId then getRests(_restId) else []
   _beatsArray = String(_beats).split ''
+  console.log 'createBeats', _noteId, _restId, _beatsArray, _restArray
   _beatsArray.map (_beat, i) ->
     _beatNumber = Number(_beat)
-    return -1 if !_beatNumber && _restArray[i] != undefined
+    return -1 if !_beatNumber && _restArray[i]
     return ramdonRest(_beatNumber) if _useRest && _restId != null
     _beatNumber
+
+decodeFullnote = (code, i)->
+  [_note, _rest] = String(code).match(/.{1,2}/g)
+  _note = parseInt Number(_note)
+  _rest = parseInt Number(_rest) if _rest
+  [_note, _rest]
 export {
   createBeats
   getRests
   ramdon
+  decodeFullnote
 }

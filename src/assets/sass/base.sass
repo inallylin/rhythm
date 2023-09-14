@@ -1,0 +1,48 @@
+:root
+  --theme-color: #60007a
+$theme-color: #333
+// body
+//   background: linear-gradient(200deg, var(--theme-color),  #333)
+#app
+  height: 100%
+  max-width: 1000px
+  margin: 0 auto
+
+.navigator
+
+.navpage
+  display: flex
+  flex-direction: column
+  min-height: 100%
+  box-sizing: border-box
+  background: white
+  &__page
+    transition: .2s
+    flex: 1 1 1%
+  &__nav
+    position: sticky
+    flex: 0 0 auto
+    z-index: 100
+    left: 0
+    bottom: 0
+    padding: 1em
+    display: flex
+    align-items: flex-end
+    justify-content: space-between
+    .preference
+      left: .5em
+      top: .5em
+      transition: .2s
+      padding: 0
+      display: flex
+      flex-wrap: wrap
+    .control
+      margin-left: auto
+      button
+        min-width: 3.5em
+        min-height: 3.5em
+        height: auto
+        padding: .5em 1em
+        svg
+          transform: scale(1.1) translate(0, 1px)
+        @media screen and (min-width: 769px)

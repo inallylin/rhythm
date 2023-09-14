@@ -38,23 +38,6 @@
   &:hover
     box-shadow: 0 0 0 2px white, 0 0 0 3px #ddd
 
-html
-  height: 100%
-  @media screen and (max-width: 991px)
-    font-size: 14px
-  @media screen and (max-width: 768px)
-    font-size: 12px
-body, *
-  font-family: 'Ubuntu', sans-serif
-body
-  margin: 0
-  padding: 0
-  height: 100%
-*, *:before, *:after
-  border-color: inherit
-  color: inherit
-svg
-  width: 1em
 [hint]
   position: relative
   &:before
@@ -68,9 +51,6 @@ svg
     transition: .2s
   &:hover:before
     opacity: .5
-#app
-  background: white
-  height: 100%
 .preference
   padding: 1rem
   > *
@@ -82,41 +62,6 @@ svg
       box-sizing: border-box
       display: inline-block
       cursor: pointer
-.navpage
-  display: flex
-  flex-direction: column
-  min-height: 100%
-  box-sizing: border-box
-  &__page
-    transition: .2s
-    flex: 1 1 1%
-  &__nav
-    position: sticky
-    flex: 0 0 auto
-    z-index: 100
-    left: 0
-    bottom: 0
-    padding: 1em
-    display: flex
-    align-items: flex-end
-    justify-content: space-between
-    .preference
-      left: .5em
-      top: .5em
-      transition: .2s
-      padding: 0
-      display: flex
-      flex-wrap: wrap
-    .control
-      margin-left: auto
-      button
-        min-width: 3.5em
-        min-height: 3.5em
-        height: auto
-        padding: .5em 1em
-        svg
-          transform: scale(1.1) translate(0, 1px)
-        @media screen and (min-width: 769px)
 .bar
   display: flex
   flex-wrap: wrap

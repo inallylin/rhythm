@@ -28,7 +28,7 @@
         _playerPointer = 0
         _play = ()->
           if _playerPointer >= track.value.length
-            return clearInterval(_player)
+            return clearInterval(player)
           if track.value[_playerPointer] == 1
             sound.value.currentTime = 0
             sound.value.play()
@@ -36,7 +36,7 @@
             sound.value.pause()
           _playerPointer += 1
         _play()
-        player = setInterval(_play, 500)
+        player = setInterval(_play, 300)
       return {
         track
         play
