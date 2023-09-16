@@ -42,7 +42,7 @@
       note: note
     setup: ->
       useRest = ref false
-      notes = ref [9]
+      notes = ref [1...16]
       rests = ref [6]
       config = reactive
         theme: storage 'theme', '#1c5580'

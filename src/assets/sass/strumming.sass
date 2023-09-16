@@ -1,25 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Music&family=Ubuntu&display=swap')
+@import '_mixins'
 %padding
-  padding: .6rem 1.2rem
+  +rwd-padding
 %color-fix
-  filter: saturate(50%)
+  +color-fix
 %reverse-roof
   left: auto
   right: .25rem
-%label
-  @extend %padding
-  @extend %color-fix
-  display: inline-block
-  cursor: pointer
-  border: 2px solid #eee
-  border-radius: .25rem
-  width: 100%
-  position: relative
-  box-sizing: border-box
-  transition: .2s
-  white-space: nowrap
-  &:hover
-    border-color: #ddd
 %button
   display: inline-block
   vertical-align: middle
@@ -37,31 +24,6 @@
   background: white
   &:hover
     box-shadow: 0 0 0 2px white, 0 0 0 3px #ddd
-
-[hint]
-  position: relative
-  &:before
-    @extend %color-fix
-    content: attr(hint)
-    position: absolute
-    left: 50%
-    top: 0
-    transform: translateX(-50%)
-    opacity: 0
-    transition: .2s
-  &:hover:before
-    opacity: .5
-.preference
-  padding: 1rem
-  > *
-    font-size: 1rem
-    margin: .5rem
-    background: white
-    label
-      height: 100%
-      box-sizing: border-box
-      display: inline-block
-      cursor: pointer
 .bar
   display: flex
   flex-wrap: wrap
@@ -92,9 +54,18 @@
     margin: 0
     @media screen and (max-width: 768px)
       margin-bottom: 1em
-      background: #fafafa
+      background: color(light)
       border-radius: 3em
       padding: .25em
+      position: relative
+      &:after
+        content: ''
+        border-top: 4px solid color(light)
+        border-left: 4px solid transparent
+        border-right: 4px solid transparent
+        position: absolute
+        top: 100%
+        left: calc(50% - 2px)
     @media screen and (min-width: 1025px)
       transition: .2s
       opacity: 0
@@ -115,9 +86,12 @@
         opacity: 1
       @media screen and (max-width: 768px)
         opacity: 1
-        margin: 0 .25em
+        margin: 0
         padding: 0
-        border-color: #f2f2f2
+        border-color: transparent
+        box-shadow: 0 2px 5px rgba(black, .08), 0 8px 16px -8px rgba(black, .05)
+        &:not(:first-child)
+          margin-left: .5em
   &:hover
     .control
       opacity: 1
@@ -440,24 +414,6 @@
   button
     @extend %button
     margin: .5em
-    &.btn-add
-      padding: 0
-
-.btn-add
-  &:before, &:after
-    content: ''
-    position: absolute
-    top: calc(50% - .125em)
-    left: calc(50% - .5em)
-    display: block
-    border-top: .125em solid
-    border-radius: 4px
-    width: 1em
-    @media screen and (min-width: 769px)
-      left: calc(1em + .125em)
-  &:after
-    transform-origin: center center
-    transform: rotate(90deg)
 .btn-delete
   color: firebrick
   svg path
@@ -469,98 +425,6 @@
     transform: rotate(360deg)
   100%
     transform: rotate(480deg)
-
-select
-  @extend %padding
-  @extend %color-fix
-  width: 100%
-  height: 100%
-  color: inherit
-  background: none
-  cursor: pointer
-  border-radius: .25rem
-  border: .125rem solid
-  box-sizing: border-box
-  font-size: inherit
-  @media screen and (min-width: 1025px)
-    margin: .5rem 0 0
-  &, &:focus, &:active, &:focus:active
-    border-color: inherit
-    outline: none
-.color-picker
-  align-self: stretch
-  > input
-    opacity: 0
-    pointer-event: none
-    position: absolute
-  > label
-    width: 1.5em
-    transition: .2s
-    border: 1px solid
-    box-shadow: 0 0 0 0 white, 0 0 0 0 #ccc, inset 0 0 0 10rem
-    display: block
-    border-radius: .25rem
-    cursor: pointer
-    position: relative
-    z-index: 0
-    &:hover
-      box-shadow: 0 0 0 2px white, 0 0 0 4px #ddd, inset 0 0 0 10rem
-.checkbox
-  margin: .5rem
-  white-space: nowrap
-  > input
-    pointer-events: none
-    position: absolute
-    opacity: 0
-    &:checked + label
-      &:before
-        right: 1.35rem
-      &:after
-        box-shadow: inset 0 0 0 10rem
-      // content: 'ON'
-      // box-shadow: inset 0 0 0 10rem
-  > label
-    @extend %label
-    &:before
-      content: ''
-      display: inline-block
-      width: .75rem
-      height: .75rem
-      margin-left: 1rem
-      position: absolute
-      background: white
-      border-radius: 50%
-      right: 2.3rem
-      top: .8rem
-      transition: .2s
-    &:after
-      content: ''
-      display: inline-block
-      width: 2rem
-      height: 1rem
-      border-radius: 3rem
-      margin-top: .075rem
-      margin-left: 1rem
-      background: #f2f2f2
-      box-shadow: inset 0 0 0 10rem #ccc
-.input
-  @extend %label
-  width: auto
-  display: flex
-  > input
-    transition: .2s
-    min-width: 0
-    max-width: 40px
-    text-align: right
-    font-size: inherit
-    border: 0
-    margin-left: 1em
-    outline: none
-    border-radius: .125rem
-    flex: 1 1 1%
-    &:focus
-      background: #eee
-      box-shadow: 0 0 0 2px #eee
 
 .list-enter, .list-leave-to
   opacity: 0

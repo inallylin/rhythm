@@ -1,21 +1,43 @@
+@import '_mixins'
 :root
   --theme-color: #60007a
 $theme-color: #333
-// body
-//   background: linear-gradient(200deg, var(--theme-color),  #333)
+%label
+  +rwd-padding
+  +color-fix
+  display: inline-block
+  cursor: pointer
+  border: 2px solid #eee
+  border-radius: .25rem
+  width: 100%
+  position: relative
+  box-sizing: border-box
+  transition: .2s
+  white-space: nowrap
+  &:hover
+    border-color: #ddd
+
 #app
   height: 100%
   max-width: 1000px
   margin: 0 auto
 
 .navigator
-
+  &.open ~ .navpage
+    +max-screen(414)
+      filter: blur(5px)
+.preference
+  &.open ~ .navpage
+    +max-screen(768)
+      filter: blur(5px)
 .navpage
   display: flex
   flex-direction: column
   min-height: 100%
   box-sizing: border-box
   background: white
+  position: relative
+  z-index: 0
   &__page
     transition: .2s
     flex: 1 1 1%
@@ -43,6 +65,124 @@ $theme-color: #333
         min-height: 3.5em
         height: auto
         padding: .5em 1em
+        @media screen and (max-width: 414px)
+          display: block
+          margin-top: 1em
         svg
           transform: scale(1.1) translate(0, 1px)
         @media screen and (min-width: 769px)
+
+select
+  +color-fix
+  +rwd-padding
+  width: 100%
+  height: 100%
+  color: inherit
+  background: none
+  cursor: pointer
+  border-radius: .25rem
+  border: .125rem solid
+  box-sizing: border-box
+  font-size: inherit
+  @media screen and (min-width: 1025px)
+    margin: .5rem 0 0
+  &, &:focus, &:active, &:focus:active
+    border-color: inherit
+    outline: none
+.color-picker, .input, .checkbox
+  border-radius: 4px
+.color-picker
+  align-self: stretch
+  > input
+    opacity: 0
+    pointer-event: none
+    position: absolute
+  > label
+    width: 1.5em
+    transition: .2s
+    height: 100%
+    border: 1px solid
+    box-shadow: inset 0 0 0 10rem
+    display: block
+    border-radius: .25rem
+    cursor: pointer
+    position: relative
+    z-index: 0
+    .color-picker > label
+      +max-screen(768)
+        min-height: 2em
+        width: 100%
+        box-sizing: border-box
+        border: 2px solid white
+.checkbox
+  white-space: nowrap
+  > input
+    pointer-events: none
+    position: absolute
+    opacity: 0
+    &:checked + label
+      &:before
+        right: 1.2em
+      &:after
+        box-shadow: inset 0 0 0 10rem, 0 0 0 2px
+  > label
+    @extend %label
+    display: flex
+    justify-content: space-between
+    align-items: center
+    &:before
+      content: ''
+      display: inline-block
+      width: 1em
+      height: 1em
+      margin-left: 1em
+      position: absolute
+      background: white
+      border-radius: 50%
+      right: 2.2em
+      top: .85em
+      transition: .2s
+    &:after
+      content: ''
+      display: inline-block
+      vertical-align: text-top
+      width: 2em
+      height: 1em
+      border-radius: 3em
+      margin-left: 1em
+      background: color(gray)
+      box-shadow: inset 0 0 0 10rem color(gray), 0 0 0 2px color(gray)
+.input
+  display: inline-flex
+  align-self: flex-start
+  > label
+    @extend %label
+  input
+    transition: .2s
+    min-width: 0
+    max-width: 40px
+    text-align: right
+    font-size: inherit
+    border: 0
+    margin-left: 1em
+    outline: none
+    border-radius: .125rem
+    flex: 1 1 1%
+    background: color(powder)
+    &:focus
+      background: color(light)
+      box-shadow: 0 0 0 2px color(light)
+
+[hint]
+  position: relative
+  &:before
+    +color-fix
+    content: attr(hint)
+    position: absolute
+    left: 50%
+    top: 0
+    transform: translateX(-50%)
+    opacity: 0
+    transition: .2s
+  &:hover:before
+    opacity: .5

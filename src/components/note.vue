@@ -26,9 +26,9 @@
           <template v-if="n != 0">{{n}}</template>
         </span>
       </div>
-      <p>NOTE:{{note}}</p>
+      <!-- <p>NOTE:{{note}}</p>
       <p>beats: {{beats.reverse()}}</p>
-      <p>restAt: {{restAt}}</p>
+      <p>restAt: {{restAt}}</p> -->
     </template>
     <template v-else>
       <div class="note__wrapper fullrest">

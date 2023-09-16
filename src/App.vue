@@ -1,11 +1,11 @@
 <template>
   <navigator />
-  <router-view v-slot="{ Component }">
+  <preference />
+  <router-view class="page" v-slot="{ Component }">
     <transition name="list" mode="out-in">
       <component :is="Component" />
     </transition>
   </router-view>
-  <preference />
 </template>
 
 <script lang="coffee">

@@ -1,6 +1,6 @@
 <template>
   {{track}}
-  <audio ref="sound" src="src/assets/sound/mixkit-attention-bell-ding-586.wav" />
+  <audio ref="sound" src="src/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" />
   <button @click="play">play</button>
 </template>
 <script lang="coffee">
@@ -24,6 +24,7 @@
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
+      speed = ref 250
       play = ->
         _playerPointer = 0
         _play = ()->
@@ -36,10 +37,12 @@
             sound.value.pause()
           _playerPointer += 1
         _play()
-        player = setInterval(_play, 300)
+        # player = setInterval(_play, 150)
+        player = setInterval(_play, 250)
       return {
         track
         play
         sound
+        speed
       }
 </script>
