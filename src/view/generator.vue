@@ -123,7 +123,9 @@ export default
     syncConfig = (codeString)->
       _codes = codeString.split ','
       if _codes.some (c)-> c.length == 4
-        config.rest = true
+        console.log 8
+        store.dispatch 'preference.set',
+          rest: true
     remove = (i)->
       notes.value.splice i, 1
       rests.value.splice i, 1
@@ -132,7 +134,6 @@ export default
     onMounted ->
       await nextTick()
       inited.value = true
-      console.log 1
     return {
       noteInstance
       createRamdon

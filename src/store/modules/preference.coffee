@@ -1,7 +1,7 @@
 validator = (_key, _value)->
   if _key == 'measure'
     _value = if isNaN(_value) then 0 else Number(_value)
-  else
+  else if _key != 'theme'
     _value = false if typeof _value != 'boolean'
   _value
 export default

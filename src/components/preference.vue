@@ -41,6 +41,7 @@
       store = useStore()
       show = ref false
       style = computed -> "color: #{config.theme}; fill: #{config.theme}; "
+      preference = computed -> store.getters.preference
       config = reactive
         theme: storage 'theme', '#1c5580'
         arrow: storage 'arrow', true
@@ -49,6 +50,11 @@
       sync = ->
         store.dispatch 'preference.set', deepCopy(config)
       watch config, sync
+      watch preference, (n)->
+        for k, v of n
+          continue if config[k] == v
+          config[k] = v
+      , deep: true
       sync()
       return {
         config
