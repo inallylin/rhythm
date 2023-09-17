@@ -1,47 +1,45 @@
 <template>
-  <div>
-    <button @click="createNote">+</button>
-    <player :notes="notes" :rests="rests" :use-rest="useRest" />
-    <div class="testnote__list">
-      <div class="testnote" v-for="note, i in notes">
-        <note
-          :useRest="config.rest"
-          :showCode="config.code"
-          :showArrow="config.arrow"
-          :index="i"
-          :key="i"
-          @remove="remove(i)"
-          v-model:note="notes[i]"
-          v-model:restAt="rests[i]"
-          />
-        <div class="flex">
-          <div class="formfield">
-            Note: 
-            <input type="number" v-model="notes[i]" min="0" max="15" />
-          </div>
-          <div class="formfield">
-            <div>
-              Rest: 
-              <input type="number" v-model="rests[i]" min="0" max="15" />
-            </div>
-          </div>
-        </div>
+  <TransitionGroup tag="div" class="navpage" name="fade">
+    <trainer-setting v-model="options" v-if="!options?.length" />
+    <div class="navpage__page" v-if="options?.length">
+      <trainer-question :options="options" v-model="exam[i]"
+        v-for="q, i in exam" />
+    </div>
+    <div class="navpage__nav" v-if="options?.length">
+      <player :notes="notes" :rests="rests" :use-rest="false" />
+      <div class="control">
+        <button><icon-play /></button>
+        <button><icon-arrow-up /></button>
+        <button><icon-arrow-down /></button>
+        <button @click="restart"><icon-power-off /></button>
       </div>
     </div>
-  </div>
+  </TransitionGroup>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed } from 'vue'
+  import { ref, reactive, computed, onMounted, nextTick } from 'vue'
   import { storage } from '@/mixins/tools.coffee'
   import { decodeFullnote } from '@/mixins/beat.coffee'
   import player from '@/components/player.vue'
-  import note from '@/components/note.vue'
+  import iconArrowDown from '@/components/icon/arrow-down.vue'
+  import iconArrowUp from '@/components/icon/arrow-up.vue'
+  import iconPowerOff from '@/components/icon/power-off.vue'
+  import iconPlay from '@/components/icon/play.vue'
+  import trainerSetting from '@/view/trainer/setting.vue'
+  import trainerQuestion from '@/view/trainer/question.vue'
   export default
     components:
       player: player
-      note: note
+      'trainer-setting': trainerSetting
+      'trainer-question': trainerQuestion
+      'icon-arrow-down': iconArrowDown
+      'icon-arrow-up': iconArrowUp
+      'icon-power-off': iconPowerOff
+      'icon-play': iconPlay
     setup: ->
-      useRest = ref false
+      inited = ref false
+      options = ref []
+      exam = ref [null]
       notes = ref [1...16]
       rests = ref [6]
       config = reactive
@@ -62,13 +60,20 @@
         [_note, _rest] = decodeFullnote('0100')
         notes.value.push _note
         rests.value.push _rest
+      restart = ->
+        options.value?.length = 0
+        exam.value?.length = 0
+        exam.value?.push null
       return {
         notes
         rests
-        useRest
+        options
         config
         createNote
         remove
+        inited
+        restart
+        exam
       }
 </script>
 <style lang="sass">

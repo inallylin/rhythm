@@ -1,6 +1,6 @@
 <template>
-  <div class="beat">
-    <div class="control">
+  <div :class="['beat', {disabled: disabled}]">
+    <div class="control" v-if="!disabled">
       <button @click="createNote($event)">
         <icon-random />
       </button>
@@ -8,7 +8,7 @@
         <icon-trash-can />
       </button>
     </div>
-    <template v-if="note">
+    <template v-if="note || !useRest">
       <div :class="['note__wrapper', {quarter: isQuarter, tie: hasTie}]">
         <span :class="['note', seqClass(j)]" v-for="n, j in beats">
           <template v-if="n > 0">v</template>
@@ -26,9 +26,9 @@
           <template v-if="n != 0">{{n}}</template>
         </span>
       </div>
-      <!-- <p>NOTE:{{note}}</p>
+      <p>NOTE:{{note}}</p>
       <p>beats: {{beats.reverse()}}</p>
-      <p>restAt: {{restAt}}</p> -->
+      <p>restAt: {{restAt}}</p>
     </template>
     <template v-else>
       <div class="note__wrapper fullrest">
@@ -59,6 +59,9 @@
       index:
         type: Number
         default: 0
+      disabled:
+        type: Boolean
+        default: false
       showCode:
         type: Boolean
         default: false

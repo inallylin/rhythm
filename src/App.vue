@@ -1,4 +1,5 @@
 <template>
+  <div class="modal-wrapper"></div>
   <navigator />
   <preference />
   <router-view class="page" v-slot="{ Component }">
@@ -22,4 +23,6 @@
   @import '@/assets/sass/reset'
   @import '@/assets/sass/base'
   @import '@/assets/sass/strumming.sass'
+  @import '@/assets/sass/modal.sass'
+  @import '@/assets/sass/transition.sass'
 </style>

@@ -65,24 +65,15 @@
 </script>
 <style lang="sass" scoped>
   @import '@/assets/sass/_mixins.sass'
-  %formfield
-    +min-screen(769)
-      margin-right: space()
-    +max-screen(768)
-      margin: 0
-      margin-bottom: space()
-      background: white
-    > label
-      +max-screen(768)
-        border-color: transparent
-  .input, .checkbox, .color-picker
-    @extend %formfield
   .preference
     +drawer(768)
+    max-width: calc(100vw - 220px)
+    box-sizing: border-box
     position: fixed
     z-index: 9
     bottom: 0
     padding: space(lg)
+    flex-wrap: wrap
     +min-screen(769)
       display: flex
     +max-screen(768)

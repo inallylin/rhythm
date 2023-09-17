@@ -19,7 +19,7 @@ $theme-color: #333
 
 #app
   height: 100%
-  max-width: 1000px
+  max-width: 1200px
   margin: 0 auto
 
 .navigator
@@ -27,6 +27,17 @@ $theme-color: #333
     +max-screen(414)
       filter: blur(5px)
 .preference
+  .input, .checkbox, .color-picker, select
+    min-height: 47px
+    +min-screen(769)
+      margin: space(sm)
+    +max-screen(768)
+      margin: 0
+      margin-bottom: space()
+      background: white
+    > label
+      +max-screen(768)
+        border-color: transparent
   &.open ~ .navpage
     +max-screen(768)
       filter: blur(5px)
@@ -63,7 +74,7 @@ $theme-color: #333
     .control
       margin-left: auto
       button
-        width: 3.5em
+        min-width: 3.5em
         height: 3.5em
         padding: .5em 1em
         position: relative
@@ -83,24 +94,39 @@ $theme-color: #333
           margin-left: 1px
           transform: translate(-50%, -50%)
         @media screen and (min-width: 769px)
-
+.section
+  width: 100%
+  > *
+    padding: space()
+  &__head
+    font-size: 1.5rem
+    text-align: center
+    font-weight: bold
+  &__foot
+    text-align: center
+    button
+      +button-theme
 select
   +color-fix
   +rwd-padding
-  width: 100%
   height: 100%
   color: inherit
   background: none
   cursor: pointer
   border-radius: .25rem
-  border: .125rem solid
+  border: 0
+  box-shadow: inset 0 0 0 2px color(light)
   box-sizing: border-box
   font-size: inherit
-  @media screen and (min-width: 1025px)
-    margin: .5rem 0 0
+  transition: .2s
+  -webkit-appearance: none
+  appearance: none
+  padding-right: 2em
+  background: url(../image/caret-down.svg) no-repeat calc(100% - 1em) center
   &, &:focus, &:active, &:focus:active
-    border-color: inherit
     outline: none
+  &:hover, &:focus, &:active, &:focus:active
+    box-shadow: inset 0 0 0 2px color(gray)
 .color-picker, .input, .checkbox
   border-radius: 4px
   color: var(--theme-color)
@@ -175,15 +201,14 @@ select
   align-self: flex-start
   > label
     @extend %label
-  input
+  input, select
     transition: .2s
     min-width: 0
-    max-width: 40px
     text-align: right
     font-size: inherit
     border: 0
     padding: 0
-    margin-left: 1em
+    margin-left: .5em
     outline: none
     border-radius: .125rem
     flex: 1 1 1%
@@ -191,6 +216,8 @@ select
     &:focus
       background: color(light)
       box-shadow: 0 0 0 2px color(light)
+  input
+    max-width: 40px
 
 [hint]
   position: relative
@@ -205,3 +232,22 @@ select
     transition: .2s
   &:hover:before
     opacity: .5
+
+.text-info
+  color: color(black)
+  &:before
+    content: 'i'
+    font-size: 1em
+    transform: scale(.75)
+    transform-origin: bottom left
+    font-weight: bold
+    display: inline-block
+    color: var(--theme-color)
+    padding: 2px
+    border: 2px solid
+    border-radius: 50%
+    width: 1em
+    height: 1em
+    line-height: 1
+    vertical-align: text-bottom
+    opacity: .75

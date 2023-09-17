@@ -12,7 +12,11 @@ storage = (slug, defaultValue)->
   return _memory
 deepCopy = (_obj)->
   JSON.parse JSON.stringify(_obj)
+getRandomArrayItem = (_array)->
+  return null if !Array.isArray(_array) || !_array?.length
+  _array[Math.floor(Math.random()*_array.length)]
 export {
   storage
   deepCopy
+  getRandomArrayItem
 }

@@ -104,3 +104,23 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
     fill: var(--theme-color)
     +min-screen($breakpoint + 1)
       display: none
+=button-disabled
+  &[disabled]
+    background: color(light)
+    color: color(dark)
+    pointer-events: none
+
+=button-theme
+  +button-disabled
+  padding: space(sm) space(lg)
+  background: var(--theme-color)
+  border-radius: 3em
+  border: 0
+  color: white
+  cursor: pointer
+  opacity: .85
+  filter: saturate(85%)
+  transition: .2s
+  &:hover
+    opacity: 1
+    filter: saturate(100%)
