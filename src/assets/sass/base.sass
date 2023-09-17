@@ -33,7 +33,7 @@ $theme-color: #333
 .navpage
   display: flex
   flex-direction: column
-  min-height: 100%
+  min-height: calc(100% - 53px)
   box-sizing: border-box
   background: white
   position: relative
@@ -63,15 +63,25 @@ $theme-color: #333
     .control
       margin-left: auto
       button
-        min-width: 3.5em
-        min-height: 3.5em
-        height: auto
+        width: 3.5em
+        height: 3.5em
         padding: .5em 1em
+        position: relative
+        &[disabled]
+          background: color(powder)
+          pointer-events: none
+          color: color(gray)
+          fill: color(gray)
         @media screen and (max-width: 414px)
           display: block
           margin-top: 1em
         svg
-          transform: scale(1.1) translate(0, 1px)
+          font-size: 1.2em
+          position: absolute
+          top: 50%
+          left: 50%
+          margin-left: 1px
+          transform: translate(-50%, -50%)
         @media screen and (min-width: 769px)
 
 select
@@ -93,6 +103,9 @@ select
     outline: none
 .color-picker, .input, .checkbox
   border-radius: 4px
+  color: var(--theme-color)
+  fill: var(--theme-color)
+  background: white
 .color-picker
   align-self: stretch
   > input
@@ -169,6 +182,7 @@ select
     text-align: right
     font-size: inherit
     border: 0
+    padding: 0
     margin-left: 1em
     outline: none
     border-radius: .125rem

@@ -119,7 +119,7 @@
       remove = -> emit 'remove'
       watch beats, (n)->
         _restAt = n.map (b)-> if b == -1 then 1 else 0
-        # restAt.value = parseInt(_restAt.join(''), 2)
+        restAt.value = parseInt(_restAt.join(''), 2)
       watch (()-> props.useRest), (n)->
         restAt.value = null if !n
       createNote() if !note.value && note.value != 0

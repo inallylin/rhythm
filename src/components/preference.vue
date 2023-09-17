@@ -8,13 +8,6 @@
       <input id="color-picker" type="color" v-model="config.theme">
       <label for="color-picker"></label>
     </div>
-    <div class="input">
-      <label for="measure">
-        Measure
-        <input id="measure" type="Number" min="1" max="100" onfocus="this.select()"
-          v-model="measure" @click.stop>
-      </label>
-    </div>
     <div class="checkbox">
       <input id="toggle-code" type="checkbox" v-model="config.code">
       <label for="toggle-code">Code</label>
@@ -35,9 +28,9 @@
   </component>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed } from 'vue'
+  import { ref, reactive, computed, watch } from 'vue'
   import { useStore } from 'vuex'
-  import { storage } from '@/mixins/tools.coffee'
+  import { storage, deepCopy } from '@/mixins/tools.coffee'
   import iconPalette from '@/components/icon/palette.vue'
   import iconXmark from '@/components/icon/xmark.vue'
   export default
@@ -48,54 +41,46 @@
       store = useStore()
       show = ref false
       style = computed -> "color: #{config.theme}; fill: #{config.theme}; "
-      measure = computed
-        get: -> store.getters.preference?.measure
-        set: (value)->
-          value = 0 if isNaN(value)
-          store.dispatch 'preference.set',
-            measure: value
       config = reactive
         theme: storage 'theme', '#1c5580'
         arrow: storage 'arrow', true
         code: storage 'code', true
         rest: storage 'rest', false
-      syncConfig = (codeString)->
-        _codes = codeString.split ','
-        if _codes.some (c)-> c.length == 4
-          config.rest = true
-      console.log 88
+      sync = ->
+        store.dispatch 'preference.set', deepCopy(config)
+      watch config, sync
+      sync()
       return {
         config
         show
         style
-        measure
       }
   
 </script>
 <style lang="sass" scoped>
   @import '@/assets/sass/_mixins.sass'
+  %formfield
+    +min-screen(769)
+      margin-right: space()
+    +max-screen(768)
+      margin: 0
+      margin-bottom: space()
+      background: white
+    > label
+      +max-screen(768)
+        border-color: transparent
+  .input, .checkbox, .color-picker
+    @extend %formfield
   .preference
     +drawer(768)
     position: fixed
-    z-index: 10
+    z-index: 9
     bottom: 0
     padding: space(lg)
     +min-screen(769)
       display: flex
     +max-screen(768)
       top: 0
-    .input, .checkbox, .color-picker
-      color: var(--theme-color)
-      fill: var(--theme-color)
-      +min-screen(769)
-        margin-right: space()
-      +max-screen(768)
-        margin: 0
-        margin-bottom: space()
-        background: white
-      > label
-        +max-screen(768)
-          border-color: transparent
     .color-picker > label
       +max-screen(768)
         min-height: 2em

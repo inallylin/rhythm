@@ -10,6 +10,9 @@ storage = (slug, defaultValue)->
       _value.value = value
       localStorage.setItem slug, value
   return _memory
+deepCopy = (_obj)->
+  JSON.parse JSON.stringify(_obj)
 export {
   storage
+  deepCopy
 }

@@ -41,11 +41,11 @@
           icon: 'icon-dombbell'
           text: 'Trainer'
         }
-        {
-          name: 'challenge'
-          icon: 'icon-metal'
-          text: 'Challenge'
-        }
+        # {
+        #   name: 'challenge'
+        #   icon: 'icon-metal'
+        #   text: 'Challenge'
+        # }
       ]
       return {
         routes

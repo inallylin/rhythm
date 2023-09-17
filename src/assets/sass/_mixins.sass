@@ -31,9 +31,19 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
     background: var(--theme-color)
     height: 100%
     box-sizing: border-box
-    padding: space(lg)
+    padding: space(lg) 0
     transform: translateX(-100%)
     transition: .2s
+    &:after
+      content: ''
+      background: var(--theme-color)
+      position: absolute
+      z-index: -1
+      top: 0
+      right: 1px
+      bottom: 0
+      left: 0
+      filter: saturate(25%)
     &:before
       content: ''
       background: none
@@ -51,6 +61,7 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
       padding-top: space()
       padding-bottom: space()
       font-size: 16px
+      text-align: left
       &:after
         width: 1px
         height: 100%
@@ -58,11 +69,21 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
         left: auto
         bottom: 0
         top: 0
+        +max-screen($breakpoint)
+          border-right: 4px solid white
+          border-top: 4px solid transparent
+          border-bottom: 4px solid transparent
+          height: 0
+          width: 0
+          top: calc(50% - 4px)
+          opacity: 0
       &.router-link-active
         opacity: 1
         &:after
-          border-bottom-width: 0px
-          border-right-width: 1px
+          opacity: 1
+          +min-screen($breakpoint + 1)
+            border-bottom-width: 0px
+            border-right-width: 1px
   &.open
     +max-screen($breakpoint)
       transform: translateX(0)

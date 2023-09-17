@@ -1,7 +1,6 @@
 <template>
-  {{track}}
   <audio ref="sound" src="src/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" />
-  <button @click="play">play</button>
+  <slot :play="play" :isPlaying="isPlaying"></slot>
 </template>
 <script lang="coffee">
   import { ref, computed } from 'vue'
@@ -19,30 +18,35 @@
         default: false
     setup: (props)->
       sound = ref null
-      player = null
+      player = ref null
+      isPlaying = computed -> !!player.value
+      playerPointer = ref 0
       track = computed ->
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
-      speed = ref 250
+      speed = ref 250 #150
+      playBeat = ->
+        if playerPointer.value >= track.value.length
+          clearInterval(player.value)
+          player.value = null
+          return
+        if track.value[playerPointer.value] == 1
+          sound.value.currentTime = 0
+          sound.value.play()
+        else if track.value[playerPointer.value] == -1
+          sound.value.pause()
+        playerPointer.value += 1
       play = ->
-        _playerPointer = 0
-        _play = ()->
-          if _playerPointer >= track.value.length
-            return clearInterval(player)
-          if track.value[_playerPointer] == 1
-            sound.value.currentTime = 0
-            sound.value.play()
-          else if track.value[_playerPointer] == -1
-            sound.value.pause()
-          _playerPointer += 1
-        _play()
-        # player = setInterval(_play, 150)
-        player = setInterval(_play, 250)
+        clearInterval(player.value)
+        playerPointer.value = 0
+        player.value = setInterval(playBeat, speed.value)
       return {
         track
         play
         sound
         speed
+        isPlaying
+        playerPointer
       }
 </script>

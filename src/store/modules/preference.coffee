@@ -7,7 +7,7 @@ validator = (_key, _value)->
 export default
   state:
     preference:
-      measure: 4
+      measure: 0
   mutations:
     'preference.set': (state, _settings) ->
       for k, v of _settings
@@ -21,4 +21,3 @@ export default
       context.commit 'preference.set', _settings
   getters:
     preference: (state) -> state.preference
-    measure: (state) -> state.preference.measure
