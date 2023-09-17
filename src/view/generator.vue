@@ -1,5 +1,6 @@
 <template>
-  <div class="navpage" :style="style">
+  <div class="navpage">
+    {{measure}}
     <div class="navpage__page">
       <TransitionGroup tag="div" class="bar" name="list" mode="out-in">
         <note
@@ -16,28 +17,6 @@
       </TransitionGroup>
     </div>
     <div class="navpage__nav">
-      <div class="preference" v-if="false">
-        <div class="color-picker">
-          <input id="color-picker" type="color" v-model="config.theme">
-          <label for="color-picker" :style="style"></label>
-        </div>
-        <div class="input">
-          <label for="measure">Measure</label>
-          <input id="measure" type="Number" min="1" max="100" onfocus="this.select()" v-model="bar">
-        </div>
-        <div class="checkbox">
-          <input id="toggle-code" type="checkbox" v-model="config.code">
-          <label for="toggle-code">Code</label>
-        </div>
-        <div class="checkbox">
-          <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
-          <label for="toggle-arrow">Arrow</label>
-        </div>
-        <div class="checkbox">
-          <input id="toggle-rest" type="checkbox" v-model="config.rest">
-          <label for="toggle-rest">Rest</label>
-        </div>
-      </div>
       <div class="control">
         <button @click="createRamdon()">
           <icon-random />
@@ -50,8 +29,9 @@
   </div>
 </template>
 <script lang="coffee">
-import { useRouter } from 'vue-router'
 import { computed, watch, onMounted, ref, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import note from '@/components/note.vue'
 import { storage } from '@/mixins/tools.coffee'
 import iconRandom from '@/components/icon/random.vue'
@@ -62,6 +42,7 @@ export default
     'icon-random': iconRandom
     'icon-plus': iconPlus
   setup: ->
+    store = useStore()
     router = useRouter()
     config = reactive
       theme: storage 'theme', '#1c5580'
@@ -80,12 +61,17 @@ export default
       set: (value)->
         codes = value.split(',')
         codes.forEach (code, i)-> decode code, i
-    bar = computed
-      get: -> notes.value.length
+    # bar = computed
+    #   get: -> notes.value.length
+    #   set: (value)->
+    #     _diff = Number(value) - notes.value.length
+    #     for i in [0...Math.abs(_diff)]
+    #       if _diff > 0 then add() else notes.value.splice -1, 1
+    measure = computed
+      get: -> store.getters.preference?.measure
       set: (value)->
-        _diff = Number(value) - notes.value.length
-        for i in [0...Math.abs(_diff)]
-          if _diff > 0 then add() else notes.value.splice -1, 1
+        store.dispatch 'preference.set',
+          measure: value
     createRamdon = ->
       for n in noteInstance.value
         n?.createNote()
@@ -102,8 +88,8 @@ export default
       return if !params.code
       syncConfig params.code
       url.value = params.code
-    watch bar, (n)->
-      noteInstance.value.length = 0
+    # watch bar, (n)->
+    #   noteInstance.value.length = 0
     watch url, (n)->
       router.replace
         name: router.currentRoute.value.name
@@ -126,12 +112,15 @@ export default
     remove = (i)->
       notes.value.splice i, 1
       rests.value.splice i, 1
+    watch measure, (n)->
+      console.log 8
+      _diff = Number(n) - notes.value.length
+      for i in [0...Math.abs(_diff)]
+        if _diff > 0 then add() else notes.value.splice -1, 1
     getUrlCode()
-    bar.value = 4 if !bar.value
+    measure.value = 4 if !measure.value
     return {
       noteInstance
-      style
-      bar
       createRamdon
       config
       getNoteInstance
@@ -140,8 +129,6 @@ export default
       rests
       getUrlCode
       remove
+      measure
     }
 </script>
-<style lang="sass">
-  @import '@/assets/sass/strumming.sass'
-</style>

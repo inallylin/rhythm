@@ -1,9 +1,9 @@
 import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
-RhythmGenerator = () => import('@/view/rhythm-generator.vue')
-Guess = () => import('@/view/guess.vue')
-Choice = () => import('@/view/choice.vue')
+Generator = () => import('@/view/generator.vue')
+Trainer = () => import('@/view/trainer.vue')
+Challenge = () => import('@/view/challenge.vue')
 About = () => import('@/view/about.vue')
 
 
@@ -11,17 +11,17 @@ routes = [
   {
     path: '/'
     name: 'home'
-    component: RhythmGenerator
+    component: Generator
   }
   {
-    path: '/guess'
-    name: 'guess'
-    component: Guess
+    path: '/trainer'
+    name: 'trainer'
+    component: Trainer
   }
   {
-    path: '/choice'
-    name: 'choice'
-    component: Choice
+    path: '/challenge'
+    name: 'challenge'
+    component: Challenge
   }
   {
     path: '/about'

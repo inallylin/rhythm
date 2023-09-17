@@ -21,7 +21,6 @@ createBeats = (_noteId, _restId, _useRest)->
   _beats = decimalToBinary(_noteId)
   _restArray = if _useRest && _restId then getRests(_restId) else []
   _beatsArray = String(_beats).split ''
-  console.log 'createBeats', _noteId, _restId, _beatsArray, _restArray
   _beatsArray.map (_beat, i) ->
     _beatNumber = Number(_beat)
     return -1 if !_beatNumber && _restArray[i]

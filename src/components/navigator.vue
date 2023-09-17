@@ -37,12 +37,12 @@
           text: 'Rhythm'
         }
         {
-          name: 'guess'
+          name: 'trainer'
           icon: 'icon-dombbell'
-          text: 'Training'
+          text: 'Trainer'
         }
         {
-          name: 'choice'
+          name: 'challenge'
           icon: 'icon-metal'
           text: 'Challenge'
         }
@@ -96,8 +96,10 @@
     +drawer
     border-bottom: 1px solid color(light)
     margin-bottom: space()
-    position: fixed
-    z-index: 10
-    top: 0
     transition: .2s
+    text-align: center
+    +max-screen(414)
+      position: fixed
+      z-index: 10
+      top: 0
 </style>

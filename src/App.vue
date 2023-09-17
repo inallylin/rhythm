@@ -21,4 +21,5 @@
 <style lang="sass">
   @import '@/assets/sass/reset'
   @import '@/assets/sass/base'
+  @import '@/assets/sass/strumming.sass'
 </style>
