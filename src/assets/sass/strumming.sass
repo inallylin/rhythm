@@ -7,23 +7,6 @@
 %reverse-roof
   left: auto
   right: .25rem
-%button
-  display: inline-block
-  vertical-align: middle
-  position: relative
-  font-size: inherit
-  min-width: 2em
-  height: 2em
-  background: none
-  border: 2px solid
-  border-radius: 2em
-  align-self: center
-  cursor: pointer
-  transition: .2s
-  padding: 0 1em
-  background: white
-  &:hover
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #ddd
 .bar
   display: flex
   flex-wrap: wrap
@@ -78,6 +61,7 @@
       width: 3em
       height: 3em
       padding: .5em
+      line-height: 1
       svg
         position: relative
         fill: #666
@@ -396,7 +380,6 @@
   font-size: 1.2rem
   &:empty:before
     content: '-'
-  // &:not(:empty) + &.rest
   &.rest
     &:before
       content: '0'
@@ -412,16 +395,10 @@
 .control
   text-align: center
   button
-    @extend %button
+    +button
     margin: .5em
+    border-width: 1px
 .btn-delete
   color: firebrick
   svg path
     fill: firebrick
-@keyframes rotate
-  0%
-    transform: rotate(150deg)
-  50%
-    transform: rotate(360deg)
-  100%
-    transform: rotate(480deg)

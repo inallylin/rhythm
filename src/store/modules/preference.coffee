@@ -1,13 +1,20 @@
 validator = (_key, _value)->
-  if _key == 'measure'
-    _value = if isNaN(_value) then 0 else Number(_value)
-  else if _key != 'theme'
-    _value = false if typeof _value != 'boolean'
-  _value
+  switch _key
+    when 'measure'
+      if isNaN(_value) then 0 else Number(_value)
+    when 'code'
+      false if typeof _value != 'boolean'
+    when 'arrow'
+      false if typeof _value != 'boolean'
+    when 'rest'
+      false if typeof _value != 'boolean'
+    else
+      _value
 export default
   state:
     preference:
       measure: 0
+      speed: 250
   mutations:
     'preference.set': (state, _settings) ->
       for k, v of _settings
@@ -21,3 +28,4 @@ export default
       context.commit 'preference.set', _settings
   getters:
     preference: (state) -> state.preference
+    speed: (state) -> state.preference.speed

@@ -1,18 +1,16 @@
 <template>
   <audio ref="sound" src="src/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" />
-  <slot :play="play" :isPlaying="isPlaying"></slot>
-  <teleport to=".preference" v-if="inited && configurable">
-    <!-- <input type="range" v-model="speed" min="100" max="300" step="50"> -->
-    <select v-model="speed">
-      <option :value="s" v-for="s in [100, 150, 200, 250, 300]">
-        {{60000/(s*4)}}bpm
-      </option>
-    </select>
-  </teleport>
+  <slot :play="play" :isPlaying="isPlaying">
+    <button class="btn-play" @click="play" :disabled="isPlaying">
+      <icon-play />
+    </button>
+  </slot>
 </template>
 <script lang="coffee">
   import { ref, computed, onMounted, nextTick } from 'vue'
+  import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
+  import iconPlay from '@/components/icon/play.vue'
   export default
     props:
       notes:
@@ -27,7 +25,10 @@
       configurable:
         type: Boolean
         default: true
+    components:
+      'icon-play': iconPlay
     setup: (props)->
+      store = useStore()
       inited = ref false
       sound = ref null
       player = ref null
@@ -37,7 +38,11 @@
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
-      speed = ref 250 #150
+      # speed = ref 250 #150
+      console.log 2
+      speed = computed ->
+        console.log 13, store.getters.speed
+        store.getters.speed
       playBeat = ->
         if playerPointer.value >= track.value.length
           clearInterval(player.value)
@@ -67,3 +72,14 @@
         inited
       }
 </script>
+<style lang="sass" scoped>
+  @import '@/assets/sass/mixins'
+  .btn-play
+    +button
+    +button-round
+    +button-svg-icon
+    +button-disabled
+    background: white
+    display: block
+    margin: 0 auto
+</style>

@@ -2,28 +2,50 @@
   <TransitionGroup tag="div" class="navpage" name="fade">
     <trainer-setting v-model="options" v-if="!options?.length" />
     <div class="navpage__page" v-if="options?.length">
-      <trainer-question :options="options" v-model="exam[i]"
-        v-for="q, i in exam" />
+      {{results}}
+      <trainer-question
+        v-for="q, i in exam"
+        :options="options"
+        v-model="exam[i]"
+        @update:result="(e)=>results[i]"
+        >
+        <template #btn:next v-if="i == exam.length - 1">
+          <button class="btn-theme" @click="add">Next</button>
+        </template>
+      </trainer-question>
     </div>
     <div class="navpage__nav" v-if="options?.length">
-      <player :notes="notes" :rests="rests" :use-rest="false" />
       <div class="control">
-        <button><icon-play /></button>
-        <button><icon-arrow-up /></button>
-        <button><icon-arrow-down /></button>
+        <button style="border: 0; line-height: 1;">
+          4 / 5
+          <span style="color: #999; display: block">
+            (80%)
+          </span>
+        </button>
+        <button @click="add"><icon-plus /></button>
         <button @click="restart"><icon-power-off /></button>
       </div>
+      <teleport to=".preference">
+        <!-- <input type="range" v-model="speed" min="100" max="300" step="50"> -->
+        <select v-model="speed">
+          <option :value="s" v-for="s in [150, 200, 250, 300]">
+            {{60000/(s*4)}}bpm
+          </option>
+        </select>
+      </teleport>
     </div>
   </TransitionGroup>
 </template>
 <script lang="coffee">
   import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+  import { useStore } from 'vuex'
   import { storage } from '@/mixins/tools.coffee'
   import { decodeFullnote } from '@/mixins/beat.coffee'
   import player from '@/components/player.vue'
   import iconArrowDown from '@/components/icon/arrow-down.vue'
   import iconArrowUp from '@/components/icon/arrow-up.vue'
   import iconPowerOff from '@/components/icon/power-off.vue'
+  import iconPlus from '@/components/icon/plus.vue'
   import iconPlay from '@/components/icon/play.vue'
   import trainerSetting from '@/view/trainer/setting.vue'
   import trainerQuestion from '@/view/trainer/question.vue'
@@ -34,14 +56,20 @@
       'trainer-question': trainerQuestion
       'icon-arrow-down': iconArrowDown
       'icon-arrow-up': iconArrowUp
+      'icon-plus': iconPlus
       'icon-power-off': iconPowerOff
       'icon-play': iconPlay
     setup: ->
+      store = useStore()
       inited = ref false
       options = ref []
       exam = ref [null]
-      notes = ref [1...16]
-      rests = ref [6]
+      results = ref [null]
+      speed = computed
+        get: -> store.getters.speed
+        set: (value)->
+          store.dispatch 'preference.set',
+            speed: value
       config = reactive
         theme: storage 'theme', '#1c5580'
         arrow: storage 'arrow', true
@@ -53,6 +81,9 @@
           config.rest = true
       zeroFill = (_number, _units = 2)->
         String(_number).padStart(_units, 0)
+      add = (i)->
+        exam.value.push null
+
       remove = (i)->
         notes.value.splice(i, 1)
         rests.value.splice(i, 1)
@@ -64,40 +95,36 @@
         options.value?.length = 0
         exam.value?.length = 0
         exam.value?.push null
+      console.log 987
       return {
-        notes
-        rests
+        results
         options
         config
         createNote
         remove
         inited
         restart
+        add
         exam
+        speed
       }
 </script>
 <style lang="sass">
   @import '@/assets/sass/strumming.sass'
 </style>
 <style lang="sass" scoped>
-  .testnote
-    background: #eee
-    font-size: 12px
-    margin: 4px
-    padding: 4px
-    border-radius: 8px
-    :deep(.beat)
-      padding: 0
-      background: white
-    &__list
-      display: flex
-      flex-wrap: wrap
+  @import '@/assets/sass/mixins'
+  .navpage__page
+    counter-reset: question
   .flex
     display: flex
     margin: -6px
     margin-top: -2px
     > .formfield
       margin: 6px
+  .btn-theme
+    +button-theme
+    margin-top: space()
   input
     border: 0
     padding: 6px 12px

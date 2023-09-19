@@ -74,6 +74,8 @@ $theme-color: #333
     .control
       margin-left: auto
       button
+        +button
+        +button-svg-icon
         min-width: 3.5em
         height: 3.5em
         padding: .5em 1em
@@ -86,14 +88,6 @@ $theme-color: #333
         @media screen and (max-width: 414px)
           display: block
           margin-top: 1em
-        svg
-          font-size: 1.2em
-          position: absolute
-          top: 50%
-          left: 50%
-          margin-left: 1px
-          transform: translate(-50%, -50%)
-        @media screen and (min-width: 769px)
 .section
   width: 100%
   > *
@@ -106,6 +100,7 @@ $theme-color: #333
     text-align: center
     button
       +button-theme
+      margin: space(xs)
 select
   +color-fix
   +rwd-padding
@@ -232,7 +227,6 @@ select
     transition: .2s
   &:hover:before
     opacity: .5
-
 .text-info
   color: color(black)
   &:before

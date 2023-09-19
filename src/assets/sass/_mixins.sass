@@ -107,7 +107,9 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
 =button-disabled
   &[disabled]
     background: color(light)
+    border-color: color(gray)
     color: color(dark)
+    fill: color(dark)
     pointer-events: none
 
 =button-theme
@@ -124,3 +126,34 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
   &:hover
     opacity: 1
     filter: saturate(100%)
+
+=button-svg-icon
+  > svg
+    font-size: 1.2em
+    position: absolute
+    top: 50%
+    left: 50%
+    margin-left: 1px
+    transform: translate(-50%, -50%)
+=button
+  display: inline-block
+  vertical-align: middle
+  position: relative
+  font-size: inherit
+  min-width: 2em
+  height: 2em
+  background: none
+  border: 2px solid
+  border-radius: 2em
+  align-self: center
+  cursor: pointer
+  transition: .2s
+  padding: 0 1em
+  background: white
+  &:hover
+    box-shadow: 0 0 0 2px white, 0 0 0 3px color(light)
+=button-round
+  width: 3.5rem
+  height: 3.5rem
+  border: 2px solid var(--theme-color)
+  border-radius: 50%

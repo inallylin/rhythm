@@ -12,8 +12,11 @@
       </div>
     </div>
     <div class="section__foot">
-      <button @click="apply" :disabled="isDisabled">Go!</button>
-      <p class="text-info" v-if="isDisabled">Atleast choose 2 rhythm</p>
+      <button @click="applyAll">All !</button>
+      <button @click="apply" :disabled="isDisabled">Go !</button>
+      <p class="text-info" v-if="isDisabled">
+        Atleast choose 2 rhythm, 1 without tie
+      </p>
     </div>
   </div>
 </template>
@@ -31,12 +34,16 @@
     setup: (props, {emit})->
       options = ref []
       isDisabled = computed ->
-        options.value.length <= 1
+        return true if options.value.length <= 1
+        options.value?.every (o)-> o%2 == 0
+      applyAll = ->
+        emit 'update:modelValue', [1..15]
       apply = ->
         emit 'update:modelValue', options.value
       return {
         options
         apply
+        applyAll
         isDisabled
       }
 </script>
