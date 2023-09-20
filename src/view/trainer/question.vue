@@ -84,7 +84,7 @@
         _isAllCorrect = checkResults.value?.every (c)-> c == true
         emit 'update:result', _isAllCorrect
       add = (_option)->
-        answer.value.push _option
+        answer.value.push _option if answer.value?.length < 4 
       init = ->
         if !notes.value?.length
           _options = [...props.options]

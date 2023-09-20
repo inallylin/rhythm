@@ -1,5 +1,7 @@
 <template>
-  <audio ref="sound" src="src/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" />
+  <audio ref="sound">
+    <source src="@/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" type="audio/wav">
+  </audio>
   <slot :play="play" :isPlaying="isPlaying">
     <button class="btn-play" @click="play" :disabled="isPlaying">
       <icon-play />

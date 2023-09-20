@@ -74,6 +74,7 @@
         rests.value.splice(i, 1)
       restart = ->
         options.value?.length = 0
+        results.value?.length = 0
         exam.value?.length = 0
         exam.value?.push null
       return {
