@@ -66,7 +66,7 @@
           return '-' if !resultsState.total
           _ratio = resultsState.correct / resultsState.total
           return 0 if isNaN(_ratio)
-          "#{_ratio * 100}%"
+          "#{(_ratio * 100).toFixed(2)}%"
       add = (i)->
         exam.value.push null
       remove = (i)->

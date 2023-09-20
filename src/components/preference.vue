@@ -69,7 +69,6 @@
           config[k] = v
       , deep: true
       sync()
-      console.log 123
       return {
         config
         show
