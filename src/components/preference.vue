@@ -22,6 +22,7 @@
         <label for="toggle-rest">Rest</label>
       </div>
     </template>
+    {{config.speed}}, {{preference}}
     <select v-model="config.speed" @click.stop>
       <option :value="s" v-for="s in [150, 200, 250, 300]">
         {{60000/(s*4)}}bpm
@@ -69,11 +70,13 @@
           config[k] = v
       , deep: true
       sync()
+      console.log 123
       return {
         config
         show
         style
         allowConfigNote
+        preference
       }
   
 </script>

@@ -1,13 +1,22 @@
 import { ref, computed } from 'vue'
 storage = (slug, defaultValue)->
-  _value = ref localStorage.getItem slug
-  _value.value = defaultValue if _value == undefined
-  _value.value = true if _value.value == 'true'
-  _value.value = false if _value.value == 'false'
+  _value = localStorage.getItem slug
+  console.log slug, _value
+  if [undefined, null].indexOf(_value) != -1
+    localStorage.setItem slug, defaultValue
+  # _value.value = defaultValue
+  # _value.value = true if _value.value == 'true'
+  # _value.value = false if _value.value == 'false'
   _memory = computed
-    get: ()-> _value.value
+    get: ()->
+      _value = localStorage.getItem slug
+      return true if _value == 'true'
+      return false if _value == 'false'
+      _value
+      # _value.value
     set: (value)->
-      _value.value = value
+      # _value.value = value
+      console.log 'set', value
       localStorage.setItem slug, value
   return _memory
 deepCopy = (_obj)->

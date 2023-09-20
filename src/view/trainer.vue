@@ -85,7 +85,6 @@
         restart
         add
         exam
-        speed
       }
 </script>
 <style lang="sass">
