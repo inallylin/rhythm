@@ -5,6 +5,9 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require('brotli-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const CompressionExtensions = ['js', 'css'];
+publicPath = ''
+if process.env.NODE_ENV === 'production' && process.env.VITE_PUBLIC_PATH
+  publicPath = process.env.VITE_PUBLIC_PATH
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -12,7 +15,7 @@ function resolve (dir) {
 module.exports = {
   productionSourceMap: false,
   parallel: true,
-  publicPath: process.env.NODE_ENV === 'production' ? '' : '',
+  publicPath: publicPath,
   pages: {
     index: {
       entry: 'src/main.js'
