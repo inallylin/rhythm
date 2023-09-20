@@ -28,16 +28,29 @@ $theme-color: #333
       filter: blur(5px)
 .preference
   .input, .checkbox, .color-picker, select
-    min-height: 47px
+    min-height: 41px
+    box-sizing: border-box
     +min-screen(769)
       margin: space(sm)
     +max-screen(768)
-      margin: 0
+      margin: space()
       margin-bottom: space()
       background: white
+      min-height: 36px
+      width: calc(100% - 24px)
+      height: auto
     > label
       +max-screen(768)
         border-color: transparent
+  .color-picker
+    +max-screen(768)
+      min-height: 0
+  select
+    min-height: 47px
+    +max-screen(768)
+      width: calc(100% - 24px)
+      box-sizing: border-box
+      margin-top: 0
   &.open ~ .navpage
     +max-screen(768)
       filter: blur(5px)
@@ -51,6 +64,8 @@ $theme-color: #333
   z-index: 0
   color: var(--theme-color)
   fill: var(--theme-color)
+  +max-screen(768)
+    padding-top: 58px
   &__page
     transition: .2s
     flex: 1 1 1%
@@ -64,6 +79,9 @@ $theme-color: #333
     display: flex
     align-items: flex-end
     justify-content: space-between
+    pointer-events: none
+    > *
+      pointer-events: all
     .preference
       left: .5em
       top: .5em
@@ -73,19 +91,23 @@ $theme-color: #333
       flex-wrap: wrap
     .control
       margin-left: auto
-      button
+      position: relative
+      > button
         +button
         +button-svg-icon
-        min-width: 3.5em
-        height: 3.5em
-        padding: .5em 1em
-        position: relative
         &[disabled]
           background: color(powder)
           pointer-events: none
           color: color(gray)
           fill: color(gray)
-        @media screen and (max-width: 414px)
+      > *, > button
+        min-width: 3.5em
+        height: 3.5em
+        padding: .5em 1em
+        position: relative
+        box-sizing: border-box
+        vertical-align: middle
+        +max-screen(414)
           display: block
           margin-top: 1em
 .section
@@ -101,6 +123,11 @@ $theme-color: #333
     button
       +button-theme
       margin: space(xs)
+    .btn-outline
+      background: none
+      color: var(--theme-color)
+      border: 2px solid var(--theme-color)
+
 select
   +color-fix
   +rwd-padding

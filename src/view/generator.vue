@@ -149,3 +149,10 @@ export default
       componentPlayer
     }
 </script>
+<style lang="sass" scoped>
+  @import '@/assets/sass/_mixins'
+  .input
+    +max-screen(414)
+      margin-top: 0
+  
+</style>

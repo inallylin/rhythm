@@ -12,8 +12,9 @@
       </div>
     </div>
     <div class="section__foot">
-      <button @click="applyAll">All !</button>
       <button @click="apply" :disabled="isDisabled">Go !</button>
+      <button class="btn-outline" @click="applyAll">Go with All</button>
+      <button class="btn-outline" @click="applyRandom">Go with Random 4</button>
       <p class="text-info" v-if="isDisabled">
         Atleast choose 2 rhythm, 1 without tie
       </p>
@@ -36,6 +37,9 @@
       isDisabled = computed ->
         return true if options.value.length <= 1
         options.value?.every (o)-> o%2 == 0
+      applyRandom = ->
+        _options = [1..15].sort ()-> Math.random() - 0.5
+        emit 'update:modelValue', _options.splice 0, 4
       applyAll = ->
         emit 'update:modelValue', [1..15]
       apply = ->
@@ -44,6 +48,7 @@
         options
         apply
         applyAll
+        applyRandom
         isDisabled
       }
 </script>

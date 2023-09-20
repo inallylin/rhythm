@@ -34,6 +34,7 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
     padding: space(lg) 0
     transform: translateX(-100%)
     transition: .2s
+    min-width: 200px
     &:after
       content: ''
       background: var(--theme-color)
@@ -53,15 +54,15 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
       position: fixed
       z-index: -1
       width: 0
+    > *
+      text-align: left
     > a
       display: block
       color: white
       fill: white
       opacity: .5
-      padding-top: space()
-      padding-bottom: space()
+      padding: space() space(xl)
       font-size: 16px
-      text-align: left
       &:after
         width: 1px
         height: 100%
@@ -87,6 +88,7 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
   &.open
     +max-screen($breakpoint)
       transform: translateX(0)
+      z-index: 100
       &:before
         width: 100vw
         background: rgba(color(powder), .5)

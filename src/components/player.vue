@@ -39,9 +39,7 @@
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
       # speed = ref 250 #150
-      console.log 2
       speed = computed ->
-        console.log 13, store.getters.speed
         store.getters.speed
       playBeat = ->
         if playerPointer.value >= track.value.length
@@ -61,7 +59,6 @@
       onMounted ->
         await nextTick()
         inited.value = true
-        console.log 444
       return {
         track
         play
