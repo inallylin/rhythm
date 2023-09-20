@@ -22,7 +22,6 @@
         <label for="toggle-rest">Rest</label>
       </div>
     </template>
-    {{config.speed}}, {{preference}}
     <select v-model="config.speed" @click.stop>
       <option :value="s" v-for="s in [150, 200, 250, 300]">
         {{60000/(s*4)}}bpm
