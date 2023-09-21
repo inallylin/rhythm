@@ -12,9 +12,9 @@
       </div>
     </div>
     <div class="section__foot">
+      <button class="btn-outline" @click="applyAll">All</button>
+      <button class="btn-outline" @click="applyRandom">Random 4</button>
       <button @click="apply" :disabled="isDisabled">Go !</button>
-      <button class="btn-outline" @click="applyAll">Go with All</button>
-      <button class="btn-outline" @click="applyRandom">Go with Random 4</button>
       <p class="text-info" v-if="isDisabled">
         Atleast choose 2 rhythm, 1 without tie
       </p>

@@ -35,7 +35,7 @@
   </component>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, watch } from 'vue'
+  import { ref, reactive, computed, watch, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
   import { useStore } from 'vuex'
   import { storage, deepCopy } from '@/mixins/tools.coffee'
@@ -49,7 +49,10 @@
       route = useRoute()
       store = useStore()
       show = ref false
+      inited = ref false
       style = computed -> "color: #{config.theme}; fill: #{config.theme}; "
+      preferenceRaw = computed ->
+        JSON.parse JSON.stringify(store.getters.preference)
       preference = computed -> store.getters.preference
       allowConfigNote = computed ->
         route.name == 'home'
@@ -62,19 +65,23 @@
       sync = ->
         store.dispatch 'preference.set', deepCopy(config)
       watch config, sync
-      watch preference, (n)->
+
+      watch preferenceRaw, (n, o)->
+        return if !inited.value
         for k, v of n
           continue if config[k] == v
           v = Number(v) if k == 'speed'
           config[k] = v
-      , deep: true
-      sync()
+      init = ->
+        sync()
+        inited.value = true
+      onMounted ->
+        init()
       return {
         config
         show
         style
         allowConfigNote
-        preference
       }
   
 </script>

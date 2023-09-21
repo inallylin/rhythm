@@ -1,5 +1,5 @@
 import { defineAsyncComponent } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 Generator = () => import('@/view/generator.vue')
 Trainer = () => import('@/view/trainer.vue')
@@ -31,7 +31,7 @@ routes = [
 ]
 export default (store) ->
   router = createRouter {
-    history: createWebHistory()
+    history: createWebHashHistory()
     routes
   }
   router

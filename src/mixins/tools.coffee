@@ -17,8 +17,14 @@ deepCopy = (_obj)->
 getRandomArrayItem = (_array)->
   return null if !Array.isArray(_array) || !_array?.length
   _array[Math.floor(Math.random()*_array.length)]
+sleep = (time)->
+  new Promise (resolve)->
+    setTimeout ->
+      resolve()
+    , time
 export {
   storage
   deepCopy
   getRandomArrayItem
+  sleep
 }

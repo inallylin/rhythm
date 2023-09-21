@@ -1,5 +1,5 @@
 <template>
-  <audio ref="sound">
+  <audio ref="sound" preload>
     <source src="@/assets/sound/mixkit-cowbell-sharp-hit-1743.wav" type="audio/wav">
   </audio>
   <slot :play="play" :isPlaying="isPlaying">
@@ -9,7 +9,7 @@
   </slot>
 </template>
 <script lang="coffee">
-  import { ref, computed, onMounted, nextTick } from 'vue'
+  import { ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
   import iconPlay from '@/components/icon/play.vue'
@@ -40,10 +40,9 @@
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
-      # speed = ref 250 #150
       speed = computed ->
         store.getters.speed
-      playBeat = ->
+      playBeat = (i)->
         if playerPointer.value >= track.value.length
           clearInterval(player.value)
           player.value = null
@@ -54,8 +53,18 @@
         else if track.value[playerPointer.value] == -1
           sound.value.pause()
         playerPointer.value += 1
+      prepare = ->
+        new Promise (resolve)->
+          sound.value.load()
+          sound.value.play()
+          setTimeout ->
+            sound.value.pause()
+            sound.value.currentTime = 0
+            resolve()
+          , 50
       play = ->
         clearInterval(player.value)
+        await prepare()
         playerPointer.value = 0
         player.value = setInterval(playBeat, speed.value)
       onMounted ->

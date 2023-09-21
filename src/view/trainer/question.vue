@@ -229,12 +229,12 @@
           top: 0
           left: 0
           padding: 0
-          background: none
+          background: none!important
           width: 100%
           border-radius: 0
           height: 100%
           margin: 0
-          border-color: transparent
+          border-color: transparent!important
           z-index: 1
           box-shadow: none
           > svg

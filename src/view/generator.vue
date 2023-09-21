@@ -49,7 +49,7 @@
 <script lang="coffee">
 import { computed, watch, onMounted, ref, reactive, nextTick } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import note from '@/components/note.vue'
 import { storage } from '@/mixins/tools.coffee'
 import iconRandom from '@/components/icon/random.vue'
@@ -66,6 +66,7 @@ export default
   setup: ->
     store = useStore()
     router = useRouter()
+    route = useRoute()
     config = computed -> store.getters.preference
     noteInstance = ref []
     notes = ref []
@@ -95,19 +96,14 @@ export default
     getNoteInstance = (instance)->
       noteInstance.value.push instance
     getUrlCode =->
-      search = location.search.replace '?', ''
-      params = {}
-      search.split("&").forEach (param)->
-        [key, value] = param.split "="
-        params[key] = value
-      return if !params.code
-      syncConfig params.code
-      url.value = params.code
+      return if !route.query?.code
+      syncConfig route.query?.code
+      url.value = route.query?.code
     watch measure, (n)->
       noteInstance.value.length = 0
     watch url, (n)->
       router.replace
-        name: router.currentRoute.value.name
+        name: route.name
         query:
           code: n
     decode = (code, i)->
@@ -123,7 +119,6 @@ export default
     syncConfig = (codeString)->
       _codes = codeString.split ','
       if _codes.some (c)-> c.length == 4
-        console.log 8
         store.dispatch 'preference.set',
           rest: true
     remove = (i)->
@@ -142,7 +137,6 @@ export default
       add
       notes
       rests
-      getUrlCode
       remove
       measure
       inited
