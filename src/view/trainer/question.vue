@@ -293,7 +293,8 @@
             font-size: 1em
       .beat
         padding: 0 space() space(xl) space()
-        flex: 1 1 auto
+        flex: 0 0 25%
+        box-sizing: border-box
         &.miss
           color: red
           :deep(.note.rest:only-child:before)
