@@ -67,8 +67,18 @@
           _ratio = resultsState.correct / resultsState.total
           return 0 if isNaN(_ratio)
           "#{(_ratio * 100).toFixed(2)}%"
+      console.log 2
+      scroll = ->
+        _domQuestions = document.querySelectorAll('.question')
+        _lastDomQuestion = Array.from(_domQuestions).pop()
+        _shift = document.body.clientHeight / 2
+        window.scrollTo
+          top: _lastDomQuestion.offsetTop + _shift
+          behavior: 'smooth'
       add = (i)->
         exam.value.push null
+        await nextTick()
+        scroll()
       remove = (i)->
         notes.value.splice(i, 1)
         rests.value.splice(i, 1)

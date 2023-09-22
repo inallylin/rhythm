@@ -23,8 +23,8 @@
       </div>
     </template>
     <select v-model="config.speed" @click.stop>
-      <option :value="s" v-for="s in [150, 200, 250, 300]">
-        {{60000/(s*4)}}bpm
+      <option :value="s" v-for="s in [150, 167, 200, 250, 300]">
+        {{Math.round(60000/(s*4))}}bpm
       </option>
     </select>
   </div>

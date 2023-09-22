@@ -28,9 +28,9 @@
         </div>
         Check Anwser
       </div>
-      <div class="question__result" v-else>
+      <div v-else :class="['question__result', `score-${score}`]">
         <div class="img">
-          <img src="@/assets/image/happy.png" v-if="checkResults.every(e=>e == true)" />
+          <img src="@/assets/image/happy.png" v-if="score == 4" />
           <img src="@/assets/image/sad.png" v-else />
         </div>
       </div>
@@ -74,6 +74,10 @@
         get: -> props.modelValue || []
         set: (value)->
           emit 'update:modelValue', value
+      score = computed ->
+        checkResults.value?.filter (r)->
+          !!r
+        .length
       undo = ()->
         answer.value.splice -1, 1
       checkAnswer = (_option)->
@@ -93,6 +97,7 @@
               if i == 0 then Number(o)%2 == 1 else true
           notes.value = _notes
       init()
+      console.log 987
       return {
         notes
         answer
@@ -101,6 +106,7 @@
         isChecked
         checkAnswer
         checkResults
+        score
       }
 </script>
 <style lang="sass" scoped>
@@ -236,7 +242,7 @@
           margin: 0
           border-color: transparent!important
           z-index: 1
-          box-shadow: none
+          box-shadow: none!important
           > svg
             right: .5em
             left: auto
@@ -292,13 +298,26 @@
           padding: space()
           background: white
           border-radius: 50%
-          border: 2px solid var(--theme-color)
-          +min-screen(577)
-            border-right-color: color(light)
-            border-top-color: color(light)
+          border: 2px solid color(gray)
           +max-screen(576)
             box-shadow: 8px 8px color(light)
             border-width: 4px
+        &[class*='score']
+          > .img
+            transform: rotate(45deg)
+            > img
+              transform: rotate(-45deg)
+        &.score-1 > .img
+          border-left-color: var(--theme-color)
+        &.score-2 > .img
+          border-bottom-color: var(--theme-color)
+          border-left-color: var(--theme-color)
+        &.score-3 > .img
+          border-right-color: var(--theme-color)
+          border-bottom-color: var(--theme-color)
+          border-left-color: var(--theme-color)
+        &.score-4 > .img
+          border-color: var(--theme-color)
       &.btn-check
         text-align: center
         text-transform: uppercase
@@ -310,6 +329,7 @@
           opacity: .5
           +max-screen(576)
             opacity: 1
+            background: white
             > img
               opacity: .25
         &:hover
@@ -336,4 +356,5 @@
             +max-screen(576)
               box-shadow: 8px 8px color(light)
               border-width: 4px
+
 </style>

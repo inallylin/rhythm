@@ -38,8 +38,11 @@
         return true if options.value.length <= 1
         options.value?.every (o)-> o%2 == 0
       applyRandom = ->
-        _options = [1..15].sort ()-> Math.random() - 0.5
-        emit 'update:modelValue', _options.splice 0, 4
+        _withoutTie = Math.floor(Math.random() * 8) * 2
+        _options = [1..15].filter (o)->
+          o != _withoutTie
+        .sort ()-> Math.random() - 0.5
+        emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
       applyAll = ->
         emit 'update:modelValue', [1..15]
       apply = ->

@@ -55,13 +55,15 @@
         playerPointer.value += 1
       prepare = ->
         new Promise (resolve)->
+          sound.value.muted = true
           sound.value.load()
           sound.value.play()
           setTimeout ->
             sound.value.pause()
             sound.value.currentTime = 0
+            sound.value.muted = false
             resolve()
-          , 50
+          , 500
       play = ->
         clearInterval(player.value)
         await prepare()
@@ -69,6 +71,7 @@
         player.value = setInterval(playBeat, speed.value)
       onMounted ->
         await nextTick()
+        await prepare()
         inited.value = true
       return {
         track
