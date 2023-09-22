@@ -3,21 +3,27 @@
     <div class="question__answer__wrapper">
       <div class="question__answer__list">
         <div :class="['question__answer', {pending: !isChecked}]">
-          <player :notes="isChecked?answer:notes" :use-rest="false" />
-          <div class="question__answer__placeholder" v-if="!answer?.length && !isChecked">
-            Choose rhythm to answer....
-          </div>
-          <div class="beat__list" v-if="answer.length">
-            <note :index="i" :note="n" disabled
+          <player ref="componentPlayer"
+            :notes="isChecked?answer:notes" :use-rest="false" />
+          <div class="beat__list">
+            <div class="question__answer__placeholder" v-if="!answer?.length && !isChecked">
+              Choose rhythm to answer....
+            </div>
+            <note :index="i" :note="n" disabled v-else
               v-for="n, i in answer" :use-rest="n == null"
               :class="{miss: isChecked && !checkResults[i]}"
               />
+            <span class="beat__pointer"
+              :style="pointerStyle(componentPlayer)" />
           </div>
         </div>
         <div :class="['question__answer', 'correct', {show: isChecked}]">
-          <player :notes="notes" :use-rest="false" />
+          <player ref="componentPlayerCorrect"
+            :notes="notes" :use-rest="false" />
           <div class="beat__list">
             <note :index="i" :note="n" v-for="n, i in notes" disabled />
+            <span class="beat__pointer"
+              :style="pointerStyle(componentPlayerCorrect)" />
           </div>
         </div>
       </div>
@@ -45,6 +51,7 @@
 </template>
 <script lang="coffee">
   import { ref, computed } from 'vue'
+  import { useStore } from 'vuex'
   import player from '@/components/player.vue'
   import { getRandomArrayItem } from '@/mixins/tools.coffee'
   import note from '@/components/note.vue'
@@ -67,9 +74,13 @@
       'icon-backspace': iconBackspace
     emits: ['update:modelValue', 'update:result']
     setup: (props, {emit})->
+      store = useStore()
       answer = ref []
       checkResults = ref []
       isChecked = ref false
+      componentPlayer = ref null
+      componentPlayerCorrect = ref null
+      speed = computed -> store.getters.speed
       notes = computed
         get: -> props.modelValue || []
         set: (value)->
@@ -88,7 +99,26 @@
         _isAllCorrect = checkResults.value?.every (c)-> c == true
         emit 'update:result', _isAllCorrect
       add = (_option)->
-        answer.value.push _option if answer.value?.length < 4 
+        answer.value.push _option if answer.value?.length < 4
+      pointerStyle = (_player)->
+        _current = 0
+        _current = _player?.pointer if _player?.pointer
+        if !_current
+          return
+            transition: 0
+            left: 0
+        # _offset = if _current then Math.ceil(_current/4)-1 else 0
+        # _percentage = (_current - 1) / 16
+        # return
+          # left: "#{_offset*25}%"
+          # transition: "#{speed.value/4/100}s linear"
+          # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
+          # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
+
+        _offset = if _current then Math.ceil(_current/4)-1 else 0
+        return
+          width: "25%"
+          left: "#{_offset*25}%"
       init = ->
         if !notes.value?.length
           _options = [...props.options]
@@ -97,7 +127,6 @@
               if i == 0 then Number(o)%2 == 1 else true
           notes.value = _notes
       init()
-      console.log 987
       return {
         notes
         answer
@@ -107,6 +136,9 @@
         checkAnswer
         checkResults
         score
+        componentPlayer
+        componentPlayerCorrect
+        pointerStyle
       }
 </script>
 <style lang="sass" scoped>
@@ -120,10 +152,13 @@
       align-items: center
       justify-content: flex-start
       flex: 1 1 100%
+      position: relative
+      align-self: stretch
+      transform-origin: center bottom
       +max-screen(576)
-        transform: scale(0.8)
-        margin-left: -10%
-        margin-right: -10%
+        transform: scale(0.85)
+        margin-left: -7.5%
+        margin-right: -7.5%
         margin-top: space()
       +max-screen(576)
         width: 100vw
@@ -132,6 +167,13 @@
         transform: scale(0.7)
         margin-left: -20%
         margin-right: -20%
+    &__pointer
+      width: 25%
+      transition: .2s
+      position: absolute
+      bottom: 0
+      border-bottom: 2px solid var(--theme-color)
+      // width: calc(100% / 16)
   .btn-undo
     +button-svg-icon
     background: var(--theme-color)!important
@@ -251,6 +293,7 @@
             font-size: 1em
       .beat
         padding: 0 space() space(xl) space()
+        flex: 1 1 auto
         &.miss
           color: red
           :deep(.note.rest:only-child:before)
@@ -267,7 +310,7 @@
           content: 'correct'
         &.show
           color: var(--theme-color)
-          border-color: var(--theme-color)
+          border-color: color(gray)
           height: auto
           min-height: 96px
     &__result
@@ -305,6 +348,8 @@
         &[class*='score']
           > .img
             transform: rotate(45deg)
+            +max-screen(576)
+              box-shadow: 12px 0px color(light)
             > img
               transform: rotate(-45deg)
         &.score-1 > .img

@@ -35,24 +35,25 @@
       sound = ref null
       player = ref null
       isPlaying = computed -> !!player.value
-      playerPointer = ref 0
+      pointer = ref 0
+      progress = ref 0
       track = computed ->
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
-      speed = computed ->
-        store.getters.speed
+      speed = computed -> store.getters.speed
       playBeat = (i)->
-        if playerPointer.value >= track.value.length
+        if pointer.value >= track.value.length
           clearInterval(player.value)
           player.value = null
+          pointer.value = 0
           return
-        if track.value[playerPointer.value] == 1
+        if track.value[pointer.value] == 1
           sound.value.currentTime = 0
           sound.value.play()
-        else if track.value[playerPointer.value] == -1
+        else if track.value[pointer.value] == -1
           sound.value.pause()
-        playerPointer.value += 1
+        pointer.value += 1
       prepare = ->
         new Promise (resolve)->
           sound.value.muted = true
@@ -67,7 +68,7 @@
       play = ->
         clearInterval(player.value)
         await prepare()
-        playerPointer.value = 0
+        pointer.value = 0
         player.value = setInterval(playBeat, speed.value)
       onMounted ->
         await nextTick()
@@ -79,7 +80,7 @@
         sound
         speed
         isPlaying
-        playerPointer
+        pointer
         inited
       }
 </script>

@@ -57,8 +57,7 @@ $theme-color: #333
 .navpage
   display: flex
   flex-direction: column
-  min-height: calc(100% - 53px)
-  box-sizing: border-box
+  min-height: calc(100vh - 58px)
   background: white
   position: relative
   z-index: 0
@@ -149,6 +148,13 @@ select
     outline: none
   &:hover, &:focus, &:active, &:focus:active
     box-shadow: inset 0 0 0 2px color(gray)
+  @at-root .input > label > &
+    margin: 0
+    padding-left: space(sm)
+    padding-right: space(sm)
+    min-height: 0
+    width: auto
+    margin-left: space(xs)
 .color-picker, .input, .checkbox
   border-radius: 4px
   color: var(--theme-color)

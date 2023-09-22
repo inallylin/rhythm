@@ -25,6 +25,16 @@
       </div>
     </div>
   </TransitionGroup>
+  <!-- <teleport to=".preference" key="perference">
+    <div class="input">
+      <label for="highlight" @click.stop>
+        Highlight
+        <select id="highlight" v-model="highlight">
+          <option value="1">1231231</option>
+        </select>
+      </label>
+    </div>
+  </teleport> -->
 </template>
 <script lang="coffee">
   import { ref, reactive, computed, onMounted, nextTick } from 'vue'
@@ -67,7 +77,11 @@
           _ratio = resultsState.correct / resultsState.total
           return 0 if isNaN(_ratio)
           "#{(_ratio * 100).toFixed(2)}%"
-      console.log 2
+      highlight = computed
+        get: -> store.getters.highlight
+        set: (value)->
+          store.dispatch 'preference.set',
+            highlight: value
       scroll = ->
         _domQuestions = document.querySelectorAll('.question')
         _lastDomQuestion = Array.from(_domQuestions).pop()
@@ -96,6 +110,7 @@
         restart
         add
         exam
+        highlight
       }
 </script>
 <style lang="sass">
