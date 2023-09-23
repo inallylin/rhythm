@@ -27,7 +27,7 @@
         {{Math.round(60000/(s*4))}}bpm
       </option>
     </select>
-    <div class="input">
+    <div class="input" v-if="$route.name == 'trainer'">
       <label for="highlight" @click.stop>
         Highlight
         <select id="highlight" v-model="config.highlight">
@@ -37,7 +37,7 @@
         </select>
       </label>
     </div>
-    <div class="input">
+    <div class="input" v-if="$route.name == 'trainer'">
       <label for="sound" @click.stop>
         Sound
         <select id="sound" v-model="config.sound">
@@ -47,7 +47,7 @@
         </select>
       </label>
     </div>
-    <div class="input" v-if="config.sound == 0">
+    <div class="input" v-if="$route.name == 'trainer' && config.sound == 0">
       <label for="sound" @click.stop>
         Sound config
         <select id="sound" v-model="config.stype">
@@ -165,6 +165,7 @@
   .hz-selector
     display: inline-flex
     vertical-align: middle
+    font-size: 12px
     input[type="range"]
       vertical-align: text-top
       margin-right: space(xs)
@@ -175,5 +176,4 @@
       display: flex
       input[type="range"]
         max-width: none
-
 </style>

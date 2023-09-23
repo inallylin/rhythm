@@ -46,8 +46,7 @@ $theme-color: #333
     +max-screen(768)
       min-height: 0
   > select
-    line-height: 2
-    min-height: 0
+    font-size: 1rem
   select
     +max-screen(768)
       width: calc(100% - 24px)
@@ -197,6 +196,8 @@ select
     &:checked + label
       &:before
         right: 1.2em
+        +min-screen(769)
+          right: 1.4em
       &:after
         box-shadow: inset 0 0 0 10rem, 0 0 0 2px
   > label
@@ -216,6 +217,9 @@ select
       right: 2.2em
       top: .85em
       transition: .2s
+      +min-screen(769)
+        top: .95em
+        right: 2.4em
     &:after
       content: ''
       display: inline-block
