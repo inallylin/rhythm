@@ -25,16 +25,6 @@
       </div>
     </div>
   </TransitionGroup>
-  <!-- <teleport to=".preference" key="perference">
-    <div class="input">
-      <label for="highlight" @click.stop>
-        Highlight
-        <select id="highlight" v-model="highlight">
-          <option value="1">1231231</option>
-        </select>
-      </label>
-    </div>
-  </teleport> -->
 </template>
 <script lang="coffee">
   import { ref, reactive, computed, onMounted, nextTick } from 'vue'

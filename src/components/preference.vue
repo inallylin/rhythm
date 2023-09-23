@@ -27,6 +27,41 @@
         {{Math.round(60000/(s*4))}}bpm
       </option>
     </select>
+    <div class="input">
+      <label for="highlight" @click.stop>
+        Highlight
+        <select id="highlight" v-model="config.highlight">
+          <option :value="0">Off</option>
+          <option :value="1">Beat</option>
+          <option :value="2">Progress</option>
+        </select>
+      </label>
+    </div>
+    <div class="input">
+      <label for="sound" @click.stop>
+        Sound
+        <select id="sound" v-model="config.sound">
+          <option :value="0">Web Audio</option>
+          <option :value="1">Cow Bell</option>
+          <option :value="2">Attention</option>
+        </select>
+      </label>
+    </div>
+    <div class="input" v-if="config.sound == 0">
+      <label for="sound" @click.stop>
+        Sound config
+        <select id="sound" v-model="config.stype">
+          <option value="sine">Sine</option>
+          <option value="square">Square</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+        </select>
+        <div class="hz-selector">
+          <input id="hz" type="range" min="164.8" max="1047" v-model="config.hz">
+          {{readableHz}}
+        </div>
+      </label>
+    </div>
   </div>
   <component is="style">
     :root{
@@ -41,6 +76,7 @@
   import { storage, deepCopy } from '@/mixins/tools.coffee'
   import iconPalette from '@/components/icon/palette.vue'
   import iconXmark from '@/components/icon/xmark.vue'
+  import hzName from '@/static/hz.json'
   export default
     components:
       'icon-palette': iconPalette
@@ -62,26 +98,40 @@
         code: storage 'code', true
         rest: storage 'rest', false
         speed: storage 'speed', 250
+        highlight: storage 'highlight', 1
+        sound: storage 'sound', 0
+        stype: storage 'stype', 'triangle'
+        hz: storage 'hz', 830.6
+      readableHz = computed ->
+        hzkey = Object.keys(hzName).find (k)->
+          _hz = hzName[k]
+          return k if Math.abs(_hz - config.hz) < 5
+        return hzkey if hzkey
+        "#{config.hz}Hz"
       sync = ->
         store.dispatch 'preference.set', deepCopy(config)
       watch config, sync
 
       watch preferenceRaw, (n, o)->
+        _numberKeys = ['speed', 'highlight', 'hz']
         return if !inited.value
         for k, v of n
           continue if config[k] == v
-          v = Number(v) if k == 'speed'
+          if _numberKeys.indexOf(k) >= 0
+            v = Number(v)
           config[k] = v
       init = ->
         sync()
         inited.value = true
       onMounted ->
         init()
+      console.log 5
       return {
         config
         show
         style
         allowConfigNote
+        readableHz
       }
   
 </script>
@@ -98,8 +148,10 @@
     flex-wrap: wrap
     +min-screen(769)
       display: flex
+      font-size: .85rem
     +max-screen(768)
       top: 0
+      width: 300px
     .color-picker > label
       +max-screen(768)
         min-height: 2em
@@ -110,4 +162,18 @@
       bottom: 0
       top: auto
       margin: 0
+  .hz-selector
+    display: inline-flex
+    vertical-align: middle
+    input[type="range"]
+      vertical-align: text-top
+      margin-right: space(xs)
+    +max-screen(768)
+      border-top: 1px solid color(light)
+      margin-top: space()
+      padding-top: space(sm)
+      display: flex
+      input[type="range"]
+        max-width: none
+
 </style>

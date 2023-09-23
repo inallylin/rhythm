@@ -13,7 +13,7 @@
               v-for="n, i in answer" :use-rest="n == null"
               :class="{miss: isChecked && !checkResults[i]}"
               />
-            <span class="beat__pointer"
+            <span v-if="hasHighlight" class="beat__pointer"
               :style="pointerStyle(componentPlayer)" />
           </div>
         </div>
@@ -22,7 +22,7 @@
             :notes="notes" :use-rest="false" />
           <div class="beat__list">
             <note :index="i" :note="n" v-for="n, i in notes" disabled />
-            <span class="beat__pointer"
+            <span v-if="hasHighlight" class="beat__pointer"
               :style="pointerStyle(componentPlayerCorrect)" />
           </div>
         </div>
@@ -78,6 +78,10 @@
       answer = ref []
       checkResults = ref []
       isChecked = ref false
+      highlight = computed ->
+        Number store.getters.preference.highlight
+      hasHighlight = computed ->
+        highlight.value > 0
       componentPlayer = ref null
       componentPlayerCorrect = ref null
       speed = computed -> store.getters.speed
@@ -101,12 +105,19 @@
       add = (_option)->
         answer.value.push _option if answer.value?.length < 4
       pointerStyle = (_player)->
+        if highlight.value == 2 # progress
+          return
+            width: "#{_player?.progress*100}%"
         _current = 0
         _current = _player?.pointer if _player?.pointer
         if !_current
           return
             transition: 0
             left: 0
+        _offset = if _current then Math.ceil(_current/4)-1 else 0
+        return
+          width: "25%"
+          left: "#{_offset*25}%"
         # _offset = if _current then Math.ceil(_current/4)-1 else 0
         # _percentage = (_current - 1) / 16
         # return
@@ -115,10 +126,6 @@
           # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
           # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
 
-        _offset = if _current then Math.ceil(_current/4)-1 else 0
-        return
-          width: "25%"
-          left: "#{_offset*25}%"
       init = ->
         if !notes.value?.length
           _options = [...props.options]
@@ -127,6 +134,7 @@
               if i == 0 then Number(o)%2 == 1 else true
           notes.value = _notes
       init()
+      console.log 23
       return {
         notes
         answer
@@ -139,6 +147,7 @@
         componentPlayer
         componentPlayerCorrect
         pointerStyle
+        hasHighlight
       }
 </script>
 <style lang="sass" scoped>
@@ -314,6 +323,8 @@
           border-color: color(gray)
           height: auto
           min-height: 96px
+          > .beat__list
+            border-color: var(--theme-color)
     &__result
       flex: 0 0 auto
       display: flex

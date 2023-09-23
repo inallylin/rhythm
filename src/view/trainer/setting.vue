@@ -42,6 +42,7 @@
         _options = [1..15].filter (o)->
           o != _withoutTie
         .sort ()-> Math.random() - 0.5
+        console.log _withoutTie, _options, [_withoutTie, ..._options.splice(0, 3)]
         emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
       applyAll = ->
         emit 'update:modelValue', [1..15]
