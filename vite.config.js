@@ -30,5 +30,26 @@ export default defineConfig({
       algorithm:  'gzip',
       ext:        'gz'
     }),
-  ]
+  ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        charset: false
+      }
+    },
+    postcss: {
+      plugins: [
+        {
+          postcssPlugin: 'internal:charset-removal',
+          AtRule: {
+            charset: (atRule) => {
+              if (atRule.name === 'charset') {
+                atRule.remove();
+              }
+            }
+          }
+        }
+      ],
+    },
+  }
 });
