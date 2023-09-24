@@ -6,28 +6,52 @@
     </button>
     <div class="color-picker">
       <input id="color-picker" type="color" v-model="config.theme">
-      <label for="color-picker"></label>
+      <label for="color-picker">
+        <icon-palette />
+      </label>
     </div>
-    <template v-if="allowConfigNote">
-      <div class="checkbox">
-        <input id="toggle-code" type="checkbox" v-model="config.code">
-        <label for="toggle-code">Code</label>
+    <div class="formfield" v-if="allowConfigNote">
+      <div class="formfield__label">
+        Note
       </div>
-      <div class="checkbox">
-        <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
-        <label for="toggle-arrow">Arrow</label>
+      <div class="formfield__field">
+        <div class="checkbox">
+          <input id="toggle-code" type="checkbox" v-model="config.code">
+          <label for="toggle-code">Code</label>
+        </div>
+        <div class="checkbox">
+          <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
+          <label for="toggle-arrow">Arrow</label>
+        </div>
+        <div class="checkbox">
+          <input id="toggle-rest" type="checkbox" v-model="config.rest">
+          <label for="toggle-rest">Rest</label>
+        </div>
       </div>
-      <div class="checkbox">
-        <input id="toggle-rest" type="checkbox" v-model="config.rest">
-        <label for="toggle-rest">Rest</label>
+    </div>
+    <div class="formfield">
+      <div class="formfield__label">
+        Sound
       </div>
-    </template>
-    <select v-model="config.speed" @click.stop>
-      <option :value="s" v-for="s in [150, 167, 200, 250, 300]">
-        {{Math.round(60000/(s*4))}}bpm
-      </option>
-    </select>
-    <div class="input" v-if="$route.name == 'trainer'">
+      <div class="formfield__field">
+        <select v-model="config.speed" @click.stop>
+          <option :value="s" v-for="s in [150, 167, 200, 250, 300]">
+            {{Math.round(60000/(s*4))}}bpm
+          </option>
+        </select>
+        <select id="sound" v-model="config.wave" @click.stop>
+          <option value="sine">Sine</option>
+          <option value="square">Square</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+        </select>
+        <div class="hz-selector" @click.stop>
+          <input id="hz" type="range" min="164.8" max="1047" v-model="config.hz">
+          <label class="hz-selector__text">{{readableHz}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="input" v-if="allowConfigHighlight">
       <label for="highlight" @click.stop>
         Highlight
         <select id="highlight" v-model="config.highlight">
@@ -35,31 +59,6 @@
           <option :value="1">Beat</option>
           <option :value="2">Progress</option>
         </select>
-      </label>
-    </div>
-    <div class="input" v-if="$route.name == 'trainer'">
-      <label for="sound" @click.stop>
-        Sound
-        <select id="sound" v-model="config.sound">
-          <option :value="0">Web Audio</option>
-          <option :value="1">Cow Bell</option>
-          <option :value="2">Attention</option>
-        </select>
-      </label>
-    </div>
-    <div class="input" v-if="$route.name == 'trainer' && config.sound == 0">
-      <label for="sound" @click.stop>
-        Sound config
-        <select id="sound" v-model="config.stype">
-          <option value="sine">Sine</option>
-          <option value="square">Square</option>
-          <option value="triangle">Triangle</option>
-          <option value="sawtooth">Sawtooth</option>
-        </select>
-        <div class="hz-selector">
-          <input id="hz" type="range" min="164.8" max="1047" v-model="config.hz">
-          {{readableHz}}
-        </div>
       </label>
     </div>
   </div>
@@ -90,6 +89,8 @@
       preferenceRaw = computed ->
         JSON.parse JSON.stringify(store.getters.preference)
       preference = computed -> store.getters.preference
+      allowConfigHighlight = computed ->
+        route.name == 'trainer'
       allowConfigNote = computed ->
         route.name == 'home'
       config = reactive
@@ -99,8 +100,7 @@
         rest: storage 'rest', false
         speed: storage 'speed', 250
         highlight: storage 'highlight', 1
-        sound: storage 'sound', 0
-        stype: storage 'stype', 'triangle'
+        wave: storage 'wave', 'triangle'
         hz: storage 'hz', 830.6
       readableHz = computed ->
         hzkey = Object.keys(hzName).find (k)->
@@ -125,12 +125,12 @@
         inited.value = true
       onMounted ->
         init()
-      console.log 5
       return {
         config
         show
         style
         allowConfigNote
+        allowConfigHighlight
         readableHz
       }
   
@@ -139,41 +139,60 @@
   @import '@/assets/sass/_mixins.sass'
   .preference
     +drawer(768)
-    max-width: calc(100vw - 220px)
+    // max-width: calc(100% - 650px)
     box-sizing: border-box
     position: fixed
     z-index: 9
     bottom: 0
     padding: space(lg)
     flex-wrap: wrap
+    align-items: flex-end
     +min-screen(769)
       display: flex
       font-size: .85rem
     +max-screen(768)
       top: 0
       width: 300px
-    .color-picker > label
-      +max-screen(768)
-        min-height: 2em
-        width: 100%
-        box-sizing: border-box
-        border: 2px solid white
     &__toggle
       bottom: 0
       top: auto
       margin: 0
   .hz-selector
-    display: inline-flex
+    +label
     vertical-align: middle
     font-size: 12px
+    padding-left: space()
+    padding-right: space()
+    background-color: white
     input[type="range"]
-      vertical-align: text-top
-      margin-right: space(xs)
+      display: block
+      width: 100%
+    &__text[class]
+      color: color(dark)
+      font-size: 12px
+      +min-screen(769)
+        position: absolute
+        background: white
+        width: auto
+        top: -0.75rem
+        left: 1rem
+        padding-left: 0.5em
+        padding-right: 0.5em
+      +max-screen(768)
+        width: 4em
+        padding-left: space(xs)
+        padding-right: space(xs)
+        background: var(--theme-color)
+        border-radius: 2px
+        color: white
+        margin-left: space(sm)
+        line-height: 1.7
+        opacity: 0.5
     +max-screen(768)
-      border-top: 1px solid color(light)
-      margin-top: space()
-      padding-top: space(sm)
-      display: flex
+      border-color: transparent
+      &[class]
+        display: flex
       input[type="range"]
         max-width: none
+        flex: 1 1 1%
 </style>

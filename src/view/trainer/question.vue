@@ -134,7 +134,6 @@
               if i == 0 then Number(o)%2 == 1 else true
           notes.value = _notes
       init()
-      console.log 23
       return {
         notes
         answer
@@ -168,7 +167,7 @@
         transform: scale(0.85)
         margin-left: -7.5%
         margin-right: -7.5%
-        margin-top: space()
+        margin-top: -#{space(xl)}
       +max-screen(576)
         width: 100vw
         overflow: hidden

@@ -2,21 +2,6 @@
 :root
   --theme-color: #60007a
 $theme-color: #333
-%label
-  +rwd-padding
-  +color-fix
-  display: inline-block
-  cursor: pointer
-  border: 2px solid color(light)
-  border-radius: .25rem
-  width: 100%
-  position: relative
-  box-sizing: border-box
-  transition: .2s
-  white-space: nowrap
-  &:hover
-    border-color: #ddd
-
 #app
   height: 100%
   max-width: 1200px
@@ -27,26 +12,31 @@ $theme-color: #333
     +max-screen(414)
       filter: blur(5px)
 .preference
-  .input, .checkbox, .color-picker, select
-    min-height: 41px
+  .input, .checkbox, select, .color-picker
     box-sizing: border-box
     +min-screen(769)
       margin: space(sm)
     +max-screen(768)
       margin: space()
       margin-bottom: space()
-      background: white
+      background-color: white
       min-height: 36px
       width: calc(100% - 24px)
       height: auto
+      &, &:hover
+        border-color: transparent
     > label
       +max-screen(768)
-        border-color: transparent
+        &, &:hover
+          border-color: transparent
   .color-picker
     +max-screen(768)
       min-height: 0
   > select
     font-size: 1rem
+  .input
+    +max-screen(414)
+      margin-top: 0
   select
     +max-screen(768)
       width: calc(100% - 24px)
@@ -58,14 +48,12 @@ $theme-color: #333
 .navpage
   display: flex
   flex-direction: column
-  min-height: calc(100vh - 58px)
+  min-height: 100vh
   background: white
   position: relative
   z-index: 0
   color: var(--theme-color)
   fill: var(--theme-color)
-  +max-screen(768)
-    padding-top: 58px
   &__page
     transition: .2s
     flex: 1 1 1%
@@ -131,24 +119,22 @@ $theme-color: #333
 select
   +color-fix
   +rwd-padding
+  +label
   height: 100%
   color: inherit
   background: none
   cursor: pointer
   border-radius: .25rem
-  border: 0
-  box-shadow: inset 0 0 0 2px color(light)
   box-sizing: border-box
   font-size: inherit
   transition: .2s
   -webkit-appearance: none
   appearance: none
   padding-right: 2em
+  color: var(--theme-color)
   background: url(../image/caret-down.svg) no-repeat calc(100% - 1em) center
   &, &:focus, &:active, &:focus:active
     outline: none
-  &:hover, &:focus, &:active, &:focus:active
-    box-shadow: inset 0 0 0 2px color(gray)
   @at-root .input > label > &
     margin: 0
     padding-left: space(sm)
@@ -157,11 +143,11 @@ select
     width: auto
     margin-left: space(xs)
 .color-picker, .input, .checkbox
-  border-radius: 4px
+  border-radius: .25rem
   color: var(--theme-color)
   fill: var(--theme-color)
   background: white
-.color-picker
+.color-picker-backup
   align-self: stretch
   > input
     opacity: 0
@@ -187,6 +173,32 @@ select
         width: 100%
         box-sizing: border-box
         border: 2px solid white
+.color-picker
+  +max-screen(768)
+    background: none!important
+    position: absolute
+    bottom: 0
+  > input
+    opacity: 0
+    height: 0
+    width: 0
+    pointer-events: none
+    position: fixed
+  > label
+    font-size: 2rem
+    cursor: pointer
+    transition: .2s
+    line-height: 1
+    +max-screen(768)
+      background: white!important
+      display: inline-flex
+      justify-content: center
+      align-items: center
+      padding: space()
+      border-radius: 50%
+      width: 1.5em
+      height: 1.5em
+
 .checkbox
   white-space: nowrap
   > input
@@ -197,11 +209,11 @@ select
       &:before
         right: 1.2em
         +min-screen(769)
-          right: 1.4em
+          right: 1.425em
       &:after
         box-shadow: inset 0 0 0 10rem, 0 0 0 2px
   > label
-    @extend %label
+    +label
     display: flex
     justify-content: space-between
     align-items: center
@@ -218,7 +230,7 @@ select
       top: .85em
       transition: .2s
       +min-screen(769)
-        top: .95em
+        top: .955em
         right: 2.4em
     &:after
       content: ''
@@ -232,9 +244,9 @@ select
       box-shadow: inset 0 0 0 10rem color(gray), 0 0 0 2px color(gray)
 .input
   display: inline-flex
-  align-self: flex-start
   > label
-    @extend %label
+    +label
+    display: inline-flex
   input
     text-align: right
   input, select
@@ -249,11 +261,39 @@ select
     flex: 1 1 1%
     background: color(powder)
     &:focus
-      background: color(light)
       box-shadow: 0 0 0 2px color(light)
+      background: color(light)
+  select
+    &:focus
+      background-color: white
   input
-    max-width: 40px
-
+    // max-width: 40px
+.formfield
+  +min-screen(769)
+    margin-bottom: -.25rem
+  > *
+    display: block
+  &__label, &__field[class]
+    padding: space()
+    padding-top: 0
+  &__label
+    font-size: 1.5rem
+    color: color(gray)
+    letter-spacing: 0
+  &__field[class]
+    > *
+      margin: 0
+      display: block
+      width: 100%
+      &:not(:first-child)
+        margin-top: space()
+      &:not(:last-child)
+        margin-bottom: space()
+      &, & > label
+        margin-left: 0
+        margin-right: 0
+        &:first-child
+          margin-top: 0
 [hint]
   position: relative
   &:before

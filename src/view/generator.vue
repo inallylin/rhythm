@@ -29,6 +29,7 @@
         <player
           :notes="notes"
           :rests="rests"
+          :useRest="config.rest"
           >
           <template #="{play, isPlaying}">
             <button @click="play()" :disabled="isPlaying">
@@ -85,6 +86,7 @@ export default
     measure = computed
       get: -> notes.value?.length
       set: (value)->
+        syncConfig 'measure', value
         _diff = Number(value) - notes.value.length
         for i in [0...Math.abs(_diff)]
           if _diff > 0 then add() else notes.value.splice -1, 1
@@ -97,8 +99,11 @@ export default
       noteInstance.value.push instance
     getUrlCode =->
       return if !route.query?.code
-      syncConfig route.query?.code
       url.value = route.query?.code
+      # syncRest
+      _codes = route.query?.code?.split ','
+      if _codes.some (c)-> c.length == 4
+        syncConfig 'rest', true
     watch measure, (n)->
       noteInstance.value.length = 0
     watch url, (n)->
@@ -116,11 +121,10 @@ export default
       restCode = String(rest).padStart(2, 0)
       restCode = '' if !rest
       "#{noteCode}#{restCode}"
-    syncConfig = (codeString)->
-      _codes = codeString.split ','
-      if _codes.some (c)-> c.length == 4
-        store.dispatch 'preference.set',
-          rest: true
+    syncConfig = (_key, _value)->
+      _config = {}
+      _config[_key] = _value
+      store.dispatch 'preference.set', _config
     remove = (i)->
       notes.value.splice i, 1
       rests.value.splice i, 1
@@ -143,10 +147,3 @@ export default
       componentPlayer
     }
 </script>
-<style lang="sass" scoped>
-  @import '@/assets/sass/_mixins'
-  .input
-    +max-screen(414)
-      margin-top: 0
-  
-</style>

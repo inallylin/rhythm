@@ -1,13 +1,16 @@
 validator = (_key, _value)->
+  _defaultBoolean = (_value)->
+    return false if typeof _value != 'boolean'
+    _value
   switch _key
     when 'measure'
       if isNaN(_value) then 0 else Number(_value)
     when 'code'
-      false if typeof _value != 'boolean'
+      _defaultBoolean(_value)
     when 'arrow'
-      false if typeof _value != 'boolean'
+      _defaultBoolean(_value)
     when 'rest'
-      false if typeof _value != 'boolean'
+      _defaultBoolean(_value)
     else
       _value
 export default

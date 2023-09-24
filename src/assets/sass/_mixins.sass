@@ -159,3 +159,18 @@ $color: (powder: #f6f7f9, light: #e9ebee, gray: #bec4c9, dark: #9ca1a6, black: #
   height: 3.5rem
   border: 2px solid var(--theme-color)
   border-radius: 50%
+
+=label
+  +rwd-padding
+  +color-fix
+  display: inline-block
+  cursor: pointer
+  border: 2px solid color(light)
+  border-radius: .25rem
+  width: 100%
+  position: relative
+  box-sizing: border-box
+  transition: .2s
+  white-space: nowrap
+  &:hover
+    border-color: color(gray)

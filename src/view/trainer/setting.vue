@@ -58,6 +58,9 @@
 </script>
 <style lang="sass" scoped>
   @import '@/assets/sass/mixins'
+  .section
+    +max-screen(768)
+      margin-top: 6px
   .note-option
     flex: 0 0 auto
     width: 150px

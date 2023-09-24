@@ -1,6 +1,7 @@
 <template>
-  <TransitionGroup tag="div" class="navpage" name="fade">
-    <trainer-setting v-model="options" v-if="!options?.length" />
+  <TransitionGroup tag="div" name="fade" class="navpage">
+    <trainer-setting class="trainer-settings"
+      v-model="options" v-if="!options?.length" />
     <div class="navpage__page" v-if="options?.length">
       <trainer-question
         v-for="q, i in exam"
@@ -27,7 +28,7 @@
   </TransitionGroup>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+  import { ref, reactive, watch, computed, onMounted, nextTick } from 'vue'
   import { useStore } from 'vuex'
   import { storage } from '@/mixins/tools.coffee'
   import { decodeFullnote } from '@/mixins/beat.coffee'
@@ -72,7 +73,7 @@
         set: (value)->
           store.dispatch 'preference.set',
             highlight: value
-      scroll = ->
+      scrollToQuestion = ->
         _domQuestions = document.querySelectorAll('.question')
         _lastDomQuestion = Array.from(_domQuestions).pop()
         _shift = document.body.clientHeight / 2
@@ -82,7 +83,7 @@
       add = (i)->
         exam.value.push null
         await nextTick()
-        scroll()
+        scrollToQuestion()
       remove = (i)->
         notes.value.splice(i, 1)
         rests.value.splice(i, 1)
@@ -91,6 +92,10 @@
         results.value?.length = 0
         exam.value?.length = 0
         exam.value?.push null
+        await nextTick()
+        window.scrollTo
+          top: 0
+          behavior: 'smooth'
       return {
         results
         resultsState
@@ -151,4 +156,7 @@
       color: color(dark)
       +min-screen(415)
         margin-top: space(sm)
+  .navpage__page
+    +max-screen(768)
+      padding-top: 30px
 </style>
