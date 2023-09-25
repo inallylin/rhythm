@@ -76,9 +76,8 @@
       scrollToQuestion = ->
         _domQuestions = document.querySelectorAll('.question')
         _lastDomQuestion = Array.from(_domQuestions).pop()
-        _shift = document.body.clientHeight / 2
         window.scrollTo
-          top: _lastDomQuestion.offsetTop + _shift
+          top: _lastDomQuestion.offsetTop
           behavior: 'smooth'
       add = (i)->
         exam.value.push null
@@ -115,6 +114,7 @@
   @import '@/assets/sass/mixins'
   .navpage__page
     counter-reset: question
+    padding-bottom: 10vh
   .flex
     display: flex
     margin: -6px

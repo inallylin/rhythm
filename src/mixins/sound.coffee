@@ -7,12 +7,12 @@ export default ->
       destroy()
     audioContext = new AudioContext()
   start = (_type = 'triangle', _frequency = 820)->
-    audioOscillator = audioContext.createOscillator()
     audioGain = audioContext.createGain()
+    audioGain.connect(audioContext.destination)
+    audioOscillator = audioContext.createOscillator()
     audioOscillator.type = _type
     audioOscillator.frequency.value = _frequency
     audioOscillator.connect(audioGain)
-    audioGain.connect(audioContext.destination)
     audioOscillator.start(0)
     stop(1.5)
   stop = (_debounce)->
@@ -20,6 +20,7 @@ export default ->
       0.00001, audioContext.currentTime + _debounce
     )
   destroy = ->
+    audioOscillator.stop()
     audioContext?.close?()
   return {
     init

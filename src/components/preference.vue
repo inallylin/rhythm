@@ -150,6 +150,7 @@
     +min-screen(769)
       display: flex
       font-size: .85rem
+      pointer-events: none
     +max-screen(768)
       top: 0
       width: 300px
@@ -157,6 +158,8 @@
       bottom: 0
       top: auto
       margin: 0
+    > *
+      pointer-events: all
   .hz-selector
     +label
     vertical-align: middle
