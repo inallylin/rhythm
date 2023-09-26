@@ -48,10 +48,10 @@
       playBeat = (i)->
         if pointer.value >= track.value.length
           clearInterval(player.value)
-          player.value = null
           pointer.value = 0
           setTimeout ->
             sound.destroy()
+            player.value = null
           , speed.value
           return
         if track.value[pointer.value] == 1
@@ -72,12 +72,12 @@
         _progress = progress.value + _step
         progress.value = if _progress < 1 then _progress else 1
       play = ->
-        sound.init()
         clearInterval(player.value)
         pointer.value = 0
-        player.value = setInterval(playBeat, speed.value)
         progress.value = 0
+        player.value = setInterval(playBeat, speed.value)
         progressor.value = setInterval(updateProgress, 100)
+      sound.init()
       return {
         track
         play

@@ -107,6 +107,7 @@
       pointerStyle = (_player)->
         if highlight.value == 2 # progress
           return
+            transition: '.2s'
             width: "#{_player?.progress*100}%"
         _current = 0
         _current = _player?.pointer if _player?.pointer
@@ -118,14 +119,6 @@
         return
           width: "25%"
           left: "#{_offset*25}%"
-        # _offset = if _current then Math.ceil(_current/4)-1 else 0
-        # _percentage = (_current - 1) / 16
-        # return
-          # left: "#{_offset*25}%"
-          # transition: "#{speed.value/4/100}s linear"
-          # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
-          # left: if !_current then 0 else "calc(#{_percentage} * 100%)"
-
       init = ->
         if !notes.value?.length
           _options = [...props.options]
@@ -177,11 +170,9 @@
         margin-right: -20%
     &__pointer
       width: 25%
-      transition: .2s
       position: absolute
       bottom: 0
       border-bottom: 2px solid var(--theme-color)
-      // width: calc(100% / 16)
   .btn-undo
     +button-svg-icon
     background: var(--theme-color)!important

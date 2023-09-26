@@ -56,7 +56,7 @@
         Highlight
         <select id="highlight" v-model="config.highlight">
           <option :value="0">Off</option>
-          <option :value="1">Beat</option>
+          <option :value="1">For Beat</option>
           <option :value="2">Progress</option>
         </select>
       </label>

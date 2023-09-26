@@ -2,11 +2,15 @@ export default ->
   audioContext = null
   audioOscillator = null
   audioGain = null
+  gc = null
   init = ->
-    if audioContext && audioContext.state != 'closed'
-      destroy()
+    # if audioContext && audioContext.state != 'closed'
+    #   destroy()
     audioContext = new AudioContext()
   start = (_type = 'triangle', _frequency = 820)->
+    console.log 'start', audioContext
+    clearTimeout gc
+    await init() if !audioContext
     audioGain = audioContext.createGain()
     audioGain.connect(audioContext.destination)
     audioOscillator = audioContext.createOscillator()
@@ -20,8 +24,11 @@ export default ->
       0.00001, audioContext.currentTime + _debounce
     )
   destroy = ->
-    audioOscillator.stop()
-    audioContext?.close?()
+    audioOscillator.stop audioContext.currentTime
+    gc = setTimeout ->
+      await audioContext?.close?()
+      init()
+    , 5000
   return {
     init
     start
