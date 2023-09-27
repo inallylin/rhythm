@@ -20,8 +20,7 @@ function getPublicPath(){
 module.exports = {
   productionSourceMap: false,
   parallel: true,
-  // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
-  publicPath: getPublicPath(),
+  publicPath: process.env.NODE_ENV === 'production' ? '/rhythm/' : '/',
   pages: {
     index: {
       entry: 'src/main.js'
