@@ -9,10 +9,19 @@ const CompressionExtensions = ['js', 'css'];
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
+
+function getPublicPath(){
+  if process.env.NODE_ENV !== 'production'
+    return '/'
+  if process.env.VITE_PUBLIC_PATH 
+    return process.env.VITE_PUBLIC_PATH
+  return ''
+}
 module.exports = {
   productionSourceMap: false,
   parallel: true,
-  publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  publicPath: getPublicPath(),
   pages: {
     index: {
       entry: 'src/main.js'
