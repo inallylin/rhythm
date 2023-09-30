@@ -6,9 +6,10 @@
   </slot>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
+  import { ref, reactive, computed, onMounted, nextTick, watch, onUnmounted } from 'vue'
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
+  import { sleep } from '@/mixins/tools.coffee'
   import mixinSound from '@/mixins/sound.coffee'
   import iconPlay from '@/components/icon/play.vue'
   export default
@@ -47,13 +48,7 @@
       speed = computed -> store.getters.speed
       playBeat = (i)->
         if pointer.value >= track.value.length
-          clearInterval(player.value)
-          pointer.value = 0
-          setTimeout ->
-            sound.destroy()
-            player.value = null
-          , speed.value
-          return
+          return stop()
         if track.value[pointer.value] == 1
           sound.start(settings.value?.wave, settings.value?.hz)
         else if track.value[pointer.value] == -1
@@ -77,7 +72,15 @@
         progress.value = 0
         player.value = setInterval(playBeat, speed.value)
         progressor.value = setInterval(updateProgress, 100)
+      stop = ->
+        clearInterval(player.value)
+        pointer.value = 0
+        await sleep speed.value
+        await sound.destroy()
+        player.value = null
       sound.init()
+      onUnmounted ->
+        stop()
       return {
         track
         play
