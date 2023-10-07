@@ -18,8 +18,8 @@
     <div class="navpage__nav">
       <teleport to=".preference" v-if="inited">
         <div class="input">
-          <label for="measure" @click.stop>
-            Measure
+          <label for="measure">
+            Measure121
             <input id="measure" type="Number" min="1" max="100" onfocus="this.select()"
               v-model="measure">
           </label>

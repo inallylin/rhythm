@@ -23,8 +23,6 @@ export default
       for k, v of _settings
         state.preference[k] = v
   actions:
-    'acl.branch.clear': (context) ->
-      context.commit 'acl.branch.clear'
     'preference.set': (context, _settings) ->
       for k, v of _settings
         _settings[k] = validator(k, v)
