@@ -38,11 +38,11 @@
         return true if options.value.length <= 1
         options.value?.every (o)-> o%2 == 0
       applyRandom = ->
-        _withoutTie = Math.floor(Math.random() * 8) * 2
+        _withoutTie = Math.floor(Math.random() * 8) * 2 - 1
+        _withoutTie = 1 if _withoutTie < 0
         _options = [1..15].filter (o)->
           o != _withoutTie
         .sort ()-> Math.random() - 0.5
-        console.log _withoutTie, _options, [_withoutTie, ..._options.splice(0, 3)]
         emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
       applyAll = ->
         emit 'update:modelValue', [1..15]
