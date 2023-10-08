@@ -19,7 +19,7 @@
       <teleport to=".preference" v-if="inited">
         <div class="input">
           <label for="measure">
-            Measure121
+            Measure
             <input id="measure" type="Number" min="1" max="100" onfocus="this.select()"
               v-model="measure">
           </label>
@@ -115,7 +115,7 @@ export default
       [_note, _rest] = String(code).match(/.{1,2}/g)
       rests.value[i] = null
       notes.value[i] = parseInt Number(_note)
-      rests.value[i] = parseInt Number(_rest) if _rest
+      rests.value[i] = parseInt Number(_rest || 0)
     encode = (note, rest)->
       noteCode = String(note).padStart(2, 0)
       restCode = String(rest).padStart(2, 0)

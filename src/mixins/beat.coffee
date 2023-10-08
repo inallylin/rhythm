@@ -24,7 +24,7 @@ createBeats = (_noteId, _restId, _useRest)->
   _beatsArray.map (_beat, i) ->
     _beatNumber = Number(_beat)
     return -1 if !_beatNumber && _restArray[i]
-    return ramdonRest(_beatNumber) if _useRest && _restId != null
+    return ramdonRest(_beatNumber) if _useRest && _restId == null
     _beatNumber
 
 decodeFullnote = (code, i)->
