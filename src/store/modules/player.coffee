@@ -1,9 +1,6 @@
-
-playBeat = (context)->
-  
-  # pointer.value += 1
-  context.commit 'pinter.add'
 import { sleep } from '@/mixins/tools.coffee'
+import mixinSound from '@/mixins/sound.coffee'
+sound = mixinSound()
 export default
   state:
     player: null
@@ -11,42 +8,47 @@ export default
       id: null
       value: null
       pointer: 0
-      progress: 0
       isPlaying:false
   mutations:
-    'pinter.add': (state) ->
+    'player.pointer.next': (state) ->
       state.track.pointer += 1
     'player.init': (state) ->
       sound.init()
-    'play.stop': (state) ->
+    'play.stop': (state, _timeout = 0) ->
       clearInterval state.player
       state.track.pointer = 0
-      await sleep state.preference.speed
-      await sound.stop()
+      await sleep _timeout
+      await sound.destroy()
       state.track.isPlaying = false
-    'play.start': (state)->
+    'play.start': (state, _interval)->
+      state.player = _interval
       state.track.isPlaying = true
-    'track.init': (context, _id, _track)->
-      state.track.id = _id
-      state.track.value = _track
+    'track.init': (state, _track)->
+      state.track.id = _track.id
+      state.track.value = [..._track.value]
   actions:
     'player.init': (context) ->
       context.commit 'player.init'
     'player.start': (context, _track) ->
-      context.dispatch 'track.init', _uuid, _track
-      context.commit 'play.start' 
-      setInterval ()->
-        _g = context.getters
+      await context.dispatch 'player.end'
+      context.commit 'track.init', _track
+      _g = context.getters
+      _interval = setInterval ()->
         _currentNote = _g.track.value[_g.track.pointer]
         if _g.track.pointer >= _g.track.value?.length
-          return context.dispatch 'player.end'
+          return context.commit 'play.stop', _g.speed
         if _currentNote == 1
           sound.start(_g.preference.wave, _g.preference.hz)
         else if _currentNote == -1
           sound.stop(0)
-      , _g.speed)
+        context.commit 'player.pointer.next'
+      , _g.speed
+      context.commit 'play.start', _interval
     'player.end': (context) ->
-      context.commit 'play.stop'
+      new Promise (resolve)->
+        context.commit 'play.stop'
+        await sleep context.getters.speed
+        resolve()
   getters:
     trackPointer: (state)-> state.track.pointer
     track: (state)-> state.track

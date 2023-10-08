@@ -6,11 +6,9 @@
   </slot>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, onMounted, nextTick, watch, onUnmounted } from 'vue'
+  import { ref, computed, onUnmounted } from 'vue'
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
-  import { sleep } from '@/mixins/tools.coffee'
-  import mixinSound from '@/mixins/sound.coffee'
   import iconPlay from '@/components/icon/play.vue'
   export default
     props:
@@ -29,31 +27,18 @@
     components:
       'icon-play': iconPlay
     setup: (props)->
+      id = +new Date()
       store = useStore()
-      player = ref null
       progressor = ref null
-      isPlaying = computed -> !!player.value
-      pointer = ref 0
       progress = ref 0
-      sound = mixinSound()
-      settings = computed ->
-        return
-          hz: Number(store.getters.preference?.hz)
-          wave: store.getters.preference?.wave
-          highlight: Number(store.getters.preference?.highlight)
+      isPlaying = computed ->
+        return false if store.getters.track?.id != id
+        store.getters.track.isPlaying
       track = computed ->
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
         .flat()
       speed = computed -> store.getters.speed
-      playBeat = (i)->
-        if pointer.value >= track.value.length
-          return stop()
-        if track.value[pointer.value] == 1
-          sound.start(settings.value?.wave, settings.value?.hz)
-        else if track.value[pointer.value] == -1
-          sound.stop(0)
-        pointer.value += 1
       updateProgress = (i)->
         if progress.value >= 1
           clearInterval progressor.value
@@ -67,28 +52,19 @@
         _progress = progress.value + _step
         progress.value = if _progress < 1 then _progress else 1
       play = ->
-        clearInterval(player.value)
-        pointer.value = 0
-        progress.value = 0
-        player.value = setInterval(playBeat, speed.value)
+        store.dispatch 'player.start',
+          id: id
+          value: track.value
         progressor.value = setInterval(updateProgress, 100)
       stop = ->
-        clearInterval(player.value)
-        pointer.value = 0
-        await sleep speed.value
-        await sound.destroy()
-        player.value = null
-      sound.init()
-      onUnmounted ->
-        stop()
+        store.dispatch 'player.end'
+      store.dispatch 'player.init'
+      onUnmounted -> stop()
       return {
         track
         play
-        speed
         isPlaying
-        pointer
         progress
-        settings
       }
 </script>
 <style lang="sass" scoped>
