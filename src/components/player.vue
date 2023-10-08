@@ -10,6 +10,7 @@
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
   import iconPlay from '@/components/icon/play.vue'
+  import { v4 as uuidV4 } from 'uuid'
   export default
     props:
       notes:
@@ -27,7 +28,7 @@
     components:
       'icon-play': iconPlay
     setup: (props)->
-      id = +new Date()
+      id = uuidV4()
       store = useStore()
       progressor = ref null
       progress = ref 0
@@ -61,6 +62,7 @@
       store.dispatch 'player.init'
       onUnmounted -> stop()
       return {
+        id
         track
         play
         isPlaying

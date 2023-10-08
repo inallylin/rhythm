@@ -6,7 +6,12 @@ export default ->
   init = ->
     # if audioContext && audioContext.state != 'closed'
     #   destroy()
+    return if audioContext
     audioContext = new AudioContext()
+    gc = setInterval ()->
+      await audioContext?.close?()
+      init()
+    , 1000 * 60 * 10
   start = (_type = 'triangle', _frequency = 820)->
     clearTimeout gc
     await init() if !audioContext
@@ -24,10 +29,10 @@ export default ->
     )
   destroy = ->
     audioOscillator?.stop?(audioContext.currentTime)
-    gc = setTimeout ->
-      await audioContext?.close?()
-      init()
-    , 1000 * 60
+    # gc = setTimeout ->
+    #   await audioContext?.close?()
+    #   init()
+    # , 1000 * 60
   return {
     init
     start
