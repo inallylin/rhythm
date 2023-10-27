@@ -49,6 +49,10 @@ export default
         context.commit 'play.stop'
         await sleep context.getters.speed
         resolve()
+    'player.reset': (context) ->
+      context.dispatch 'loading.start', 'player.reset'
+      await sound.reset()
+      context.dispatch 'loading.end', 'player.reset'
   getters:
     trackPointer: (state)-> state.track.pointer
     track: (state)-> state.track

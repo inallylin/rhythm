@@ -1,3 +1,4 @@
+import { sleep } from '@/mixins/tools.coffee'
 export default ->
   audioContext = null
   audioOscillator = null
@@ -33,9 +34,19 @@ export default ->
     #   await audioContext?.close?()
     #   init()
     # , 1000 * 60
+  reset = ->
+    new Promise (resolve)->
+      clearInterval gc if gc
+      try
+        await audioContext?.close?()
+      catch e
+      init()
+      await sleep(3 * 1000)
+      resolve()
   return {
     init
     start
     stop
     destroy
+    reset
   }

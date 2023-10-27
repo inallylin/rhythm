@@ -35,6 +35,9 @@
       isPlaying = computed ->
         return false if store.getters.track?.id != id
         store.getters.track.isPlaying
+      pointer = computed ->
+        return 0 if !isPlaying.value
+        store.getters.track.pointer
       track = computed ->
         props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest).reverse()
@@ -67,6 +70,7 @@
         play
         isPlaying
         progress
+        pointer
       }
 </script>
 <style lang="sass" scoped>

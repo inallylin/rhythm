@@ -61,6 +61,13 @@
         </select>
       </label>
     </div>
+    <div class="preference-append"></div>
+    <div class="btn-group">
+      <button class="btn-outline" @click="resetPlayer">
+        <icon-arrow-rotate />
+        Reset Player
+      </button>
+    </div>
   </div>
   <component is="style">
     :root{
@@ -75,11 +82,13 @@
   import { storage, deepCopy } from '@/mixins/tools.coffee'
   import iconPalette from '@/components/icon/palette.vue'
   import iconXmark from '@/components/icon/xmark.vue'
+  import iconArrorRotate from '@/components/icon/arrow-rotate.vue'
   import hzName from '@/static/hz.json'
   export default
     components:
       'icon-palette': iconPalette
       'icon-xmark': iconXmark
+      'icon-arrow-rotate': iconArrorRotate
     setup: ->
       route = useRoute()
       store = useStore()
@@ -108,10 +117,14 @@
           return k if Math.abs(_hz - config.hz) < 5
         return hzkey if hzkey
         "#{config.hz}Hz"
+      resetPlayer = ->
+        store.dispatch 'player.reset'
       sync = ->
         store.dispatch 'preference.set', deepCopy(config)
+      init = ->
+        sync()
+        inited.value = true
       watch config, sync
-
       watch preferenceRaw, (n, o)->
         _numberKeys = ['speed', 'highlight', 'hz']
         return if !inited.value
@@ -120,9 +133,6 @@
           if _numberKeys.indexOf(k) >= 0
             v = Number(v)
           config[k] = v
-      init = ->
-        sync()
-        inited.value = true
       onMounted ->
         init()
       return {
@@ -132,6 +142,7 @@
         allowConfigNote
         allowConfigHighlight
         readableHz
+        resetPlayer
       }
   
 </script>

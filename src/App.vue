@@ -10,6 +10,8 @@
 </template>
 
 <script lang="coffee">
+  import { computed, watch } from 'vue'
+  import { useStore } from 'vuex'
   import navigator from '@/components/navigator.vue'
   import preference from '@/components/preference.vue'
   export default
@@ -17,7 +19,13 @@
       navigator: navigator
       preference: preference
     setup: ->
-      return {}
+      store = useStore()
+      isLoading = computed ->
+        store.getters.isLoading
+      watch isLoading, (n)->
+        document.body.classList.toggle 'loading', n
+      return {
+      }
 </script>
 <style lang="sass">
   @import '@/assets/sass/reset'

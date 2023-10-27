@@ -2,6 +2,50 @@
 @import '_mixins'
 :root
   --theme-color: #60007a
+
+@keyframes rotate
+  0%
+    transform: rotate(0)
+  100%
+    transform: rotate(360deg)
+
+body
+  &:before, &:after
+    content: ''
+    pointer-events: none
+    opacity: 0
+    z-index: -1
+    transition: .2s
+  &:after
+    content: ''
+    position: fixed
+    top: 50%
+    left: 50%
+    border: 2px solid var(--theme-color)
+    border-top-color: transparent
+    border-radius: 50%
+    width: 4em
+    height: 4em
+    animation: rotate .5s infinite linear
+  &:before
+    content: ''
+    position: fixed
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    background: rgba(white, .75)
+    filter: blur(5px)
+  &.loading:before, &.loading:after
+    z-index: 100
+    opacity: 1
+  &.loading
+    pointer-events: none
+    .page
+      filter: blur(5px)
+
+  &:not(.loaindg):before
+
 #app
   height: 100%
   max-width: 1200px
@@ -29,6 +73,20 @@
       +max-screen(768)
         &, &:hover
           border-color: transparent
+  .btn-group
+    +padding
+    display: flex
+    align-items: flex-end
+    margin-top: auto
+    > button
+      +button
+      +button-svg-icon
+      color: var(--theme-color)
+      fill: var(--theme-color)
+      > svg
+        position: relative
+        bottom: auto
+        left: auto
   .color-picker
     +max-screen(768)
       min-height: 0

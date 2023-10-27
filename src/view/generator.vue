@@ -16,7 +16,7 @@
       </TransitionGroup>
     </div>
     <div class="navpage__nav">
-      <teleport to=".preference" v-if="inited">
+      <teleport to=".preference-append" v-if="inited">
         <div class="input">
           <label for="measure">
             Measure
