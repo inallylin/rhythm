@@ -43,9 +43,6 @@ body
     pointer-events: none
     .page
       filter: blur(5px)
-
-  &:not(.loaindg):before
-
 #app
   height: 100%
   max-width: 1200px
@@ -86,7 +83,10 @@ body
       > svg
         position: relative
         bottom: auto
-        left: auto
+        left: 4px
+        font-size: 1em
+        margin-top: -1px
+        vertical-align: top
   .color-picker
     +max-screen(768)
       min-height: 0

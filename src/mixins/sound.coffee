@@ -39,6 +39,7 @@ export default ->
       clearInterval gc if gc
       try
         await audioContext?.close?()
+        audioContext = null
       catch e
       init()
       await sleep(3 * 1000)
