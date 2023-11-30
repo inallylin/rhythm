@@ -161,6 +161,9 @@
     +min-screen(769)
       display: flex
       font-size: .85rem
+      pointer-events: none
+      > *
+        pointer-events: all
     +max-screen(768)
       top: 0
       width: 300px
