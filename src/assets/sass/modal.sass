@@ -25,7 +25,31 @@
   background: white
   box-shadow: 0 3px 5px rgba(black, .1), 0 8px 16px -8px rgba(black, .1), 0 30px 50px -30px rgba(black, .5)
   margin-top: -2vh
+  border-radius: space(lg)
   &:before
     content: ''
     position: fixed
     z-index: -1
+  > *
+    padding: space(lg)
+    &:not(:first-child)
+      border-top: 1px solid #ccc
+  &__dismiss
+    +button-theme
+    font-size: 1em
+    background: var(--theme-color)
+    svg
+      vertical-align: text-bottom
+      fill: white
+  &__head
+    display: flex
+    position: relative
+    &__actions
+  &__head &__dismiss
+    position: absolute
+    top: 0
+    right: 0
+    transform: translate(50%, -50%)
+  &__foot
+    button
+      +button

@@ -4,9 +4,6 @@
       <TransitionGroup tag="div" class="bar" name="list" mode="out-in">
         <note
           :ref="getNoteInstance"
-          :useRest="config.rest"
-          :showCode="config.code"
-          :showArrow="config.arrow"
           :index="i"
           :key="i"
           @remove="remove(i)"
@@ -51,7 +48,7 @@
 import { computed, watch, onMounted, ref, reactive, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import note from '@/components/note.vue'
+import note from '@/view/generator/note-control.vue'
 import { storage } from '@/mixins/tools.coffee'
 import iconRandom from '@/components/icon/random.vue'
 import iconPlus from '@/components/icon/plus.vue'

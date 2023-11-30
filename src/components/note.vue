@@ -1,13 +1,6 @@
 <template>
   <div :class="['beat', {disabled: disabled}]">
-    <div class="control" v-if="!disabled">
-      <button @click="createNote($event)">
-        <icon-random />
-      </button>
-      <button class="btn-delete" @click="remove()">
-        <icon-trash-can />
-      </button>
-    </div>
+    <slot name="control"></slot>
     <template v-if="note || !useRest">
       <div :class="['note__wrapper', {quarter: isQuarter, tie: hasTie}]">
         <span :class="['note', seqClass(j)]" v-for="n, j in beats">
@@ -45,9 +38,11 @@
 </template>
 <script lang="coffee">
   import { ref, computed, watch } from 'vue'
+  import { useStore } from 'vuex'
   import iconRandom from '@/components/icon/random.vue'
   import iconTrashCan from '@/components/icon/trashcan.vue'
   import { createBeats, getRests, ramdon } from '@/mixins/beat.coffee'
+  import actionEdit from '@/view/generator/action-edit.vue'
   export default
     props:
       note:
@@ -62,20 +57,17 @@
       disabled:
         type: Boolean
         default: false
-      showCode:
-        type: Boolean
-        default: false
-      showArrow:
-        type: Boolean
-        default: false
-      useRest:
-        type: Boolean
-        default: false
     emits: ['update:note', 'update:restAt', 'remove']
     components:
       'icon-random': iconRandom
       'icon-trash-can': iconTrashCan
+      'action-edit': actionEdit
     setup: (props, {emit})->
+      store = useStore()
+      config = computed -> store.getters.preference
+      useRest = computed -> config.value?.rest
+      showCode = computed -> config.value?.code
+      showArrow = computed -> config.value?.arrow
       note = computed
         get: -> props.note
         set: (value)-> emit 'update:note', value
@@ -85,15 +77,12 @@
         n
       restAt = computed
         get: ->
-          # trigger computed by useRest
-          return if (props.useRest && !props.useRest)
           return [] if !props.restAt
           getRests(props.restAt)
         set: (value)->
           emit 'update:restAt', value
-
       beats = computed ->
-        createBeats(props.note, props.restAt, props.useRest)
+        createBeats(props.note, props.restAt, useRest.value)
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->
@@ -109,31 +98,18 @@
         next = beats.value[index+2] if !next
         next = beats.value[index+3] if !next
         return true if next && next == -1
-      createNote = (e)->
-        e.target.blur() if e
-        restAt.value = null
-        if props.useRest && ramdon(0.03)
-          _note = 0
-        else
-          _note = ramdon 15, 1
-          if props.index == 0 && _note%2 == 0
-            _note -= 1
-        note.value = _note
-      remove = -> emit 'remove'
       watch beats, (n)->
         _restAt = n.map (b)-> if b == -1 then 1 else 0
         restAt.value = parseInt(_restAt.join(''), 2)
-      watch (()-> props.useRest), (n)->
-        restAt.value = null if !n
-      createNote() if !note.value && note.value != 0
       return {
         note
-        createNote
         beats
         feint
         hasTie
         isQuarter
         seqClass
-        remove
+        useRest
+        showCode
+        showArrow
       }
 </script>
