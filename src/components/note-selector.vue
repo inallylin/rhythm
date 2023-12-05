@@ -41,7 +41,8 @@
   @import '@/assets/sass/mixins'
   .note-option
     flex: 0 0 auto
-    width: 150px
+    width: 30vw
+    max-width: 150px
     color: var(--theme-color)
     > input
       position: fixed
