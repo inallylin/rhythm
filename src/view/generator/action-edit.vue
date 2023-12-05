@@ -5,10 +5,10 @@
       Change Note
     </template>
     <template #content>
-      <input type="number" v-model="note">
-      <!-- <note-selector v-model="note" /> -->
+      <note-selector v-model="note" />
     </template>
     <template #actions:foot:right="{answer}">
+      <button @click="answer(false)">Cancel</button>
       <button @click="answer(note)">Save</button>
     </template>
   </modal>
@@ -29,7 +29,6 @@
       'note-selector': noteSelector
     emits: ['update:modelValue']
     setup: (props, {emit})->
-      console.log 987
       componentModal = ref null
       note = ref props.modelValue
       edit = ->

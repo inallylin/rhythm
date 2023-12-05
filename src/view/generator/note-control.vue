@@ -6,6 +6,7 @@
     >
     <template #control>
       <div class="control" v-if="!disabled">
+        <button class="btn-carousel" @click="changeNote(-1)"></button>
         <button @click="createNote($event)">
           <icon-random />
         </button>
@@ -13,6 +14,7 @@
         <button class="btn-delete" @click="remove()">
           <icon-trash-can />
         </button>
+        <button class="btn-carousel" @click="changeNote(1)"></button>
       </div>
     </template>
   </note>
@@ -63,6 +65,12 @@
             _note -= 1
         note.value = _note
       remove = -> emit 'remove'
+      console.log 987
+      changeNote = (_diff)->
+        _note = note.value + _diff
+        _note = 15 if _note < 0
+        _note = 0 if _note > 15
+        note.value = _note
       watch useRest, (n)->
         if n
           restAt.value = getRests(props.restAt)
@@ -74,5 +82,6 @@
         createNote
         remove
         restAt
+        changeNote
       }
 </script>

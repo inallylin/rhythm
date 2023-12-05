@@ -4,12 +4,7 @@
       Choose Rhythm to Use
     </div>
     <div class="section__body note-option__list">
-      <div class="note-option" v-for="i in 16">
-        <input :id="`note-option-${i}`" type="checkbox" :value="i-1" v-model="options">
-        <label :for="`note-option-${i}`">
-          <note :index="1" :note="i - 1" :disabled="true" />
-        </label>
-      </div>
+      <note-selector v-model.multi="options" />
     </div>
     <div class="section__foot">
       <button class="btn-outline" @click="applyAll">All</button>
@@ -24,6 +19,7 @@
 <script lang="coffee">
   import { ref, computed } from 'vue'
   import note from '@/components/note.vue'
+  import noteSelector from '@/components/note-selector.vue'
   export default
     props:
       modelValue:
@@ -31,6 +27,7 @@
         default: []
     components:
       note: note
+      'note-selector': noteSelector
     emits: ['update:modelValue']
     setup: (props, {emit})->
       options = ref []

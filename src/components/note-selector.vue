@@ -1,15 +1,16 @@
 <template>
-  <div class="note-option" v-for="i in 16">
-    <input :id="`note-option-${i}`" :type="inputType" :value="i-1" v-model="notes">
-    <label :for="`note-option-${i}`">
-      {{i}}
-      <!-- <note :index="1" :note="i - 1" :disabled="true" /> -->
-    </label>
+  <div class="note-option__list">
+    <div class="note-option" v-for="i in 16">
+      <input :id="`note-option-${i}`" :type="inputType" :value="i-1" v-model="notes">
+      <label :for="`note-option-${i}`">
+        <note :index="1" :note="i - 1" :disabled="true" />
+      </label>
+    </div>
   </div>
 </template>
 <script lang="coffee">
   import { ref, computed, defineAsyncComponent } from 'vue'
-  # note = defineAsyncComponent -> import '@/components/note.vue'
+  note = defineAsyncComponent () => import('@/components/note.vue')
   export default
     props:
       modelValue:
@@ -17,11 +18,10 @@
         default: 0
       modelModifiers:
         default: ()-> {}
-    # components:
-    #   note: note
+    components:
+      note: note
     emits: ['update:modelValue']
     setup: (props, {emit})->
-      console.log 987
       isMulti = computed ->
         props.modelModifiers?.multi
       inputType = computed ->

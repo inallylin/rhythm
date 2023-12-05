@@ -6,6 +6,7 @@
 %reverse-roof
   left: auto
   right: .25rem
+$arrow-size: 4px
 .bar
   display: flex
   flex-wrap: wrap
@@ -67,6 +68,27 @@
         top: 1px
       &:hover
         opacity: 1
+      &.btn-carousel
+        background: none
+        margin: 0
+        border: 0
+        width: auto
+        height: auto
+        min-width: 0
+        &:before
+          content: ''
+          border-top: $arrow-size solid transparent
+          border-bottom: $arrow-size solid transparent
+          height: 0
+          display: block
+        &:first-child:before
+          border-left: 0
+          border-right: $arrow-size solid var(--theme-color)
+        &:last-child:before
+          border-right: 0
+          border-left: $arrow-size solid var(--theme-color)
+        &, &:hover
+          box-shadow: none
       @media screen and (max-width: 768px)
         opacity: 1
         margin: 0
@@ -75,6 +97,10 @@
         box-shadow: 0 2px 5px rgba(black, .08), 0 8px 16px -8px rgba(black, .05)
         &:not(:first-child)
           margin-left: .5em
+        &.btn-carousel
+          display: none
+          &:first-child + button
+            margin-left: 0
   &:hover
     .control
       opacity: 1

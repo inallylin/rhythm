@@ -2,54 +2,84 @@
 .modal-wrapper
   position: fixed
   z-index: 11
-  display: flex
-  justify-content: center
-  align-items: center
   transition: .2s
   top: 0
   bottom: 0
   left: 0
   right: 0
+  padding: 10vh 5vw
+  overflow: auto
   pointer-events: none
+  text-align: center
+  &:before
+    content: ''
+    height: 100%
+  &:before, > *
+    display: inline-block
+    vertical-align: middle
   &:not(:empty)
     pointer-events: all
     background: rgba(color(black), .95)
     ~ *
       filter: blur(5px)
 .modal
-  width: 500px
+  width: 800px
+  max-width: 80vw
   left: 50%
   top: 50%
-  display: table
   margin: 0 auto
   background: white
   box-shadow: 0 3px 5px rgba(black, .1), 0 8px 16px -8px rgba(black, .1), 0 30px 50px -30px rgba(black, .5)
   margin-top: -2vh
-  border-radius: space(lg)
+  border-radius: space()
   &:before
     content: ''
     position: fixed
     z-index: -1
   > *
-    padding: space(lg)
+    padding: space() space(lg)
     &:not(:first-child)
       border-top: 1px solid #ccc
   &__dismiss
     +button-theme
+    opacity: 1
+    padding: 0
     font-size: 1em
     background: var(--theme-color)
+    width: 2.5em
+    height: 2.5em
+    border: 2px solid white
+    filter: brightness(1)
+    &:hover
+      filter: brightness(1.2)
     svg
       vertical-align: text-bottom
       fill: white
   &__head
     display: flex
     position: relative
+    font-size: 1.2em
+    letter-spacing: 0
     &__actions
   &__head &__dismiss
     position: absolute
     top: 0
     right: 0
-    transform: translate(50%, -50%)
+    transform: translate(35%, -35%)
+    font-size: 1rem
   &__foot
-    button
-      +button
+    &__actions
+      display: flex
+      justify-content: flex-end
+      margin: -#{space(xs)}
+      font-size: 14px
+      button
+        +button
+        margin: space(xs)
+        color: var(--theme-color)
+        &:last-child
+          background: var(--theme-color)
+          border-color: var(--theme-color)
+          color: white
+          // background: none
+          // box-shadow: inset 0 0 0 2px

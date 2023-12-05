@@ -65,9 +65,15 @@
     setup: (props, {emit})->
       store = useStore()
       config = computed -> store.getters.preference
-      useRest = computed -> config.value?.rest
-      showCode = computed -> config.value?.code
-      showArrow = computed -> config.value?.arrow
+      useRest = computed ->
+        return false if props.disabled
+        config.value?.rest
+      showCode = computed ->
+        return false if props.disabled
+        config.value?.code
+      showArrow = computed ->
+        return false if props.disabled
+        config.value?.arrow
       note = computed
         get: -> props.note
         set: (value)-> emit 'update:note', value
