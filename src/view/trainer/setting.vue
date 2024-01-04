@@ -42,7 +42,7 @@
         .sort ()-> Math.random() - 0.5
         emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
       applyAll = ->
-        emit 'update:modelValue', [1..15]
+        emit 'update:modelValue', [0..15]
       apply = ->
         emit 'update:modelValue', options.value
       return {
