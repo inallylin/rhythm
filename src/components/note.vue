@@ -66,7 +66,7 @@
       store = useStore()
       config = computed -> store.getters.preference
       useRest = computed ->
-        return false if props.disabled
+        return false if props.disabled && note.value
         config.value?.rest
       showCode = computed ->
         return false if props.disabled

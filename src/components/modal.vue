@@ -29,7 +29,6 @@
     components:
       'icon-xmark': iconXmark
     setup: ->
-      console.log 98
       state = reactive
         promise: null
         resolve: null

@@ -34,7 +34,7 @@
       edit = ->
         note.value = props.modelValue
         _changedNote = await componentModal.value?.open()
-        return if !_changedNote
+        return if _changedNote == false
         emit 'update:modelValue', _changedNote
       return {
         componentModal
