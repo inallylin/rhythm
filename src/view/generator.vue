@@ -34,7 +34,7 @@
             </button>
           </template>
         </player>
-        <button @click="createRamdon()">
+        <button @click="createRandom()">
           <icon-random />
         </button>
         <button class="btn-add" @click="add">
@@ -87,7 +87,7 @@ export default
         _diff = Number(value) - notes.value.length
         for i in [0...Math.abs(_diff)]
           if _diff > 0 then add() else notes.value.splice -1, 1
-    createRamdon = ->
+    createRandom = ->
       for n in noteInstance.value
         n?.createNote()
     add = ->
@@ -132,7 +132,7 @@ export default
       inited.value = true
     return {
       noteInstance
-      createRamdon
+      createRandom
       config
       getNoteInstance
       add

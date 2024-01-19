@@ -92,7 +92,7 @@
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->
-       note.value == 1 && beats.value.indexOf(-1) == -1
+        note.value <= 1 && beats.value.indexOf(-1) == -1
       seqClass = (index)->
         _className = []
         _className.push 'rest' if beats.value[index] == -1

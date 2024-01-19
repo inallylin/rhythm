@@ -1,6 +1,7 @@
 <template>
   <teleport to=".modal-wrapper" v-if="isOpen">
     <div class="modal">
+      <div class="modal__bgclose" @click="answer(false)"></div>
       <div class="modal__head" v-if="$slots.title">
         <slot name="title"></slot>
         <div class="modal__head__actions">
@@ -38,7 +39,7 @@
         state.promise = new Promise (resolve)->
           state.resolve = resolve
       answer = (_ans)->
-        state.resolve _ans
+        state.resolve? _ans
         state.promise = null
       close = ->
         answer false

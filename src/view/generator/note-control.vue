@@ -38,6 +38,9 @@
       disabled:
         type: Boolean
         default: false
+      index:
+        type: Number
+        default: 1
     emits: ['update:note', 'update:restAt', 'remove']
     components:
       note: cnote
@@ -65,7 +68,6 @@
             _note -= 1
         note.value = _note
       remove = -> emit 'remove'
-      console.log 987
       changeNote = (_diff)->
         _note = note.value + _diff
         _note = 15 if _note < 0

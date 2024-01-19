@@ -7,14 +7,10 @@
     <template #content>
       <note-selector v-model="note" />
     </template>
-    <template #actions:foot:right="{answer}">
-      <button @click="answer(false)">Cancel</button>
-      <button @click="answer(note)">Save</button>
-    </template>
   </modal>
 </template>
 <script lang="coffee">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import modal from '@/components/modal.vue'
   import iconPen from '@/components/icon/pen.vue'
   import noteSelector from '@/components/note-selector.vue'
@@ -30,12 +26,14 @@
     emits: ['update:modelValue']
     setup: (props, {emit})->
       componentModal = ref null
-      note = ref props.modelValue
+      note = computed
+        get: -> props.modelValue
+        set: (value)->
+          emit 'update:modelValue', value
       edit = ->
-        note.value = props.modelValue
-        _changedNote = await componentModal.value?.open()
-        return if _changedNote == false
-        emit 'update:modelValue', _changedNote
+        componentModal.value?.open()
+      watch note, ->
+        componentModal.value?.close()
       return {
         componentModal
         edit
