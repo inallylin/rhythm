@@ -51,16 +51,12 @@
         </div>
       </div>
     </div>
-    <div class="input" v-if="allowConfigHighlight">
-      <label for="highlight" @click.stop>
-        Highlight
-        <select id="highlight" v-model="config.highlight">
-          <option :value="0">Off</option>
-          <option :value="1">For Beat</option>
-          <option :value="2">Progress</option>
-        </select>
-      </label>
-    </div>
+    <label for="highlight" @click.stop v-if="allowConfigHighlight">
+      <div class="checkbox">
+        <input id="toggle-code" type="checkbox" v-model="config.highlight">
+        <label for="toggle-code">Highlight</label>
+      </div>
+    </label>
     <div class="preference-append"></div>
     <div class="btn-group">
       <button class="btn-outline" @click="resetPlayer">
