@@ -7,13 +7,23 @@ decimalToBinary = (x)->
     bin = bin + rem * i
     i = i * 10
   String(bin).padStart 4, 0
-ramdon = (max = 0.5, min)->
+random = (max = 0.5, min)->
   return Math.random() < max if !min
   Math.floor(Math.random() * max) + min
-ramdonRest = (_beat)->
-  _r = ramdon(0.9)
+randomRest = (_beat)->
+  _r = random(0.9)
   return _beat if _beat || _r
   -1
+getNoteOptions = (_use16Beat = true, _allowTie = true)->
+  [0..15].filter (_number)->
+    _isEven = _number % 2 != 0
+    _is8Beat = _number < 8 && (_number % 4) < 2
+    (_allowTie || _isEven) &&  (_is8Beat || _use16Beat)
+randomNote = (_use16Beat = true, _allowTie = true)->
+  getNoteOptions(_use16Beat, _allowTie)
+  .sort ()->
+    Math.random() - 0.5
+  .pop()
 getRests = (_restId)->
   _restAt = decimalToBinary Number(_restId)
   String(_restAt).split('').map (r)-> Number r
@@ -24,7 +34,7 @@ createBeats = (_noteId, _restId, _useRest)->
   _beatsArray.map (_beat, i) ->
     _beatNumber = Number(_beat)
     return -1 if !_beatNumber && _restArray[i]
-    return ramdonRest(_beatNumber) if _useRest && _restId == null
+    return randomRest(_beatNumber) if _useRest && _restId == null
     _beatNumber
 
 decodeFullnote = (code, i)->
@@ -35,6 +45,8 @@ decodeFullnote = (code, i)->
 export {
   createBeats
   getRests
-  ramdon
+  randomNote
+  random
   decodeFullnote
+  getNoteOptions
 }

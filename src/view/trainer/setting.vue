@@ -4,11 +4,11 @@
       Choose Rhythm to Use
     </div>
     <div class="section__body note-option__list">
-      <note-selector v-model.multi="options" />
+      <note-selector v-model.multi="options" ref="componentSelector" />
     </div>
     <div class="section__foot">
       <button class="btn-outline" @click="applyAll">All</button>
-      <button class="btn-outline" @click="applyRandom">Random 4</button>
+      <button class="btn-outline" @click="applyRandom" v-if="allOptions.length > 4">Random 4</button>
       <button @click="apply" :disabled="isDisabled">Go !</button>
       <p class="text-info" v-if="isDisabled">
         Atleast choose 2 rhythm, 1 without tie
@@ -31,6 +31,10 @@
     emits: ['update:modelValue']
     setup: (props, {emit})->
       options = ref []
+      componentSelector = ref null
+      allOptions = computed ->
+        return [] if !componentSelector.value
+        [...componentSelector.value?.options]
       isDisabled = computed ->
         return true if options.value.length <= 1
         options.value?.every (o)-> o%2 == 0
@@ -42,10 +46,12 @@
         .sort ()-> Math.random() - 0.5
         emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
       applyAll = ->
-        emit 'update:modelValue', [0..15]
+        emit 'update:modelValue', allOptions.value
       apply = ->
         emit 'update:modelValue', options.value
       return {
+        componentSelector
+        allOptions
         options
         apply
         applyAll

@@ -51,12 +51,21 @@
         </div>
       </div>
     </div>
-    <label for="highlight" @click.stop v-if="allowConfigHighlight">
-      <div class="checkbox">
-        <input id="toggle-code" type="checkbox" v-model="config.highlight">
-        <label for="toggle-code">Highlight</label>
+    <div class="formfield">
+      <div class="formfield__label">
+        Beats
       </div>
-    </label>
+      <div class="formfield__field">
+        <div class="checkbox">
+          <input id="toggle-beat-type" type="checkbox" v-model="config.type">
+          <label for="toggle-beat-type">16 Beats</label>
+        </div>
+        <div class="checkbox" v-if="allowConfigHighlight">
+          <input id="toggle-highlight" type="checkbox" v-model="config.highlight">
+          <label for="toggle-highlight">Highlight</label>
+        </div>
+      </div>
+    </div>
     <div class="preference-append"></div>
     <div class="btn-group">
       <button class="btn-outline" @click="resetPlayer">
@@ -107,6 +116,7 @@
         highlight: storage 'highlight', 1
         wave: storage 'wave', 'triangle'
         hz: storage 'hz', 830.6
+        type: storage 'type', true
       readableHz = computed ->
         hzkey = Object.keys(hzName).find (k)->
           _hz = hzName[k]

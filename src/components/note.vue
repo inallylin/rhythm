@@ -20,7 +20,7 @@
         </span>
       </div>
       <!-- <p>NOTE:{{note}}</p>
-      <p>beats: {{beats.reverse()}}</p>
+      <p>beats: {{beats.slice().reverse()}}</p>
       <p>restAt: {{restAt}}</p> -->
     </template>
     <template v-else>
@@ -41,7 +41,7 @@
   import { useStore } from 'vuex'
   import iconRandom from '@/components/icon/random.vue'
   import iconTrashCan from '@/components/icon/trashcan.vue'
-  import { createBeats, getRests, ramdon } from '@/mixins/beat.coffee'
+  import { createBeats, getRests } from '@/mixins/beat.coffee'
   import actionEdit from '@/view/generator/action-edit.vue'
   export default
     props:

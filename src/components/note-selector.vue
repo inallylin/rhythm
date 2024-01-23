@@ -1,16 +1,18 @@
 <template>
   <div class="note-option__list">
-    <div class="note-option" v-for="i in 16">
-      <input :id="`note-option-${i}`" :type="inputType" :value="i-1" v-model="notes">
+    <div class="note-option" v-for="i in options">
+      <input :id="`note-option-${i}`" :type="inputType" :value="i" v-model="notes">
       <label :for="`note-option-${i}`">
-        <note :index="1" :note="i - 1" :disabled="true" />
+        <note :index="1" :note="i" :disabled="true" />
       </label>
     </div>
   </div>
 </template>
 <script lang="coffee">
   import { ref, computed, defineAsyncComponent } from 'vue'
+  import { useStore } from 'vuex'
   note = defineAsyncComponent () => import('@/components/note.vue')
+  import { getNoteOptions } from '@/mixins/beat.coffee'
   export default
     props:
       modelValue:
@@ -22,10 +24,15 @@
       note: note
     emits: ['update:modelValue']
     setup: (props, {emit})->
+      store = useStore()
+      config = computed -> store.getters.preference
+      use16Beat = computed -> config.value?.type
       isMulti = computed ->
         props.modelModifiers?.multi
       inputType = computed ->
         if isMulti.value then 'checkbox' else 'radio'
+      options = computed ->
+        getNoteOptions(use16Beat.value)
       notes = computed
         get: ->
           return props.modelValue if !isMulti.value
@@ -35,6 +42,7 @@
       return {
         notes
         inputType
+        options
       }
 </script>
 <style lang="sass" scoped>

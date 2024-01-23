@@ -13,6 +13,7 @@ export default
     'player.pointer.next': (state) ->
       state.track.pointer += 1
     'player.init': (state) ->
+      console.log 23132
       sound.init()
     'play.stop': (state, _timeout = 0) ->
       clearInterval state.player

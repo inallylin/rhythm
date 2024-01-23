@@ -5,8 +5,6 @@ export default ->
   audioGain = null
   gc = null
   init = ->
-    # if audioContext && audioContext.state != 'closed'
-    #   destroy()
     return if audioContext
     audioContext = new AudioContext()
     gc = setInterval ()->
@@ -30,10 +28,6 @@ export default ->
     )
   destroy = ->
     audioOscillator?.stop?(audioContext.currentTime)
-    # gc = setTimeout ->
-    #   await audioContext?.close?()
-    #   init()
-    # , 1000 * 60
   reset = ->
     new Promise (resolve)->
       clearInterval gc if gc

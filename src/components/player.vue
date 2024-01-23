@@ -56,13 +56,13 @@
         _progress = progress.value + _step
         progress.value = if _progress < 1 then _progress else 1
       play = ->
+        await store.dispatch 'player.init'
         store.dispatch 'player.start',
           id: id
           value: track.value
         progressor.value = setInterval(updateProgress, 100)
       stop = ->
         store.dispatch 'player.end'
-      store.dispatch 'player.init'
       onUnmounted -> stop()
       return {
         id
