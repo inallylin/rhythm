@@ -109,6 +109,7 @@ export default
         query:
           code: n
     decode = (code, i)->
+      return if isNaN(_note)
       [_note, _rest] = String(code).match(/.{1,2}/g)
       rests.value[i] = null
       notes.value[i] = parseInt Number(_note)
