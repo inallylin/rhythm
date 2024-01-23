@@ -1,7 +1,6 @@
 <template>
   <teleport to=".modal-wrapper" v-if="isOpen">
     <div class="modal">
-      <div class="modal__bgclose" @click="answer(false)"></div>
       <div class="modal__head" v-if="$slots.title">
         <slot name="title"></slot>
         <div class="modal__head__actions">
@@ -20,6 +19,7 @@
           <slot name="actions:foot:right" :answer="answer"></slot>
         </div>
       </div>
+      <div class="modal__bgclose" @click="answer(false)"></div>
     </div>
   </teleport>
 </template>
