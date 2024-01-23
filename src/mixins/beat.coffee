@@ -27,14 +27,15 @@ randomNote = (_use16Beat = true, _allowTie = true)->
 getRests = (_restId)->
   _restAt = decimalToBinary Number(_restId)
   String(_restAt).split('').map (r)-> Number r
-createBeats = (_noteId, _restId, _useRest)->
+createBeats = (_noteId, _restId, _useRest, _use16Beat)->
   _beats = decimalToBinary(_noteId)
-  _restArray = if _useRest && _restId then getRests(_restId) else []
+  _restArray = if _useRest && _restId && (_noteId || _restId == 8) then getRests(_restId) else []
   _beatsArray = String(_beats).split ''
   _beatsArray.map (_beat, i) ->
     _beatNumber = Number(_beat)
     return -1 if !_beatNumber && _restArray[i]
-    return randomRest(_beatNumber) if _useRest && _restId == null
+    if _useRest && _restId == null && (_use16Beat || i%2 != 0)
+      return randomRest(_beatNumber)
     _beatNumber
 
 decodeFullnote = (code, i)->

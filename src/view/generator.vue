@@ -109,11 +109,15 @@ export default
         query:
           code: n
     decode = (code, i)->
-      return if isNaN(_note)
+      return if isNaN(code)
       [_note, _rest] = String(code).match(/.{1,2}/g)
+      _note = parseInt Number(_note)
+      _rest = parseInt Number(_rest || 0)
       rests.value[i] = null
-      notes.value[i] = parseInt Number(_note)
-      rests.value[i] = parseInt Number(_rest || 0)
+      if _note == 0 && _rest != 8
+        _rest = 0
+      notes.value[i] = _note
+      rests.value[i] = _rest
     encode = (note, rest)->
       noteCode = String(note).padStart(2, 0)
       restCode = String(rest).padStart(2, 0)

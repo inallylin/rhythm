@@ -1,7 +1,7 @@
 <template>
   <div :class="['beat', {disabled: disabled}]">
     <slot name="control"></slot>
-    <template v-if="note || !useRest">
+    <template v-if="note || restAt != 8">
       <div :class="['note__wrapper', {quarter: isQuarter, tie: hasTie}]">
         <span :class="['note', seqClass(j)]" v-for="n, j in beats">
           <template v-if="n > 0">v</template>
@@ -19,7 +19,7 @@
           <template v-if="n != 0">{{n}}</template>
         </span>
       </div>
-      <!-- <p>NOTE:{{note}}</p>
+     <!--  <p>NOTE:{{note}}</p>
       <p>beats: {{beats.slice().reverse()}}</p>
       <p>restAt: {{restAt}}</p> -->
     </template>
@@ -65,6 +65,7 @@
     setup: (props, {emit})->
       store = useStore()
       config = computed -> store.getters.preference
+      use16Beats = computed -> config.value?.type
       useRest = computed ->
         return false if props.disabled && note.value
         config.value?.rest
@@ -88,7 +89,7 @@
         set: (value)->
           emit 'update:restAt', value
       beats = computed ->
-        createBeats(props.note, props.restAt, useRest.value)
+        createBeats(props.note, props.restAt, useRest.value, use16Beats.value)
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->

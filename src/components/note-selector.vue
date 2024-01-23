@@ -77,5 +77,5 @@
       justify-content: center
       align-items: center
       max-width: 700px
-      margin: 0 auto
+      margin: space(xl) auto
 </style>

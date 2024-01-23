@@ -24,7 +24,7 @@
   import { useStore } from 'vuex'
   import iconRandom from '@/components/icon/random.vue'
   import iconTrashCan from '@/components/icon/trashcan.vue'
-  import { createBeats, getRests, random, randomNote } from '@/mixins/beat.coffee'
+  import { getRests, random, randomNote } from '@/mixins/beat.coffee'
   import actionEdit from '@/view/generator/action-edit.vue'
   import cnote from '@/components/note.vue'
   export default
@@ -61,12 +61,11 @@
       createNote = (e)->
         e.target.blur() if e
         restAt.value = null
-        if props.useRest && random(0.03) && use16Beat.value
-          _note = 0
-        else
-          _allowTie = props.index != 0
-          _note = randomNote(use16Beat.value, _allowTie)
+        _allowTie = props.index != 0
+        _note = randomNote(use16Beat.value, _allowTie)
         note.value = _note
+        if !_note && props.useRest && random(0.03)
+          restAt.value = 8
       remove = -> emit 'remove'
       changeNote = (_diff)->
         _note = note.value + _diff
@@ -74,11 +73,7 @@
         _note = 0 if _note > 15
         note.value = _note
       watch use16Beat, -> createNote()
-      watch useRest, (n)->
-        if n
-          restAt.value = getRests(props.restAt)
-        else
-          restAt.value = null
+      watch useRest, -> createNote()
       createNote() if !note.value && note.value != 0
       return {
         note
