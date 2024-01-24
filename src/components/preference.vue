@@ -81,7 +81,7 @@
   </component>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, watch, onMounted } from 'vue'
+  import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
   import { useRoute } from 'vue-router'
   import { useStore } from 'vuex'
   import { storage, deepCopy } from '@/mixins/tools.coffee'
@@ -131,6 +131,10 @@
         sync()
         inited.value = true
       watch config, sync
+      watch (()-> config.type), (n, o)->
+        return if n
+        await nextTick()
+        config.rest = false
       watch preferenceRaw, (n, o)->
         _numberKeys = ['speed', 'highlight', 'hz']
         return if !inited.value

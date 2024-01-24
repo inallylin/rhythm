@@ -1,5 +1,5 @@
 <template>
-  <div :class="['beat', {disabled: disabled}]">
+  <div :class="['beat', {disabled: disabled, beat8: !use16Beats}]">
     <slot name="control"></slot>
     <template v-if="note || restAt != 8">
       <div :class="['note__wrapper', {quarter: isQuarter, tie: hasTie}]">
@@ -9,7 +9,7 @@
       </div>
       <div v-if="showCode" class="number__wrapper">
         <span :class="['number', {rest: n == -1}]"
-          v-for="n, j in beats.slice().reverse()">
+          v-for="n, j in codes">
           <template v-if="n > 0">{{feint(j+1, n)}}</template>
         </span>
       </div>
@@ -90,6 +90,10 @@
           emit 'update:restAt', value
       beats = computed ->
         createBeats(props.note, props.restAt, useRest.value, use16Beats.value)
+      codes = computed ->
+        [...beats.value].reverse().filter (_act, _idx)->
+          return true if use16Beats.value
+          _idx % 2 == 0
       hasTie = computed ->
         note?.value % 2 == 0 && beats.value[3] != -1
       isQuarter = computed ->
@@ -111,6 +115,7 @@
       return {
         note
         beats
+        codes
         feint
         hasTie
         isQuarter
@@ -118,5 +123,6 @@
         useRest
         showCode
         showArrow
+        use16Beats
       }
 </script>

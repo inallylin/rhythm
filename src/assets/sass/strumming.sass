@@ -392,6 +392,11 @@ $arrow-size: 4px
         display: none
       + .rest
         box-shadow: 1rem 0 0 0.05rem
+  @at-root .beat8 &
+    &:nth-child(2):before
+      transform: translateY(100%) rotate(-135deg)
+      top: auto
+      bottom: -0.125rem
   &__wrapper
     margin-top: 2em
     opacity: .5
@@ -405,6 +410,8 @@ $arrow-size: 4px
   font-size: 1.2rem
   &:empty:before
     content: '-'
+  &:last-child
+    margin-right: .5rem
   &.rest
     &:before
       content: '0'
