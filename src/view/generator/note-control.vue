@@ -7,10 +7,10 @@
     <template #control>
       <div class="control" v-if="!disabled">
         <button class="btn-carousel" @click="changeNote(-1)"></button>
+        <action-edit v-model="note" />
         <button @click="createNote($event)">
           <icon-random />
         </button>
-        <action-edit v-model="note" />
         <button class="btn-delete" @click="remove()">
           <icon-trash-can />
         </button>

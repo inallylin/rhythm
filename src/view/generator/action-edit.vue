@@ -1,5 +1,9 @@
 <template>
-  <button @click="edit"><icon-pen/></button>
+  <slot :onClick="edit">
+    <button @click="edit" v-bind="$attrs">
+      <icon-pen/>
+    </button>
+  </slot>
   <modal ref="componentModal">
     <template #title>
       Change Note
@@ -19,6 +23,7 @@
       modelValue:
         type: Number
         default: 0
+    inheritAttrs: false
     components:
       modal: modal
       'icon-pen': iconPen
