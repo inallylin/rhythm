@@ -41,7 +41,7 @@
           emit 'update:restAt', value
       edit = ->
         componentModal.value?.open()
-      watch note, ->
+      watch [note, restAt], ->
         componentModal.value?.close()
       return {
         componentModal

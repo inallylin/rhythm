@@ -43,6 +43,7 @@
           if Array.isArray(props.modelValue) then props.modelValue else []
         set: (value)->
           emit 'update:modelValue', value
+          emit 'update:restAt', 0
       return {
         notes
         inputType
