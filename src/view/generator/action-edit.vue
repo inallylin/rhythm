@@ -1,15 +1,13 @@
 <template>
-  <slot :onClick="edit">
-    <button @click="edit" v-bind="$attrs">
-      <icon-pen/>
-    </button>
-  </slot>
+  <button @click="edit">
+    <slot><icon-pen/></slot>
+  </button>
   <modal ref="componentModal">
     <template #title>
       Change Note
     </template>
     <template #content>
-      <note-selector v-model="note" />
+      <note-selector v-model="note" v-model:restAt="restAt" />
     </template>
   </modal>
 </template>
@@ -23,7 +21,9 @@
       modelValue:
         type: Number
         default: 0
-    inheritAttrs: false
+      restAt:
+        type: Number
+        default: null
     components:
       modal: modal
       'icon-pen': iconPen
@@ -35,6 +35,10 @@
         get: -> props.modelValue
         set: (value)->
           emit 'update:modelValue', value
+      restAt = computed
+        get: -> props.restAt
+        set: (value)->
+          emit 'update:restAt', value
       edit = ->
         componentModal.value?.open()
       watch note, ->
@@ -43,5 +47,6 @@
         componentModal
         edit
         note
+        restAt
       }
 </script>

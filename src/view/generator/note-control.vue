@@ -7,7 +7,7 @@
     <template #control>
       <div class="control" v-if="!disabled">
         <button class="btn-carousel" @click="changeNote(-1)"></button>
-        <action-edit v-model="note" />
+        <action-edit v-model="note" v-model:restAt="restAt" />
         <button @click="createNote($event)">
           <icon-random />
         </button>

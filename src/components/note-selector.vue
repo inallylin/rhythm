@@ -18,6 +18,9 @@
       modelValue:
         type: [Number, Array]
         default: 0
+      restAt:
+        type: Number
+        default: null
       modelModifiers:
         default: ()-> {}
     components:
@@ -35,6 +38,7 @@
         getNoteOptions(use16Beat.value)
       notes = computed
         get: ->
+          return null if props.restAt
           return props.modelValue if !isMulti.value
           if Array.isArray(props.modelValue) then props.modelValue else []
         set: (value)->

@@ -131,10 +131,6 @@
         sync()
         inited.value = true
       watch config, sync
-      watch (()-> config.type), (n, o)->
-        return if n
-        await nextTick()
-        config.rest = false
       watch preferenceRaw, (n, o)->
         _numberKeys = ['speed', 'highlight', 'hz']
         return if !inited.value

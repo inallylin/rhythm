@@ -89,7 +89,8 @@
         set: (value)->
           emit 'update:restAt', value
       beats = computed ->
-        createBeats(props.note, props.restAt, useRest.value, use16Beats.value)
+        _isUseRest = useRest.value && !props.disabled
+        createBeats(props.note, props.restAt, _isUseRest , use16Beats.value)
       codes = computed ->
         [...beats.value].reverse().filter (_act, _idx)->
           return true if use16Beats.value
