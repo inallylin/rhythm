@@ -53,7 +53,7 @@ body
     +max-screen(414)
       filter: blur(5px)
 .preference
-  .input, .checkbox, select, .color-picker
+  .input, .checkbox, select
     box-sizing: border-box
     +min-screen(769)
       margin: space(sm)
@@ -236,7 +236,8 @@ select
   +max-screen(768)
     background: none!important
     position: absolute
-    bottom: 0
+    right: space(lg)
+    z-index: 0
   > input
     opacity: 0
     height: 0
@@ -253,7 +254,8 @@ select
       display: inline-flex
       justify-content: center
       align-items: center
-      padding: space()
+      padding: space(xs)
+      font-size: 1rem
       border-radius: 50%
       width: 1.5em
       height: 1.5em

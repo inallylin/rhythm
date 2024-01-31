@@ -4,74 +4,76 @@
       <icon-xmark v-if="show" />
       <icon-palette v-else />
     </button>
-    <div class="color-picker">
-      <input id="color-picker" type="color" v-model="config.theme">
-      <label for="color-picker">
-        <icon-palette />
-      </label>
-    </div>
-    <div class="formfield" v-if="allowConfigNote">
-      <div class="formfield__label">
-        Note
+    <div class="preference__context">
+      <div class="color-picker">
+        <input id="color-picker" type="color" v-model="config.theme">
+        <label for="color-picker">
+          <icon-palette />
+        </label>
       </div>
-      <div class="formfield__field">
-        <div class="checkbox">
-          <input id="toggle-code" type="checkbox" v-model="config.code">
-          <label for="toggle-code">Code</label>
+      <div class="formfield" v-if="allowConfigNote">
+        <div class="formfield__label">
+          Note
         </div>
-        <div class="checkbox">
-          <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
-          <label for="toggle-arrow">Arrow</label>
-        </div>
-        <div class="checkbox">
-          <input id="toggle-rest" type="checkbox" v-model="config.rest">
-          <label for="toggle-rest">Rest</label>
-        </div>
-      </div>
-    </div>
-    <div class="formfield">
-      <div class="formfield__label">
-        Sound
-      </div>
-      <div class="formfield__field">
-        <select v-model="config.speed" @click.stop>
-          <option :value="s" v-for="s in [150, 167, 200, 250, 300]">
-            {{Math.round(60000/(s*4))}}bpm
-          </option>
-        </select>
-        <select id="sound" v-model="config.wave" @click.stop>
-          <option value="sine">Sine</option>
-          <option value="square">Square</option>
-          <option value="triangle">Triangle</option>
-          <option value="sawtooth">Sawtooth</option>
-        </select>
-        <div class="hz-selector" @click.stop>
-          <input id="hz" type="range" min="164.8" max="1047" v-model="config.hz">
-          <label class="hz-selector__text">{{readableHz}}</label>
+        <div class="formfield__field">
+          <div class="checkbox">
+            <input id="toggle-code" type="checkbox" v-model="config.code">
+            <label for="toggle-code">Code</label>
+          </div>
+          <div class="checkbox">
+            <input id="toggle-arrow" type="checkbox" v-model="config.arrow">
+            <label for="toggle-arrow">Arrow</label>
+          </div>
+          <div class="checkbox">
+            <input id="toggle-rest" type="checkbox" v-model="config.rest">
+            <label for="toggle-rest">Rest</label>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="formfield">
-      <div class="formfield__label">
-        Beats
-      </div>
-      <div class="formfield__field">
-        <div class="checkbox">
-          <input id="toggle-beat-type" type="checkbox" v-model="config.type">
-          <label for="toggle-beat-type">16 Beats</label>
+      <div class="formfield">
+        <div class="formfield__label">
+          Sound
         </div>
-        <div class="checkbox" v-if="allowConfigHighlight">
-          <input id="toggle-highlight" type="checkbox" v-model="config.highlight">
-          <label for="toggle-highlight">Highlight</label>
+        <div class="formfield__field">
+          <select v-model="config.speed" @click.stop>
+            <option :value="s" v-for="s in [150, 167, 200, 250, 300]">
+              {{Math.round(60000/(s*4))}}bpm
+            </option>
+          </select>
+          <select id="sound" v-model="config.wave" @click.stop>
+            <option value="sine">Sine</option>
+            <option value="square">Square</option>
+            <option value="triangle">Triangle</option>
+            <option value="sawtooth">Sawtooth</option>
+          </select>
+          <div class="hz-selector" @click.stop>
+            <input id="hz" type="range" min="164.8" max="1047" v-model="config.hz">
+            <label class="hz-selector__text">{{readableHz}}</label>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="preference-append"></div>
-    <div class="btn-group">
-      <button class="btn-outline" @click="resetPlayer">
-        <icon-arrow-rotate />
-        Reset Player
-      </button>
+      <div class="formfield">
+        <div class="formfield__label">
+          Beats
+        </div>
+        <div class="formfield__field">
+          <div class="checkbox">
+            <input id="toggle-beat-type" type="checkbox" v-model="config.type">
+            <label for="toggle-beat-type">16 Beats</label>
+          </div>
+          <div class="checkbox" v-if="allowConfigHighlight">
+            <input id="toggle-highlight" type="checkbox" v-model="config.highlight">
+            <label for="toggle-highlight">Highlight</label>
+          </div>
+        </div>
+      </div>
+      <div class="preference-append"></div>
+      <div class="btn-group">
+        <button class="btn-outline" @click="resetPlayer">
+          <icon-arrow-rotate />
+          Reset Player
+        </button>
+      </div>
     </div>
   </div>
   <component is="style">
@@ -81,7 +83,7 @@
   </component>
 </template>
 <script lang="coffee">
-  import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
+  import { ref, reactive, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
   import { useRoute } from 'vue-router'
   import { useStore } from 'vuex'
   import { storage, deepCopy } from '@/mixins/tools.coffee'
@@ -125,6 +127,8 @@
         "#{config.hz}Hz"
       resetPlayer = ->
         store.dispatch 'player.reset'
+      hide = ->
+        show.value = false
       sync = ->
         store.dispatch 'preference.set', deepCopy(config)
       init = ->
@@ -139,8 +143,11 @@
           if _numberKeys.indexOf(k) >= 0
             v = Number(v)
           config[k] = v
+      window.addEventListener 'resize', hide
       onMounted ->
         init()
+      onUnmounted ->
+        window.removeEventListener 'resize', hide
       return {
         config
         show
@@ -161,7 +168,6 @@
     position: fixed
     z-index: 9
     bottom: 0
-    padding: space(lg)
     flex-wrap: wrap
     align-items: flex-end
     +min-screen(769)
@@ -173,6 +179,21 @@
     +max-screen(768)
       top: 0
       width: 300px
+      .btn-outline
+        border-color: transparent
+    &__context
+      overflow: auto
+      height: 100%
+      box-sizing: border-box
+      padding: space(lg)
+      position: relative
+      z-index: 1
+      +min-screen(769)
+        display: flex
+        align-items: flex-end
+      +max-screen(768)
+        padding-left: 0
+        padding-right: 0
     &__toggle
       bottom: 0
       top: auto

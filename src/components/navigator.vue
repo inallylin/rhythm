@@ -102,4 +102,6 @@
       position: fixed
       z-index: 10
       top: 0
+      padding-top: space(lg)
+      padding-bottom: space(lg)
 </style>
