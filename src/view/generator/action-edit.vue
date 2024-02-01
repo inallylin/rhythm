@@ -7,12 +7,13 @@
       Change Note
     </template>
     <template #content>
-      <note-selector v-model="note" v-model:restAt="restAt" />
+      <note-selector :use16Beat="use16Beats" v-model="note" v-model:restAt="restAt" />
     </template>
   </modal>
 </template>
 <script lang="coffee">
   import { ref, computed, watch } from 'vue'
+  import { useStore } from 'vuex'
   import modal from '@/components/modal.vue'
   import iconPen from '@/components/icon/pen.vue'
   import noteSelector from '@/components/note-selector.vue'
@@ -30,7 +31,10 @@
       'note-selector': noteSelector
     emits: ['update:modelValue']
     setup: (props, {emit})->
+      store = useStore()
       componentModal = ref null
+      config = computed -> store.getters.preference
+      use16Beats = computed -> !config.value?.type
       note = computed
         get: -> props.modelValue
         set: (value)->
@@ -48,5 +52,6 @@
         edit
         note
         restAt
+        use16Beats
       }
 </script>

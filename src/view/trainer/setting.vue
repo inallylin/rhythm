@@ -8,6 +8,7 @@
     </div>
     <div class="section__foot">
       <button class="btn-outline" @click="applyAll">All</button>
+      <button class="btn-outline" @click="apply8Beat">Only 8 beat</button>
       <button class="btn-outline" @click="applyRandom" v-if="allOptions.length > 4">Random 4</button>
       <button @click="apply" :disabled="isDisabled">Go !</button>
       <p class="text-info" v-if="isDisabled">
@@ -44,9 +45,16 @@
         _options = [1..15].filter (o)->
           o != _withoutTie
         .sort ()-> Math.random() - 0.5
-        emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
+        # emit 'update:modelValue', [_withoutTie, ..._options.splice(0, 3)]
+        options.value = [_withoutTie, ..._options.splice(0, 3)]
+      apply8Beat = ->
+        _options8Beats = allOptions.value.filter (_number)->
+          _number < 8 && (_number % 4) < 2
+        # emit 'update:modelValue', _options8Beats
+        options.value = _options8Beats
       applyAll = ->
-        emit 'update:modelValue', allOptions.value
+        # emit 'update:modelValue', allOptions.value
+        options.value = allOptions.value
       apply = ->
         emit 'update:modelValue', options.value
       return {
@@ -56,6 +64,7 @@
         apply
         applyAll
         applyRandom
+        apply8Beat
         isDisabled
       }
 </script>

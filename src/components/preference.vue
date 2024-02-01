@@ -57,9 +57,9 @@
           Beats
         </div>
         <div class="formfield__field">
-          <div class="checkbox">
+          <div class="checkbox" v-if="allowConfigNote">
             <input id="toggle-beat-type" type="checkbox" v-model="config.type">
-            <label for="toggle-beat-type">16 Beats</label>
+            <label for="toggle-beat-type">Only 8 Beat</label>
           </div>
           <div class="checkbox" v-if="allowConfigHighlight">
             <input id="toggle-highlight" type="checkbox" v-model="config.highlight">
@@ -118,7 +118,7 @@
         highlight: storage 'highlight', 1
         wave: storage 'wave', 'triangle'
         hz: storage 'hz', 830.6
-        type: storage 'type', true
+        type: storage 'type', false
       readableHz = computed ->
         hzkey = Object.keys(hzName).find (k)->
           _hz = hzName[k]

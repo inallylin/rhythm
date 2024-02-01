@@ -65,7 +65,7 @@
     setup: (props, {emit})->
       store = useStore()
       config = computed -> store.getters.preference
-      use16Beats = computed -> config.value?.type
+      use16Beats = computed -> !config.value?.type
       useRest = computed ->
         return false if props.disabled && note.value
         config.value?.rest

@@ -1,5 +1,6 @@
 <template>
   <div class="note-option__list">
+    <!-- {{notes}} -->
     <div class="note-option" v-for="i in options">
       <input :id="`note-option-${i}`" :type="inputType" :value="i" v-model="notes">
       <label :for="`note-option-${i}`">
@@ -23,13 +24,16 @@
         default: null
       modelModifiers:
         default: ()-> {}
+      use16Beat:
+        type: Boolean
+        default: true
     components:
       note: note
     emits: ['update:modelValue']
     setup: (props, {emit})->
       store = useStore()
       config = computed -> store.getters.preference
-      use16Beat = computed -> config.value?.type
+      use16Beat = computed -> props.use16Beat
       isMulti = computed ->
         props.modelModifiers?.multi
       inputType = computed ->

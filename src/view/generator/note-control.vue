@@ -51,7 +51,7 @@
       store = useStore()
       config = computed -> store.getters.preference
       useRest = computed -> config.value?.rest
-      use16Beat = computed -> config.value?.type
+      use16Beat = computed -> !config.value?.type
       note = computed
         get: -> props.note
         set: (value)-> emit 'update:note', value

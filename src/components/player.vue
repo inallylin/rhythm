@@ -41,7 +41,7 @@
         store.getters.track.pointer
       track = computed ->
         props.notes?.map (_note, i)->
-          createBeats(_note, props.rests?[i], props.useRest, config.value?.type).reverse()
+          createBeats(_note, props.rests?[i], props.useRest, !config.value?.type).reverse()
         .flat()
       speed = computed -> store.getters.speed
       updateProgress = (i)->

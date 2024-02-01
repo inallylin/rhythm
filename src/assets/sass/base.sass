@@ -249,6 +249,12 @@ select
     cursor: pointer
     transition: .2s
     line-height: 1
+    padding: space()
+    svg
+      +min-screen(769)
+        display: inline-block
+        position: relative
+        top: 2px
     +max-screen(768)
       background: white!important
       display: inline-flex
