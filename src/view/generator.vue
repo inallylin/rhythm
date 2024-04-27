@@ -101,9 +101,11 @@ export default
         for i in [0...Math.abs(_diff)]
           if _diff > 0 then add() else notes.value.splice -1, 1
     createRandom = ->
+      playInLoop(false)
       for n in noteInstance.value
         n?.createNote()
     add = ->
+      playInLoop(false)
       notes.value.push null
     getNoteInstance = (instance)->
       noteInstance.value.push instance
@@ -140,6 +142,7 @@ export default
       return if !componentPlayer.value
       if !_state
         playLoopWatcher.value?()
+        playLoopWatcher.value = null
         componentPlayer.value.stop()  
         return
       componentPlayer.value.play()
