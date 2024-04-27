@@ -1,5 +1,5 @@
 <template>
-  <slot :play="play" :isPlaying="isPlaying">
+  <slot :play="play" :stop="stop" :isPlaying="isPlaying">
     <button class="btn-play" @click="play" :disabled="isPlaying">
       <icon-play />
     </button>
@@ -69,6 +69,7 @@
         id
         track
         play
+        stop
         isPlaying
         progress
         pointer

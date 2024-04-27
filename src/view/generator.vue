@@ -1,8 +1,9 @@
 <template>
   <div class="navpage">
     <div class="navpage__page">
-      <TransitionGroup tag="div" class="bar" name="list" mode="out-in">
+      <TransitionGroup tag="div" class="bar" name="list" mode="out-in" :class="{playing: componentPlayer?.isPlaying}">
         <note
+          :class="{active: measurePointer == i}"
           :ref="getNoteInstance"
           :index="i"
           :key="i"
@@ -24,13 +25,17 @@
       </teleport>
       <div class="control">
         <player
+          ref="componentPlayer"
           :notes="notes"
           :rests="rests"
           :useRest="config.rest"
           >
           <template #="{play, isPlaying}">
-            <button @click="play()" :disabled="isPlaying">
+            <button @click="playInLoop(true)" v-if="!playLoopWatcher">
               <icon-play />
+            </button>
+            <button @click="playInLoop(false)" v-else>
+              <icon-stop />
             </button>
           </template>
         </player>
@@ -53,6 +58,7 @@ import { storage } from '@/mixins/tools.coffee'
 import iconRandom from '@/components/icon/random.vue'
 import iconPlus from '@/components/icon/plus.vue'
 import iconPlay from '@/components/icon/play.vue'
+import iconStop from '@/components/icon/stop.vue'
 import player from '@/components/player.vue'
 export default
   components:
@@ -61,6 +67,7 @@ export default
     'icon-random': iconRandom
     'icon-plus': iconPlus
     'icon-play': iconPlay
+    'icon-stop': iconStop
   setup: ->
     store = useStore()
     router = useRouter()
@@ -71,7 +78,13 @@ export default
     rests = ref []
     inited = ref false
     componentPlayer = ref null
+    playLoopWatcher = ref null
     style = computed -> "color: #{config.theme}; fill: #{config.theme}; "
+    measurePointer = computed ->
+      return if !componentPlayer.value?.isPlaying
+      _pointer = componentPlayer.value?.pointer
+      return 0 if !_pointer
+      Math.floor(_pointer/4)
     url = computed
       get: ->
         codes = notes.value.map (note, i)->
@@ -101,13 +114,6 @@ export default
       _codes = route.query?.code?.split ','
       if _codes.some (c)-> c.length == 4
         syncConfig 'rest', true
-    watch measure, (n)->
-      noteInstance.value.length = 0
-    watch url, (n)->
-      router.replace
-        name: route.name
-        query:
-          code: n
     decode = (code, i)->
       return if isNaN(code)
       [_note, _rest] = String(code).match(/.{1,2}/g)
@@ -130,8 +136,26 @@ export default
     remove = (i)->
       notes.value.splice i, 1
       rests.value.splice i, 1
+    playInLoop = (_state = true)->
+      return if !componentPlayer.value
+      if !_state
+        playLoopWatcher.value?()
+        componentPlayer.value.stop()  
+        return
+      componentPlayer.value.play()
+      playLoopWatcher.value = watch (()-> componentPlayer.value.isPlaying), (n) ->
+        return if n
+        await nextTick()
+        componentPlayer.value.play()
     getUrlCode()
     measure.value = 4 if !measure.value
+    watch measure, (n)->
+      noteInstance.value.length = 0
+    watch url, (n)->
+      router.replace
+        name: route.name
+        query:
+          code: n
     onMounted ->
       await nextTick()
       inited.value = true
@@ -147,5 +171,17 @@ export default
       measure
       inited
       componentPlayer
+      measurePointer
+      playInLoop
+      playLoopWatcher
     }
 </script>
+<style lang="sass" scoped>
+  .bar
+    &.playing
+      .beat
+        transition: .2s
+        opacity: .4
+      .beat.active
+        opacity: 1
+</style>
