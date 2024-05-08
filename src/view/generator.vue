@@ -172,6 +172,7 @@ export default
           when 38 # ArrowUp
             add()
           when 40 # ArrowDown
+            playInLoop(false)
             notes.value.pop()
       enable: ->
         window.addEventListener 'keydown', hotkey.trigger
