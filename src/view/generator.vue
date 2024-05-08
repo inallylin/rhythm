@@ -3,7 +3,7 @@
     <div class="navpage__page">
       <TransitionGroup tag="div" class="bar" name="list" mode="out-in" :class="{playing: componentPlayer?.isPlaying}">
         <note
-          :class="{active: measurePointer == i}"
+          :class="{active: playing.pointer == i}"
           :ref="getNoteInstance"
           :index="i"
           :key="i"
@@ -26,23 +26,23 @@
       <div class="control">
         <player
           ref="componentPlayer"
-          :notes="notes"
-          :rests="rests"
+          :notes="playing.notes"
+          :rests="playing.rests"
           :useRest="config.rest"
           >
           <template #="{play, isPlaying}">
-            <button @click="playInLoop(true)" v-if="!playLoopWatcher">
+            <button @click="playInLoop(true)" v-if="!playing.watcher" title="play with space">
               <icon-play />
             </button>
-            <button @click="playInLoop(false)" v-else>
+            <button @click="playInLoop(false)" title="stop with space" v-else>
               <icon-stop />
             </button>
           </template>
         </player>
-        <button @click="createRandom()">
+        <button @click="createRandom()" title="random with tab">
           <icon-random />
         </button>
-        <button class="btn-add" @click="add">
+        <button class="btn-add" @click="add" title="up/down to add/remove">
           <icon-plus />
         </button>
       </div>
@@ -50,7 +50,7 @@
   </div>
 </template>
 <script lang="coffee">
-import { computed, watch, onMounted, ref, reactive, nextTick } from 'vue'
+import { computed, watch, onMounted, ref, reactive, nextTick, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import note from '@/view/generator/note-control.vue'
@@ -78,13 +78,7 @@ export default
     rests = ref []
     inited = ref false
     componentPlayer = ref null
-    playLoopWatcher = ref null
     style = computed -> "color: #{config.theme}; fill: #{config.theme}; "
-    measurePointer = computed ->
-      return if !componentPlayer.value?.isPlaying
-      _pointer = componentPlayer.value?.pointer
-      return 0 if !_pointer
-      Math.floor(_pointer/4)
     url = computed
       get: ->
         codes = notes.value.map (note, i)->
@@ -138,18 +132,51 @@ export default
     remove = (i)->
       notes.value.splice i, 1
       rests.value.splice i, 1
+    playing = reactive
+      notes: []
+      rests: []
+      watcher: null
+      pointer: computed ->
+        return if !componentPlayer.value?.isPlaying
+        _pointer = componentPlayer.value?.pointer
+        return 0 if !_pointer
+        _measures = notes.value.length
+        Math.floor(_pointer/4%_measures)
     playInLoop = (_state = true)->
       return if !componentPlayer.value
       if !_state
-        playLoopWatcher.value?()
-        playLoopWatcher.value = null
+        playing.watcher?()
+        playing.watcher = null
+        playing.notes.length = 0
+        playing.rests.length = 0
         componentPlayer.value.stop()  
         return
+      playing.notes.push ...notes.value
+      playing.rests.push ...rests.value
       componentPlayer.value.play()
-      playLoopWatcher.value = watch (()-> componentPlayer.value.isPlaying), (n) ->
-        return if n
-        await nextTick()
-        componentPlayer.value.play()
+      playing.watcher = watch (()-> playing.pointer), (n) ->
+        return if !n
+        _measures = notes.value.length
+        if n % _measures == 1
+          playing.notes.push ...notes.value
+          playing.rests.push ...rests.value
+    hotkey =
+      trigger: (e)->
+        return if [9, 32, 38, 40].indexOf(e.keyCode) == -1
+        e.preventDefault()
+        switch e.keyCode
+          when 32 # space
+            playInLoop(!playing.watcher)
+          when 9 # tab
+            createRandom()
+          when 38 # ArrowUp
+            add()
+          when 40 # ArrowDown
+            notes.value.pop()
+      enable: ->
+        window.addEventListener 'keydown', hotkey.trigger
+      disable: ->
+        window.removeEventListener 'keydown', hotkey.trigger
     getUrlCode()
     measure.value = 4 if !measure.value
     watch measure, (n)->
@@ -161,7 +188,10 @@ export default
           code: n
     onMounted ->
       await nextTick()
+      hotkey.enable()
       inited.value = true
+    onUnmounted ->
+      hotkey.disable()
     return {
       noteInstance
       createRandom
@@ -174,9 +204,8 @@ export default
       measure
       inited
       componentPlayer
-      measurePointer
+      playing
       playInLoop
-      playLoopWatcher
     }
 </script>
 <style lang="sass" scoped>

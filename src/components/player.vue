@@ -6,7 +6,7 @@
   </slot>
 </template>
 <script lang="coffee">
-  import { ref, computed, onUnmounted } from 'vue'
+  import { ref, computed, onUnmounted, watch } from 'vue'
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
   import iconPlay from '@/components/icon/play.vue'
@@ -32,6 +32,7 @@
       store = useStore()
       progressor = ref null
       progress = ref 0
+      track = ref([])
       config = computed -> store.getters.preference
       isPlaying = computed ->
         return false if store.getters.track?.id != id
@@ -39,11 +40,12 @@
       pointer = computed ->
         return 0 if !isPlaying.value
         store.getters.track.pointer
-      track = computed ->
-        props.notes?.map (_note, i)->
+      notesLength = computed -> props.notes?.length || 0
+      speed = computed -> store.getters.speed
+      getTrack = ->
+        track.value = props.notes?.map (_note, i)->
           createBeats(_note, props.rests?[i], props.useRest, !config.value?.type).reverse()
         .flat()
-      speed = computed -> store.getters.speed
       updateProgress = (i)->
         if progress.value >= 1
           clearInterval progressor.value
@@ -58,12 +60,15 @@
         progress.value = if _progress < 1 then _progress else 1
       play = ->
         await store.dispatch 'player.init'
+        # sending ref track to store player, for keep playing on track change
         store.dispatch 'player.start',
           id: id
-          value: track.value
+          value: track
         progressor.value = setInterval(updateProgress, 100)
       stop = ->
         store.dispatch 'player.end'
+      watch notesLength, getTrack
+      getTrack()
       onUnmounted -> stop()
       return {
         id

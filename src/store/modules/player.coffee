@@ -13,7 +13,6 @@ export default
     'player.pointer.next': (state) ->
       state.track.pointer += 1
     'player.init': (state) ->
-      console.log 23132
       sound.init()
     'play.stop': (state, _timeout = 0) ->
       clearInterval state.player
@@ -25,8 +24,9 @@ export default
       state.player = _interval
       state.track.isPlaying = true
     'track.init': (state, _track)->
+      # this _track.value can be a ref, dont deconstruct it
       state.track.id = _track.id
-      state.track.value = [..._track.value]
+      state.track.value = _track.value
   actions:
     'player.init': (context) ->
       context.commit 'player.init'
