@@ -34,7 +34,8 @@
       progress = ref 0
       track = ref([])
       config = computed -> store.getters.preference
-      isPlaying = computed ->
+      isPlaying = ref false
+      storeIsPlaying = computed ->
         return false if store.getters.track?.id != id
         store.getters.track.isPlaying
       pointer = computed ->
@@ -59,6 +60,7 @@
         _progress = progress.value + _step
         progress.value = if _progress < 1 then _progress else 1
       play = ->
+        isPlaying.value = true
         await store.dispatch 'player.init'
         # sending ref track to store player, for keep playing on track change
         store.dispatch 'player.start',
@@ -68,6 +70,8 @@
       stop = ->
         store.dispatch 'player.end'
       watch notesLength, getTrack
+      watch storeIsPlaying, (n) ->
+        isPlaying.value = !!n
       getTrack()
       onUnmounted -> stop()
       return {

@@ -18,7 +18,6 @@ export default
       clearInterval state.player
       state.track.pointer = 0
       await sleep _timeout
-      await sound.destroy()
       state.track.isPlaying = false
     'play.start': (state, _interval)->
       state.player = _interval
