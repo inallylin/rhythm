@@ -69,7 +69,10 @@
         progressor.value = setInterval(updateProgress, 100)
       stop = ->
         store.dispatch 'player.end'
-      watch notesLength, getTrack
+      a = computed () ->
+        console.log('a', props.notes)
+        props.note.join()
+      watch (() -> props.notes?.join()) ,getTrack
       watch storeIsPlaying, (n) ->
         isPlaying.value = !!n
       getTrack()

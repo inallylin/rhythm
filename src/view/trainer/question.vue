@@ -97,8 +97,9 @@
         answer.value.splice -1, 1
       checkAnswer = (_option)->
         checkResults.value = [0...4]?.map (i)->
+          if !answer.value?[i]
+            answer.value?[i] = 1
           answer.value?[i] == notes.value?[i]
-        answer.value?.length = 4 if answer.value?.length < 4
         isChecked.value = true
         _isAllCorrect = checkResults.value?.every (c)-> c == true
         emit 'update:result', _isAllCorrect
@@ -305,7 +306,7 @@
         overflow: hidden
         border-top: 1px solid transparent
         color: transparent
-        transition: .2s
+        transition: .2s min-height
         &:before
           content: 'correct'
         &.show

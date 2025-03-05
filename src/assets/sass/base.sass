@@ -2,7 +2,6 @@
 @import '_mixins'
 :root
   --theme-color: #60007a
-
 @keyframes rotate
   0%
     transform: rotate(0)
@@ -83,10 +82,12 @@ body
       > svg
         position: relative
         bottom: auto
-        left: 4px
+        left: -2px
+        top: .3em
         font-size: 1em
         margin-top: -1px
         vertical-align: top
+        transform: none
   .color-picker
     +max-screen(768)
       min-height: 0

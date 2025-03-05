@@ -122,7 +122,7 @@ $arrow-size: 4px
   &:before
     width: 1rem
     height: 1rem
-    box-shadow: inset 0 0 0 5rem
+    box-shadow: inset 0 0 0 5rem currentColor
     border-radius: 50%
     border-top-right-radius: 0
     top: 100%
@@ -141,7 +141,7 @@ $arrow-size: 4px
         &:last-child:after
           width: 2.25rem
         + :not(:empty):last-child:after
-          box-shadow: 0 -.5rem, 1rem -.5rem
+          box-shadow: 0 -.5rem currentColor, 1rem -.5rem currentColor
       &:not(:empty)
         + :not(:empty) //, + :last-child:empty
           &:after
@@ -155,11 +155,11 @@ $arrow-size: 4px
         &, &:last-child
           &:after
             border-color: transparent
-            box-shadow: 0 -.5rem, -1rem -.5rem, 1.25rem -.5rem
+            box-shadow: 0 -.5rem currentColor, -1rem -.5rem currentColor, 1.25rem -.5rem currentColor
         &:nth-child(2):after
-          box-shadow: 0 -.5rem, -1rem -.5rem
+          box-shadow: 0 -.5rem currentColor, -1rem -.5rem currentColor
         &:last-child:after
-          box-shadow: 0 -.5rem
+          box-shadow: 0 -.5rem currentColor
         &:not(:last-child)
           &:after
             left: auto
@@ -176,7 +176,7 @@ $arrow-size: 4px
             &:after
               left: 0
               right: auto
-              box-shadow: 0 -.5rem
+              box-shadow: 0 -.5rem currentColor
         + *:last-child:after
           width: 1rem
         + *:not(:empty):not(:last-child):not(.afterRest):after
@@ -185,34 +185,34 @@ $arrow-size: 4px
       &:empty:not(.rest)
         &:after
           border-color: transparent
-          box-shadow: 0 -.5rem, 1rem -.5rem
+          box-shadow: 0 -.5rem currentColor, 1rem -.5rem currentColor
         + span
           &:not(:empty)
             &:last-child:after
-              box-shadow: 0 -.5rem
+              box-shadow: 0 -.5rem currentColor
             &:not(:last-child):after
               @extend %reverse-roof
           &:not(:empty), &:last-child
             // 8.
             &:not(.rest):before
-              box-shadow: inset 0 0 0 3rem, 1rem -.5rem 0 -.3rem
+              box-shadow: inset 0 0 0 3rem currentColor, 1rem -.5rem 0 -.3rem currentColor
             &:after
               border-color: transparent
               &:not(:last-child)
                 @extend %reverse-roof
             &:nth-child(3):after
-              box-shadow: 0 -.5rem
+              box-shadow: 0 -.5rem currentColor
           &:empty:not(.rest)
             + span
               // 4
               &:before
-                box-shadow: inset 0 0 0 3rem
+                box-shadow: inset 0 0 0 3rem currentColor
               &:after
                 box-shadow: none
     &:first-child:not(:empty) + span, &:not(:first-child):not(:last-child):not(:empty)
       + span:not(:empty):not(:last-child)
         &:after
-          box-shadow: -.25rem -0.5rem, 1.5rem -0.5rem, 2.25rem -0.5rem
+          box-shadow: -.25rem -0.5rem currentColor, 1.5rem -0.5rem currentColor, 2.25rem -0.5rem currentColor
   &__wrapper
     display: inline-flex
     flex-direction: row-reverse
@@ -282,14 +282,14 @@ $arrow-size: 4px
           right: .25rem
     + span:empty:not(.rest)
       + *:not(.rest):after
-        box-shadow: 0 -.5rem
+        box-shadow: 0 -.5rem currentColor
   &.afterRest
     &:not(.rest)[class][class]
       &:after
         left: 0
         right: auto
   &:after
-    box-shadow: 0 -.5rem
+    box-shadow: 0 -.5rem currentColor
   &:empty
     + .rest
       // 8
@@ -299,7 +299,7 @@ $arrow-size: 4px
       + .afterRest:not(:empty)[class]:after
         left: auto
         right: auto
-        box-shadow: 0 -.5rem
+        box-shadow: 0 -.5rem currentColor
     + span
       &:empty
         + .rest
@@ -314,7 +314,7 @@ $arrow-size: 4px
 .arrow
   height: .25rem
   margin-top: 1.75rem
-  box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
+  box-shadow: 0 -.25rem currentColor, 0 -.5rem currentColor, 0 -.75rem currentColor, 0 -1rem currentColor, 0 -1.25rem currentColor
   &__wrapper
     &:before
       left: .25rem
@@ -357,16 +357,16 @@ $arrow-size: 4px
       &:empty:not(.rest)
         + span
           &:not(:empty), &:last-child
-            box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem, 1rem 0 0 .05rem
+            box-shadow: 0 -.25rem currentColor, 0 -.5rem currentColor, 0 -.75rem currentColor, 0 -1rem currentColor, 0 -1.25rem currentColor, 1rem 0 0 .05rem currentColor
             &.rest
-              box-shadow: 1rem 0 0 .05rem
+              box-shadow: 1rem 0 0 .05rem currentColor
             &:not(.rest):before
               box-shadow: none
             &:before
               box-shadow: none
           &:empty:not(.rest)
             + span
-              box-shadow: 0 -.25rem, 0 -.5rem, 0 -.75rem, 0 -1rem, 0 -1.25rem
+              box-shadow: 0 -.25rem currentColor, 0 -.5rem currentColor, 0 -.75rem currentColor, 0 -1rem currentColor, 0 -1.25rem currentColor
               &:before
                 box-shadow: none
   &:not(:empty)
@@ -391,7 +391,7 @@ $arrow-size: 4px
       &:after
         display: none
       + .rest
-        box-shadow: 1rem 0 0 0.05rem
+        box-shadow: 1rem 0 0 0.05rem currentColor
   @at-root .beat8 &
     &:not(.rest):nth-child(2):before
       transform: translateY(100%) rotate(-135deg)

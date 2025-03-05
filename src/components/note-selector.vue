@@ -56,6 +56,16 @@
 </script>
 <style lang="sass" scoped>
   @import '@/assets/sass/mixins'
+  @keyframes out
+    0%
+      border-color: rgba(yellow, .1)
+    100%
+      border-color: inherit
+  @keyframes in
+    0%
+      border-color: rgba(yellow, .1)
+    100%
+      border-color: inherit
   .note-option
     flex: 0 0 auto
     width: 30vw
@@ -72,6 +82,8 @@
           opacity: .5
           color: color(gray)
           transition: .2s
+          .beat
+            animation: .5s out forwards 1
           &:hover
             opacity: 1
     > label
@@ -80,6 +92,7 @@
         pointer-events: none
         padding: 0
         padding-bottom: 1em
+        animation: .5s in forwards 1
     &__list
       display: flex
       flex-wrap: wrap
