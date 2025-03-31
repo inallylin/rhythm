@@ -1,7 +1,10 @@
 <template>
   <slot :play="play" :stop="stop" :isPlaying="isPlaying">
-    <button class="btn-play" @click="play" :disabled="isPlaying">
-      <icon-play />
+    <button
+      class="btn-play"
+      @click="isPlaying ? stop() : play()">
+      <icon-play v-if="!isPlaying" />
+      <icon-stop v-else />
     </button>
   </slot>
 </template>
@@ -10,6 +13,7 @@
   import { useStore } from 'vuex'
   import { createBeats } from '@/mixins/beat.coffee'
   import iconPlay from '@/components/icon/play.vue'
+  import iconStop from '@/components/icon/stop.vue'
   import { v4 as uuidV4 } from 'uuid'
   export default
     props:
@@ -27,6 +31,7 @@
         default: true
     components:
       'icon-play': iconPlay
+      'icon-stop': iconStop
     setup: (props)->
       id = uuidV4()
       store = useStore()
@@ -34,9 +39,11 @@
       progress = ref 0
       track = ref([])
       config = computed -> store.getters.preference
-      isPlaying = ref false
-      storeIsPlaying = computed ->
+      isPlaying = computed ->
         return false if store.getters.track?.id != id
+        store.getters.track.isPlaying
+      storeOtherPlaying = computed ->
+        return false if store.getters.track?.id == id
         store.getters.track.isPlaying
       pointer = computed ->
         return 0 if !isPlaying.value
@@ -73,8 +80,9 @@
         console.log('a', props.notes)
         props.note.join()
       watch (() -> props.notes?.join()) ,getTrack
-      watch storeIsPlaying, (n) ->
-        isPlaying.value = !!n
+      # watch storeIsPlaying, (n) ->
+      #   isPlaying.value = !!n
+      console.log 32
       getTrack()
       onUnmounted -> stop()
       return {
@@ -83,6 +91,7 @@
         play
         stop
         isPlaying
+        storeOtherPlaying
         progress
         pointer
       }

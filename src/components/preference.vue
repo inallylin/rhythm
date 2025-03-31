@@ -174,7 +174,7 @@
       display: flex
       font-size: .85rem
       pointer-events: none
-      > *
+      .preference__toggle, .preference__context > *
         pointer-events: all
     +max-screen(768)
       top: 0

@@ -97,7 +97,7 @@
         answer.value.splice -1, 1
       checkAnswer = (_option)->
         checkResults.value = [0...4]?.map (i)->
-          if !answer.value?[i]
+          if answer.value?[i] == undefined
             answer.value?[i] = 1
           answer.value?[i] == notes.value?[i]
         isChecked.value = true
