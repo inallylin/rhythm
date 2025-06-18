@@ -11,7 +11,8 @@ export default ->
       await audioContext?.close?()
       init()
     , 1000 * 60 * 10
-  start = (_type = 'triangle', _frequency = 820)->
+  start = (_type = 'triangle', _frequency = 820, _options)->
+    # options: { scale, debounce }
     clearTimeout gc
     await init() if !audioContext
     audioGain = audioContext.createGain()
@@ -21,7 +22,10 @@ export default ->
     audioOscillator.frequency.value = _frequency
     audioOscillator.connect(audioGain)
     audioOscillator.start(0)
-    stop(1.5)
+    if _options?.debounce
+      await sleep(_options.debounce * 1.5 * 100)
+    soundLength = (_options?.scale || 1) * 1.5
+    stop(soundLength)
   stop = (_debounce)->
     audioGain?.gain?.exponentialRampToValueAtTime(
       0.00001, audioContext.currentTime + _debounce

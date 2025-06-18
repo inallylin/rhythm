@@ -57,10 +57,16 @@
           Beats
         </div>
         <div class="formfield__field">
-          <div class="checkbox" v-if="allowConfigNote">
-            <input id="toggle-beat-type" type="checkbox" v-model="config.type">
-            <label for="toggle-beat-type">Only 8 Beat</label>
-          </div>
+          <template v-if="allowConfigNote">
+            <div class="checkbox">
+              <input id="toggle-beat-type" type="checkbox" v-model="config.type">
+              <label for="toggle-beat-type">Only 8 Beat</label>
+            </div>
+            <div class="checkbox" v-if="config.type">
+              <input id="toggle-shuffle" type="checkbox" v-model="config.shuffle">
+              <label for="toggle-shuffle">Shuffle</label>
+            </div>
+          </template>
           <div class="checkbox" v-if="allowConfigHighlight">
             <input id="toggle-highlight" type="checkbox" v-model="config.highlight">
             <label for="toggle-highlight">Highlight</label>
@@ -119,6 +125,7 @@
         wave: storage 'wave', 'triangle'
         hz: storage 'hz', 830.6
         type: storage 'type', false
+        shuffle: storage 'shuffle', false
       readableHz = computed ->
         hzkey = Object.keys(hzName).find (k)->
           _hz = hzName[k]
