@@ -39,12 +39,11 @@ export default
           return context.commit 'play.stop', _g.speed
         if _currentNote == 1
           isNoteLead = _g.track.pointer % 4 == 0
-          isShuffle = _g.preference.type && _g.preference.shuffle
-          shuffleConfig = if isShuffle then {
+          params = if _track.shuffle then {
             scale: if isNoteLead then 4/3 else 2/3
             debounce: if isNoteLead then 0 else 1/3
           } else undefined
-          sound.start(_g.preference.wave, _g.preference.hz, shuffleConfig)
+          sound.start(_g.preference.wave, _g.preference.hz, params)
         else if _currentNote == -1
           sound.stop(0)
         context.commit 'player.pointer.next'

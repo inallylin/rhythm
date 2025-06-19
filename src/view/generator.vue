@@ -29,7 +29,7 @@
           :notes="playing.notes"
           :rests="playing.rests"
           :useRest="config.rest"
-          >
+          :isShuffle="config.type && config.shuffle">
           <template #="{play, isPlaying}">
             <button @click="playInLoop(true)" v-if="!playing.watcher" title="play with space">
               <icon-play />

@@ -26,9 +26,9 @@
       useRest:
         type: Boolean
         default: false
-      configurable:
+      isShuffle:
         type: Boolean
-        default: true
+        default: false
     components:
       'icon-play': iconPlay
       'icon-stop': iconStop
@@ -67,22 +67,16 @@
         _progress = progress.value + _step
         progress.value = if _progress < 1 then _progress else 1
       play = ->
-        isPlaying.value = true
         await store.dispatch 'player.init'
         # sending ref track to store player, for keep playing on track change
         store.dispatch 'player.start',
           id: id
           value: track
+          shuffle: props.isShuffle
         progressor.value = setInterval(updateProgress, 100)
       stop = ->
         store.dispatch 'player.end'
-      a = computed () ->
-        console.log('a', props.notes)
-        props.note.join()
-      watch (() -> props.notes?.join()) ,getTrack
-      # watch storeIsPlaying, (n) ->
-      #   isPlaying.value = !!n
-      console.log 32
+      watch (() -> props.notes?.join()), getTrack
       getTrack()
       onUnmounted -> stop()
       return {
