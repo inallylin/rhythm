@@ -37,11 +37,12 @@ export default
         _currentNote = _g.track.value[_g.track.pointer]
         if _g.track.pointer >= _g.track.value?.length
           return context.commit 'play.stop', _g.speed
+        console.log '_g.speed', _g.speed
         if _currentNote == 1
           isNoteLead = _g.track.pointer % 4 == 0
           params = if _track.shuffle then {
             scale: if isNoteLead then 4/3 else 2/3
-            debounce: if isNoteLead then 0 else 1/3
+            delay: if isNoteLead then 0 else 1/3
           } else undefined
           sound.start(_g.preference.wave, _g.preference.hz, params)
         else if _currentNote == -1

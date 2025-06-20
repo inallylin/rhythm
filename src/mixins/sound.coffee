@@ -12,7 +12,7 @@ export default ->
       init()
     , 1000 * 60 * 10
   start = (_type = 'triangle', _frequency = 820, _options)->
-    # options: { scale, debounce }
+    # options: { scale, delay }
     clearTimeout gc
     await init() if !audioContext
     audioGain = audioContext.createGain()
@@ -21,9 +21,9 @@ export default ->
     audioOscillator.type = _type
     audioOscillator.frequency.value = _frequency
     audioOscillator.connect(audioGain)
+    if _options?.delay
+      await sleep(_options.delay * 1.5 * 100)
     audioOscillator.start(0)
-    if _options?.debounce
-      await sleep(_options.debounce * 1.5 * 100)
     soundLength = (_options?.scale || 1) * 1.5
     stop(soundLength)
   stop = (_debounce)->
